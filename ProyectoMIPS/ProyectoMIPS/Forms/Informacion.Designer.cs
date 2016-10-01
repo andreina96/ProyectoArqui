@@ -1,6 +1,6 @@
 ﻿namespace ProyectoMIPS.Forms
 {
-    partial class UserInformation
+    partial class Informacion
     {
         /// <summary>
         /// Required designer variable.
@@ -113,7 +113,6 @@
             this.Controls.Add(this.label1);
             this.Name = "UserInformation";
             this.Text = "Llenar información";
-            this.Load += new System.EventHandler(this.UserInformation_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

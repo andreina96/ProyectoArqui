@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static ProyectoMIPS.EstructurasDeDatos;
 
 namespace ProyectoMIPS
@@ -32,10 +33,18 @@ namespace ProyectoMIPS
                 while ((linea = sr.ReadLine()) != null)
                 {
                     string[] p = linea.Split(' ');
-                    instrucciones[numInstrucciones].entero1 = Convert.ToInt32(p[0]);
-                    instrucciones[numInstrucciones].entero2 = Convert.ToInt32(p[1]);
-                    instrucciones[numInstrucciones].entero3 = Convert.ToInt32(p[2]);
-                    instrucciones[numInstrucciones].entero4 = Convert.ToInt32(p[3]);
+                    try
+                    {
+                        instrucciones[numInstrucciones].entero1 = Convert.ToInt32(p[0]);
+                        instrucciones[numInstrucciones].entero2 = Convert.ToInt32(p[1]);
+                        instrucciones[numInstrucciones].entero3 = Convert.ToInt32(p[2]);
+                        instrucciones[numInstrucciones].entero4 = Convert.ToInt32(p[3]);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("Ha ocurrido un error al leer el archivo: " + ex);
+                    }
+
                     numInstrucciones++;
                 }
             }

@@ -16,6 +16,8 @@ namespace ProyectoMIPS
         
         /* Se crea la variable para almacenar el quantum */
         public int quantum;
+        /* Se crea la variable para el número de hilillos */
+        public int numHilillos;
         /* Se crea la memoria principal como un arrerglo de 736 enteros */
         public int[] memoriaPrincipal;
         /* Se crea la variable que indica hasta qué posición de memoria de datos se
@@ -36,6 +38,8 @@ namespace ProyectoMIPS
         /* Se inicializan las variables de la clase */
         public Controladora()
         {
+            quantum = 0;
+            numHilillos = 0;
             memoriaPrincipal = new int[736];
             posDatosActual = 0;
             posInstruccionesActual = 96;

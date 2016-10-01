@@ -7,7 +7,7 @@ using ProyectoMIPS.Forms;
 
 namespace ProyectoMIPS
 {
-    static class Programa
+    static class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -17,7 +17,7 @@ namespace ProyectoMIPS
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new UserInformation());
+            Application.Run(new Informacion());
         }
     }
 }
