@@ -16,20 +16,26 @@ namespace ProyectoMIPS
         
         /* Se crea la variable para almacenar el quantum */
         public int quantum;
+        
         /* Se crea la variable para el número de hilillos */
         public int numHilillos;
+        
         /* Se crea la memoria principal como un arrerglo de 736 enteros */
         public int[] memoriaPrincipal;
+        
         /* Se crea la variable que indica hasta qué posición de memoria de datos se
          * encuentra ocupado */
         int posDatosActual;
+
         /* Se crea la variable que indica hasta qué posición de memoria de instrucciones se
          * encuentra ocupado */
         int posInstruccionesActual;
+        
         /* Se crea la cache de datos para cada uno de los hilos principales */
         public cacheDatos cacheDatosHilo1;
         public cacheDatos cacheDatosHilo2;
         public cacheDatos cacheDatosHilo3;
+        
         /* Se crea la cache de instrucciones para cada uno de los hilos principales*/
         public cacheInstrucciones cacheInstruccionesHilo1;
         public cacheInstrucciones cacheInstruccionesHilo2;
@@ -45,6 +51,7 @@ namespace ProyectoMIPS
             posInstruccionesActual = 96;
         }
 
+        /* Carga las instrucciones en memoria */
         public void cargarInstrucciones(instruccion[] instrucciones, int numInstrucciones)
         {
             if(numInstrucciones > 160)

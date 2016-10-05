@@ -6,8 +6,90 @@ using System.Threading.Tasks;
 
 namespace ProyectoMIPS
 {
-    class EstructurasDeDatos
+    /* ======================================================
+     * Se crea una estructura cola para mantener los hilillos
+     * que siguen a ejecutar
+     * ====================================================== */
+    public class cola
     {
+        public struct elemCola
+        {
+            public int numHilillo;
+            public int numeNucleo;
+            public bool finalizado;
+        }
+
+        public elemCola[] elementos;
+        public int numElementos;
+        public int primero;
+        public int ultimo;
+
+        public cola()
+        {
+            elementos = new elemCola[8];
+            numElementos = 0;
+            primero = 1;
+            ultimo = 0;
+
+            for (int i = 0; i < 8; i++)
+            {
+                elementos[i].finalizado = false;
+            }
+        }
+
+        public void agregar(elemCola elemento)
+        {
+            if (numElementos == 0)
+            {
+                ultimo = 1;
+                elementos[1] = elemento;
+            }
+            else if (ultimo == 7)
+            {
+                elementos[0] = elemento;
+                ultimo = 0;
+            }
+            else
+            {
+                ultimo++;
+                elementos[ultimo] = elemento;
+            }
+
+            numElementos++;
+        }
+
+        public void sacar()
+        {
+            if (primero == 7)
+            {
+                primero = 0;
+            }
+            else
+            {
+                primero++;
+            }
+
+            numElementos--;
+        }
+
+        public elemCola frente()
+        {
+            return elementos[primero];
+        }
+    }
+
+    public class EstructurasDeDatos
+    {
+        /* ======================================================
+         * Se crea una estructura  para  el orden de los procesos
+         * ====================================================== */
+        public cola cola = new cola();
+
+        /* ======================================================
+         * Se crea una estructura para representar los contextos
+         * ====================================================== */
+        public int[] contexto = new int[34];
+
         /* ======================================================
          * Se crean los elementos necesarios para crear las caché 
          * ====================================================== */
@@ -60,14 +142,5 @@ namespace ProyectoMIPS
             public bloqueInstrucciones bloqueInstrucciones3;
             public bloqueInstrucciones bloqueInstrucciones4;
         }
-
-        /* ====================================================== 
-         * ====================================================== */
-
-        /* ======================================================
-         * Se crea una estructura para representar los contextos
-         * ====================================================== */
-
-        public int[] contexto = new int[34];
     }
 }

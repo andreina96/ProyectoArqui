@@ -99,7 +99,7 @@
             this.aceptar.UseVisualStyleBackColor = true;
             this.aceptar.Click += new System.EventHandler(this.aceptar_Click);
             // 
-            // UserInformation
+            // Informacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -111,7 +111,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.numeroHilillos);
             this.Controls.Add(this.label1);
-            this.Name = "UserInformation";
+            this.Name = "Informacion";
             this.Text = "Llenar información";
             this.ResumeLayout(false);
             this.PerformLayout();
