@@ -23,10 +23,16 @@ namespace ProyectoMIPS
         /* Recorre el archivo, guardando en un arreglo todas las instrucciones
          * del hilillo */
         public instruccion[] leerArchivo()
-        { 
+        {
             /* El arreglo se hace para 160 instrucciones, porque es el máximo que se
              * puede guardar en memoria */
             instruccion[] instrucciones = new instruccion[160];
+
+            for (int i = 0; i < 160; i++)
+            {
+                instrucciones[i] = new instruccion();
+            }
+
             using (StreamReader sr = File.OpenText(ruta))
             {
                 string linea;
@@ -35,12 +41,12 @@ namespace ProyectoMIPS
                     string[] p = linea.Split(' ');
                     try
                     {
-                        instrucciones[numInstrucciones].entero1 = Convert.ToInt32(p[0]);
-                        instrucciones[numInstrucciones].entero2 = Convert.ToInt32(p[1]);
-                        instrucciones[numInstrucciones].entero3 = Convert.ToInt32(p[2]);
-                        instrucciones[numInstrucciones].entero4 = Convert.ToInt32(p[3]);
+                        instrucciones[numInstrucciones].entero[0] = Convert.ToInt32(p[0]);
+                        instrucciones[numInstrucciones].entero[1] = Convert.ToInt32(p[1]);
+                        instrucciones[numInstrucciones].entero[2] = Convert.ToInt32(p[2]);
+                        instrucciones[numInstrucciones].entero[3] = Convert.ToInt32(p[3]);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show("Ha ocurrido un error al leer el archivo: " + ex);
                     }
