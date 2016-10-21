@@ -299,8 +299,7 @@ namespace ProyectoMIPS
                         //SW
                         break;
                     case 63:
-                        //es_instruccion_fin = true;
-                        //m_quantum_de_proceso_actual = 0;
+                        //Fin
                         break;
                 }
             }
@@ -325,19 +324,19 @@ namespace ProyectoMIPS
             // El bloque no está en caché
             if (cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque))
                 /*m_cache_instrucciones->identificador_de_bloque_memoria[indice]*/
+
             {
                 // Debe esperar mientras el bus no esté disponible
-                while (true/*!m_procesador.bus_de_memoria_instrucciones_libre()*/)
+                while (true)
                 {
                     break;
                     //bloquear el bus
-                    //m_procesador.aumentar_reloj();
-                    //emit reportar_estado(QString("Núcleo %1 está esperando a que se desocupe el bus de datos").arg(m_numero_nucleo));
                 }
 
                 // Se pide el bloque a memoria prinicipal
                 /*m_procesador.obtener_bloque(numero_de_bloque)*/
                 cacheInstruccionesHilo[hilo].setBloque(getBloqueMemoria(numeroBloque), numeroBloque);
+
 
                 // Aquí se da el retraso de tiempo en el cual se debe ir a memoria a traer un bloque.
                 
