@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ProyectoMIPS.EstructurasDeDatos;
+using ProyectoMIPS;
 
 namespace ProyectoMIPS.Forms
 {
@@ -17,10 +17,12 @@ namespace ProyectoMIPS.Forms
     {
         /* Controladora para la ejecución del programa */
         Controladora con;
+        Hilo h;
 
         public Informacion()
         {
             con = new Controladora();
+            h = new Hilo();
             InitializeComponent();
         }
 
@@ -42,7 +44,7 @@ namespace ProyectoMIPS.Forms
                     if (Convert.ToInt32(numeroHilillos.Text) > 0)
                     {
                         /* Se asigna el valor al número de hilillos */
-                        con.numHilillos = Convert.ToInt32(numeroHilillos.Text);
+                        h.setNumeroHilillos(Convert.ToInt32(numeroHilillos.Text));
                         String[] archivos;
                         /* Si el directorio dado existe, se obtienen todos los nombres de los archivos que 
                          * tendrán hilillos */
@@ -53,11 +55,10 @@ namespace ProyectoMIPS.Forms
                             while (indice < archivos.Length)
                             {
                                 /* Se lee cada uno de los archivos y se obtienen las intrucciones de todos los hilillos */
-                                Archivo a = new Archivo(archivos[indice]);
+                                Archivo a = new Archivo();
+                                a.setRuta(archivos[indice]);
                                 instruccion[] instrucciones = a.leerArchivo();
-                                int numInstrucciones = a.getNumInstrucciones();
-                                /* Una vez que se tienen todas las instrucciones de un hilillo, se cargan en memoria */
-                                con.cargarInstrucciones(instrucciones, numInstrucciones);
+                                h.cargarInstruccionesMemoria(instrucciones, a.getNumInstrucciones());                                
                                 indice++;
                             }
                             if (Regex.IsMatch(numeroQuantum.Text, @"^[0-9\p{L} \w]+$"))
@@ -65,7 +66,7 @@ namespace ProyectoMIPS.Forms
                                 if (Convert.ToInt32(numeroQuantum.Text) > 0)
                                 {
                                     /* Se asigna el valor al número de quantum */
-                                    con.quantum = Convert.ToInt32(numeroQuantum.Text);
+                                    h.setNumeroQuantum(Convert.ToInt32(numeroQuantum.Text));
                                 }
                                 else
                                 {

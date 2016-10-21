@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ProyectoMIPS.EstructurasDeDatos;
+using ProyectoMIPS;
 
 namespace ProyectoMIPS
 {
@@ -14,24 +14,26 @@ namespace ProyectoMIPS
         string ruta;
         int numInstrucciones;
 
-        public Archivo(string r)
+        public Archivo()
         {
-            ruta = r;
             numInstrucciones = 0;
         }
 
-        /* Recorre el archivo, guardando en un arreglo todas las instrucciones
-         * del hilillo */
+        public void setRuta(string r)
+        {
+            ruta = r;
+        }
+
+        /* ======================================================
+         * Recorre el archivo, guardando en un arreglo todas las 
+         * instrucciones del hilillo
+         * ====================================================== */
+
         public instruccion[] leerArchivo()
         {
             /* El arreglo se hace para 160 instrucciones, porque es el máximo que se
              * puede guardar en memoria */
             instruccion[] instrucciones = new instruccion[160];
-
-            for (int i = 0; i < 160; i++)
-            {
-                instrucciones[i] = new instruccion();
-            }
 
             using (StreamReader sr = File.OpenText(ruta))
             {
@@ -39,19 +41,19 @@ namespace ProyectoMIPS
                 while ((linea = sr.ReadLine()) != null)
                 {
                     string[] p = linea.Split(' ');
+
                     try
                     {
-                        instrucciones[numInstrucciones].entero[0] = Convert.ToInt32(p[0]);
-                        instrucciones[numInstrucciones].entero[1] = Convert.ToInt32(p[1]);
-                        instrucciones[numInstrucciones].entero[2] = Convert.ToInt32(p[2]);
-                        instrucciones[numInstrucciones].entero[3] = Convert.ToInt32(p[3]);
+                        instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[0]),0);
+                        instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[1]), 1);
+                        instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[2]), 2);
+                        instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[3]), 3);
+                        numInstrucciones++;
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Ha ocurrido un error al leer el archivo: " + ex);
                     }
-
-                    numInstrucciones++;
                 }
             }
             numInstrucciones++;
