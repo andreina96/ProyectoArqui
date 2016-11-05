@@ -49,27 +49,18 @@
   <ItemGroup>
     <Compile Include="Controladora.cs" />
     <Compile Include="EstructurasDeDatos.cs" />
-    <Compile Include="Forms\Resultados.cs">
+    <Compile Include="Forms\Vista.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Resultados.Designer.cs">
-      <DependentUpon>Resultados.cs</DependentUpon>
+    <Compile Include="Forms\Vista.Designer.cs">
+      <DependentUpon>Vista.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Informacion.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Informacion.Designer.cs">
-      <DependentUpon>Informacion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Hilo.cs" />
+    <Compile Include="Procesador.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Archivo.cs" />
-    <EmbeddedResource Include="Forms\Resultados.resx">
-      <DependentUpon>Resultados.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Informacion.resx">
-      <DependentUpon>Informacion.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Vista.resx">
+      <DependentUpon>Vista.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

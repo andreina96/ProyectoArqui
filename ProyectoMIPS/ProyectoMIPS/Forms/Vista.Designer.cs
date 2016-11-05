@@ -1,6 +1,6 @@
 ﻿namespace ProyectoMIPS.Forms
 {
-    partial class Informacion
+    partial class Vista
     {
         /// <summary>
         /// Required designer variable.
@@ -81,28 +81,31 @@
             // 
             // directorio
             // 
+            this.directorio.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.directorio.Location = new System.Drawing.Point(150, 79);
             this.directorio.Name = "directorio";
             this.directorio.Size = new System.Drawing.Size(110, 23);
             this.directorio.TabIndex = 5;
             this.directorio.Text = "Directorio";
-            this.directorio.UseVisualStyleBackColor = true;
+            this.directorio.UseVisualStyleBackColor = false;
             this.directorio.Click += new System.EventHandler(this.directorio_Click);
             // 
             // aceptar
             // 
+            this.aceptar.BackColor = System.Drawing.Color.MintCream;
             this.aceptar.Location = new System.Drawing.Point(185, 171);
             this.aceptar.Name = "aceptar";
             this.aceptar.Size = new System.Drawing.Size(75, 23);
             this.aceptar.TabIndex = 6;
             this.aceptar.Text = "Aceptar";
-            this.aceptar.UseVisualStyleBackColor = true;
+            this.aceptar.UseVisualStyleBackColor = false;
             this.aceptar.Click += new System.EventHandler(this.aceptar_Click);
             // 
-            // Informacion
+            // Vista
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Turquoise;
             this.ClientSize = new System.Drawing.Size(285, 225);
             this.Controls.Add(this.aceptar);
             this.Controls.Add(this.directorio);
@@ -111,7 +114,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.numeroHilillos);
             this.Controls.Add(this.label1);
-            this.Name = "Informacion";
+            this.Name = "Vista";
             this.Text = "Llenar información";
             this.ResumeLayout(false);
             this.PerformLayout();

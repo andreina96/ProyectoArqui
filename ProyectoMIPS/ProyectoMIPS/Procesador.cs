@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ProyectoMIPS
 {
-    class Hilo
+    class Procesador
     {
         /* ======================================================
          * Se crea una estructura para representar la parte de
@@ -72,7 +72,7 @@ namespace ProyectoMIPS
          * temporales de cada hilo
          * ====================================================== */
 
-        contexto[] contextoHilo;
+        nucleo [] nucleoHilo;
 
         /* ======================================================
          * Se crean estructuras para representar las cachés de 
@@ -94,22 +94,23 @@ namespace ProyectoMIPS
          * ====================================================== */
 
         Queue<hilillo> colaHilillos;
+        Queue<hilillo> hilillos_finalizados;
 
         /* ======================================================
          * Se crea una variable para almacenar el número de hili-
          * llos
          * ====================================================== */
 
-        int numeroDeHilillos;
+        int numero_hilillos;
 
         /* ======================================================
          * Se crea una variable para almacenar el número de quan-
          * tum
          * ====================================================== */
 
-        int numeroQuantum;
+        int numero_Quantum;
 
-        public Hilo()
+        public Procesador()
         {
             memoriaPrincipalDatos = new int[96];
             memoriaPrincipalDatosBloqueLleno = 0;
@@ -117,70 +118,33 @@ namespace ProyectoMIPS
             memoriaPrincipalInstrucciones = new int[640];
             memoriaPrincipalInstruccionesBloqueLleno = 0;
 
-            contextoHilo = new contexto[3];
+            nucleoHilo = new nucleo[3];
 
             cacheDatosHilo = new cacheDatos[3];
             cacheInstruccionesHilo = new cacheInstrucciones[3];
 
             for (int i = 0; i < 3; i++)
             {
-                contextoHilo[i] = new contexto();
+                nucleoHilo[i] = new nucleo();
                 cacheDatosHilo[i] = new cacheDatos();
                 cacheInstruccionesHilo[i] = new cacheInstrucciones();
             }
 
             colaHilillos = new Queue<hilillo>();
+            hilillos_finalizados = new Queue<hilillo>();
 
-            numeroDeHilillos = 0;
-            numeroQuantum = 0;
+            numero_hilillos = 0;
+            numero_Quantum = 0;
         }
 
-        /* ======================================================
-         * Se crea un método para cargar instrucciones a la 
-         * memoria principal
-         * ====================================================== */
-
-        public void cargarInstruccionesMemoria(instruccion[] instrucciones, int numeroInstrucciones)
-        {
-            if (memoriaPrincipalInstruccionesBloqueLleno < 640)
-            {
-                hilillo nuevoHilillo = new hilillo();
-                nuevoHilillo.setHililloInicia(memoriaPrincipalInstruccionesBloqueLleno);
-                nuevoHilillo.setHililloTermina(memoriaPrincipalInstruccionesBloqueLleno + numeroInstrucciones);
-
-                for (int i = 0; i < instrucciones.Length; i++)
-                {
-                    memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno] = instrucciones[i].getParteInstruccion(0);
-                    memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno + 1] = instrucciones[i].getParteInstruccion(1);
-                    memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno + 2] = instrucciones[i].getParteInstruccion(2);
-                    memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno + 3] = instrucciones[i].getParteInstruccion(3);
-                    memoriaPrincipalInstruccionesBloqueLleno = memoriaPrincipalInstruccionesBloqueLleno + 4;
-                }
-
-                colaHilillos.Enqueue(nuevoHilillo);
-            }
-            else
-            {
-                MessageBox.Show("Error: la memoria se encuentra llena");
-            }
-        }
-
-        public void cargarContexto() {
-            
-        }
-
-        public void guardarContexto() {
-            
-        }
 
         /* ======================================================
          * Se crea un método para asignarle un valor al número de
          * hilillos
          * ====================================================== */
-
-        public void setNumeroHilillos(int numDeHilillos)
+        public void asignar_numero_hilillos(int num_hilillos)
         {
-            numeroDeHilillos = numDeHilillos;
+            numero_hilillos = num_hilillos;
         }
 
         /* ======================================================
@@ -188,10 +152,97 @@ namespace ProyectoMIPS
          * quantum
          * ====================================================== */
 
-        public void setNumeroQuantum(int numQuantum)
+        public void asignar_numero_quantum(int numQuantum)
         {
-            numeroQuantum = numQuantum;
+            numero_Quantum = numQuantum;
         }
+
+
+        /* ======================================================
+         * Se crea un método para cargar instrucciones a la 
+         * memoria principal
+         * ====================================================== */
+
+        public void cargarInstruccionMemoria(int instruccion , int op1, int op2, int op3)
+        {
+            if (memoriaPrincipalInstruccionesBloqueLleno < 640)
+            {
+                memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno] = instruccion;
+                memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno + 1] = op1;
+                memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno + 2] = op2;
+                memoriaPrincipalInstrucciones[memoriaPrincipalInstruccionesBloqueLleno + 3] = op3;
+                memoriaPrincipalInstruccionesBloqueLleno += 4;
+            }
+            else
+            {
+                MessageBox.Show("Error: la memoria se encuentra llena");
+            }
+        }
+
+        /* ======================================================
+         * Se crea un método para imprimir en un archivo la 
+         * memoria principal
+         * ====================================================== */
+        public void imprimirMemoria()
+        {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\ProyectoMIPS\Memoria.txt"))
+            {
+                for (int i = 0; i < 640; i++)
+                {
+                    escritor.WriteLine("Posicion " + i + ": "+memoriaPrincipalInstrucciones[i] +"\n");
+                }
+            }
+        }
+
+        /* ======================================================
+         * Se crea un método para imprimir en un archivo la 
+         * la cola de hilillos
+         * ====================================================== */
+        public void imprimirColaHilillos()
+        {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\ProyectoMIPS\ColaHilillos.txt"))
+            {
+                Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
+                hilillo aux = null;
+
+                while (cola_aux.Count != 0)
+                {
+                    aux = cola_aux.Dequeue();
+                    escritor.WriteLine("Numero hilillo: " + aux.obtener_numero_hil());
+                    escritor.WriteLine("Dirección de inicio: " + aux.obtener_inicio_hilillo());
+                    escritor.WriteLine("Dirección de fin: " + aux.obtener_fin_hilillo());
+                    escritor.WriteLine("Finalizado: " + aux.obtener_finalizado());
+                    escritor.WriteLine("PC: " + aux.obtener_PC() + "\n");
+
+                    for (int i = 0; i < 33; i++)
+                    {
+                        escritor.WriteLine("Registro" + i + " : " + aux.obtener_registros()[i] + "\n");
+                    }
+                    escritor.WriteLine("\n----------------------------------------------------\n");
+                }
+            }
+        }
+
+        // Se crea la información de cada hilillo
+        public void crear_hilillos ( int inicio, int fin, int numero_hilillo)
+        {
+            hilillo nuevo_hilillo = new hilillo(numero_hilillo);
+            nuevo_hilillo.asignar_inicio_hilillo(inicio);
+            nuevo_hilillo.asignar_fin_hilillo(fin);
+            nuevo_hilillo.asignar_PC(inicio);
+            colaHilillos.Enqueue(nuevo_hilillo);
+        }
+
+
+        public void cargarContexto() {
+            
+        }
+
+        public void guardarContexto()
+        {
+            
+        }
+
 
         /* ======================================================
          * Se crea un método para ejecutar una instrucción
@@ -201,7 +252,7 @@ namespace ProyectoMIPS
         {
             try
             {
-                contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + 4, 33);
+                //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + 4, 33);
 
                 switch (CodigoOperacion)
                 {
@@ -212,7 +263,7 @@ namespace ProyectoMIPS
                          *      R[SegundoOperando] <- R[PrimerOperando] + TercerOperando 
                          */
 
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) + TercerOperando, SegundoOperando);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) + TercerOperando, SegundoOperando);
                         break;
                     case 32:
                         /* Instruccion: DADD
@@ -221,7 +272,7 @@ namespace ProyectoMIPS
                          *      R[TercerOperando] <- R[PrimerOperando] + R[SegundoOperando] 
                          */
 
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) + contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) + contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
                         break;
                     case 34:
                         /* Instruccion: DSUB
@@ -230,7 +281,7 @@ namespace ProyectoMIPS
                          *      R[TercerOperando] <- R[PrimerOperando] - R[SegundoOperando] 
                          */
 
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) - contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) - contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
                         break;
                     case 12:
                         /* Instruccion: DMUL
@@ -239,7 +290,7 @@ namespace ProyectoMIPS
                          *      R[TercerOperando] <- R[PrimerOperando] * R[SegundoOperando] 
                          */
 
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) * contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) * contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
                         break;
                     case 14:
                         /* Instruccion: DDIV
@@ -248,7 +299,7 @@ namespace ProyectoMIPS
                          *      R[TercerOperando] <- R[PrimerOperando] / R[SegundoOperando] 
                          */
 
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) / contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) / contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
                         break;
                     case 4:
                         /* Instruccion: BEQZ
@@ -258,8 +309,8 @@ namespace ProyectoMIPS
                          *          R[PC] <- R[PC] + TecerOperando * 4 
                          */
 
-                        if (contextoHilo[hilo].getRegistro(PrimerOperando) == 0)
-                            contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + TercerOperando * 4, 33);
+                        //if (contextoHilo[hilo].getRegistro(PrimerOperando) == 0)
+                            //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + TercerOperando * 4, 33);
                         break;
                     case 5:
                         /* Instruccion: BNEZ
@@ -269,8 +320,8 @@ namespace ProyectoMIPS
                          *          R[PC] <- R[PC] + TercerOperando * 4 
                          */
 
-                        if (contextoHilo[hilo].getRegistro(PrimerOperando) != 0)
-                            contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + TercerOperando * 4, 33);
+                        //if (contextoHilo[hilo].getRegistro(PrimerOperando) != 0)
+                         //   contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + TercerOperando * 4, 33);
                         break;
                     case 3:
                         /* Instruccion: JAL
@@ -280,8 +331,8 @@ namespace ProyectoMIPS
                          *      R[PC] <- R[PC] + TercerOperando 
                          */
 
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33), 31);
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + TercerOperando, 33);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33), 31);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(33) + TercerOperando, 33);
                         break;
                     case 2:
                         /* Instruccion: JR
@@ -290,7 +341,7 @@ namespace ProyectoMIPS
                          *      R[PC] <- R[PrimerOperando] 
                          */
 
-                        contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando), 33);
+                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando), 33);
                         break;
                     case 35:
                         //LW
@@ -316,13 +367,13 @@ namespace ProyectoMIPS
 
         public instruccion obtienerInstruccion(int hilo)
         {
-            int numeroBloque = contextoHilo[hilo].getRegistro(33) / 16;
-            int numeroPalabra = (contextoHilo[hilo].getRegistro(33) % 16) / 4;
+            //int numeroBloque = contextoHilo[hilo].getRegistro(33) / 16;
+            //int numeroPalabra = (contextoHilo[hilo].getRegistro(33) % 16) / 4;
 
             // índice donde se debería encontrar el bloque en cahé si estuviera
 
             // El bloque no está en caché
-            if (cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque))
+            //if (cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque))
                 /*m_cache_instrucciones->identificador_de_bloque_memoria[indice]*/
 
             {
@@ -335,7 +386,7 @@ namespace ProyectoMIPS
 
                 // Se pide el bloque a memoria prinicipal
                 /*m_procesador.obtener_bloque(numero_de_bloque)*/
-                cacheInstruccionesHilo[hilo].setBloque(getBloqueMemoria(numeroBloque), numeroBloque);
+              //  cacheInstruccionesHilo[hilo].setBloque(getBloqueMemoria(numeroBloque), numeroBloque);
 
 
                 // Aquí se da el retraso de tiempo en el cual se debe ir a memoria a traer un bloque.
@@ -343,10 +394,11 @@ namespace ProyectoMIPS
                 // Se libera el bus
             }
 
-            return cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra);
+            //return cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra);
+            return null;
         }
 
-        public instruccion[] getBloqueMemoria(int numeroDeBloque)
+        public instruccion[] obtener_bloque_memoria (int numeroDeBloque)
         {
             instruccion[] bloque = new instruccion[4];
             bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4], numeroDeBloque);

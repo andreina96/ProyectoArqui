@@ -17,7 +17,7 @@ namespace ProyectoMIPS
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Informacion());
+            Application.Run(new Vista());
         }
     }
 }

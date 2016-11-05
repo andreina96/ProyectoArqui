@@ -19,6 +19,12 @@ namespace ProyectoMIPS
             numInstrucciones = 0;
         }
 
+        /* Devuelve el número de instrucciones del hilillo */
+        public int getNumInstrucciones()
+        {
+            return numInstrucciones;
+        }
+
         public void setRuta(string r)
         {
             ruta = r;
@@ -35,6 +41,9 @@ namespace ProyectoMIPS
              * puede guardar en memoria */
             instruccion[] instrucciones = new instruccion[160];
 
+            for (int i = 0; i < 160; i++)
+                instrucciones[i] = new instruccion();
+
             using (StreamReader sr = File.OpenText(ruta))
             {
                 string linea;
@@ -44,7 +53,7 @@ namespace ProyectoMIPS
 
                     try
                     {
-                        instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[0]),0);
+                        instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[0]), 0);
                         instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[1]), 1);
                         instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[2]), 2);
                         instrucciones[numInstrucciones].setParteInstruccion(Convert.ToInt32(p[3]), 3);
@@ -61,10 +70,6 @@ namespace ProyectoMIPS
             return instrucciones;
         }
 
-        /* Devuelve el número de instrucciones del hilillo */
-        public int getNumInstrucciones()
-        {
-            return numInstrucciones;
-        }
+        
     }
 }

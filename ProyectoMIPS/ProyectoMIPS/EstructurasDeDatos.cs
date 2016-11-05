@@ -8,100 +8,146 @@ using System.Collections;
 namespace ProyectoMIPS
 {
     /* ======================================================
+     * Clase 1: Hilillo
      * Estructura de datos para mantener la información de 
      * los hilillos
      * ====================================================== */
-
     public class hilillo
     {
-        int iniciaHilillo;
-        int terminaHilillo;
-        contexto contextoHilillo;
-        bool finalizado;
+        int numero_hilillo;
+        int inicio_hilillo;  // Corresponde al inicio del hilillo
+        int fin_hilillo;     // Corresponde al final del hilillo
+        bool finalizado;     // Bandera que indica si ya finalizó
+        int[] registros;     // R0 - R31 y RL
+        int PC;
 
-        public hilillo()
+        public hilillo(int numero_hil)
         {
-            iniciaHilillo = 0;
-            terminaHilillo = 0;
-            contextoHilillo = new contexto();
+            numero_hilillo = numero_hil;
+            inicio_hilillo = 0;
+            fin_hilillo = 0;
+            registros = new int [34];
             finalizado = false;
+            PC = 0;
         }
 
-        public void setHililloInicia(int inicia)
+        public int obtener_numero_hil()
         {
-            iniciaHilillo = inicia;
+            return numero_hilillo;
         }
-
-        public int getHililloInicia()
+        // Asigna el inicio del hilillo
+        public void asignar_inicio_hilillo(int inicia)
         {
-            return iniciaHilillo;
+            inicio_hilillo = inicia;
         }
 
-        public void setHililloTermina(int termina)
+        // Retorna el inicio del hilillo
+        public int obtener_inicio_hilillo()
         {
-            terminaHilillo = termina;
+            return inicio_hilillo;
         }
 
-        public int getHililloTermina()
+        // Asigna el final del hilillo
+        public void asignar_fin_hilillo(int termina)
         {
-            return terminaHilillo;
+            fin_hilillo = termina;
         }
 
-        public contexto getContexto()
+        // Obtener el fin del hilillo
+        public int obtener_fin_hilillo()
         {
-            return contextoHilillo;
+            return fin_hilillo;
         }
 
-        public void setFinalizado()
+        // Se obtiene el contador del programa
+        public int obtener_PC()
+        {
+            return PC;
+        }
+
+        // Asigna el contador de programa del hilillo
+        public void asignar_PC(int contador_programa)
+        {
+            PC = contador_programa;
+        } 
+        // Obtener el contexto
+        public int[] obtener_registros()
+        {
+            return registros;
+        }
+
+        // Asignar contexto de un hilillo
+        public void asignar_contexto( int contador_programa, int[] reg)
+        {
+            PC = contador_programa;
+
+            for (int i = 0; i < 33; i++)
+            {
+                registros[i] = reg[i]; 
+            }
+        }
+
+        // Asignar estado del hilillo
+        public void asignar_finalizado()
         {
             finalizado = true;
         }
 
-        public bool getFinalizado()
+        // Obtener estado del hilillo
+        public bool obtener_finalizado()
         {
             return finalizado;
         }
     }
     
     /* ======================================================
-     * Estructura de datos cola para guardar los contextos
-     * de los hilos
+     * Clase 2: Estructura Nucleo
+     *
+     * Inicio y fin del hilillo actual 
+     *
+     * Contador de programa: PC
      * 
      * Registros de propósito general: 
      *      registro[0]-registro[31]
      * 
      * Registro RL:
      *      registro[32]
-     *      
-     * Registro PC:
-     *      registro[33] 
      * ====================================================== */
 
-    public class contexto
+    public class nucleo
     {
         public int[] registro;
+        public int PC;
+        public int inicio_hilillo;
+        public int fin_hilillo;
 
-        public contexto()
+        public nucleo()
         {
-            registro = new int[34];
+            PC = 0;
+            registro = new int[33];
             registro[0] = 0;
+            inicio_hilillo = 0;
+            fin_hilillo = 0;
         }
 
-        public void setRegistro(int r, int i)
+
+        public void asignar_registro (int reg, int pos)
         {
-            registro[i] = r;
+            registro[pos] = reg;
         }
 
-        public int getRegistro(int i)
+        public int obtener_registro(int pos)
         {
-            return registro[i];
+            return registro[pos];
         }
 
-        public void copiar(contexto n)
+        public void copiar_registros (hilillo hil)
         {
-            for (int i = 1; i < 34; i++)
+            PC = hil.obtener_PC();
+
+            for (int i = 1; i < 33; i++)
             {
-                registro[i] = n.getRegistro(i);
+                registro[i - 1] = hil.obtener_registros()[i];
             }
         }
     }
@@ -262,6 +308,7 @@ namespace ProyectoMIPS
         public cacheDatos()
         {
             bloqueDatos = new bloqueDatos[4];
+            numeroBloque = new int[4];
 
             for (int i = 0; i < 4; i++)
             {
@@ -315,6 +362,7 @@ namespace ProyectoMIPS
         public cacheInstrucciones()
         {
             bloqueInstruccion = new bloqueInstrucciones[4];
+            numeroBloque = new int[4];
 
             for (int i = 0; i < 4; i++)
             {
