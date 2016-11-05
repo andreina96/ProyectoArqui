@@ -40,31 +40,26 @@ namespace ProyectoMIPS
         {
             inicio_hilillo = inicia;
         }
-
         // Retorna el inicio del hilillo
         public int obtener_inicio_hilillo()
         {
             return inicio_hilillo;
         }
-
         // Asigna el final del hilillo
         public void asignar_fin_hilillo(int termina)
         {
             fin_hilillo = termina;
         }
-
         // Obtener el fin del hilillo
         public int obtener_fin_hilillo()
         {
             return fin_hilillo;
         }
-
         // Se obtiene el contador del programa
         public int obtener_PC()
         {
             return PC;
         }
-
         // Asigna el contador de programa del hilillo
         public void asignar_PC(int contador_programa)
         {
@@ -75,24 +70,19 @@ namespace ProyectoMIPS
         {
             return registros;
         }
-
         // Asignar contexto de un hilillo
         public void asignar_contexto( int contador_programa, int[] reg)
         {
             PC = contador_programa;
 
             for (int i = 0; i < 33; i++)
-            {
                 registros[i] = reg[i]; 
-            }
         }
-
         // Asignar estado del hilillo
         public void asignar_finalizado()
         {
             finalizado = true;
         }
-
         // Obtener estado del hilillo
         public bool obtener_finalizado()
         {
@@ -130,7 +120,6 @@ namespace ProyectoMIPS
             fin_hilillo = 0;
         }
 
-
         public void asignar_registro (int reg, int pos)
         {
             registro[pos] = reg;
@@ -146,9 +135,7 @@ namespace ProyectoMIPS
             PC = hil.obtener_PC();
 
             for (int i = 1; i < 33; i++)
-            {
                 registro[i - 1] = hil.obtener_registros()[i];
-            }
         }
     }
 
@@ -278,9 +265,7 @@ namespace ProyectoMIPS
         public void setBloque(instruccion[] nuevasInstrucciones)
         {
             for (int i = 0; i < 4; i++)
-            {
                 instrucciones[i] = nuevasInstrucciones[i];
-            }
         }
 
         public instruccion[] getBloque()

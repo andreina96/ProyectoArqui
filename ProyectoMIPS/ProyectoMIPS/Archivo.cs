@@ -68,8 +68,6 @@ namespace ProyectoMIPS
             numInstrucciones++;
 
             return instrucciones;
-        }
-
-        
+        }   
     }
 }

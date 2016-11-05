@@ -16,10 +16,10 @@ namespace ProyectoMIPS
 {
     class Controladora
     {
-        Procesador procesador;  // Unico procesador
-        int numeroHilillos;  // Numero total de hilillos
-        int quantum;         // quantum  
-        String[] archivos_rutas;   // rutas de los hilillos
+        Procesador procesador;      // Unico procesador
+        int numeroHilillos;         // Numero total de hilillos
+        int quantum;                // quantum  
+        String[] archivos_rutas;    // rutas de los hilillos
         int numero_instrucciones;   // Numero total de instrucciones 
 
         public Controladora(int num_hil, int quant, String[] archivos_r)
@@ -49,7 +49,7 @@ namespace ProyectoMIPS
                         
                         try
                         {         
-                            fin+=4;
+                            fin += 4;
                             numero_instrucciones++;
                             procesador.cargarInstruccionMemoria(Convert.ToInt32(p[0]), Convert.ToInt32(p[1]), Convert.ToInt32(p[2]), Convert.ToInt32(p[3]));
 
@@ -59,12 +59,9 @@ namespace ProyectoMIPS
                             MessageBox.Show("Ha ocurrido un error al leer el archivo: " + ex);
                         }
                     }
-
-                    procesador.crear_hilillos(inicio, fin,i);
-
+                    procesador.crear_hilillos(inicio, fin, i);
                 }
                 numero_instrucciones++;
-
             }
         }
 

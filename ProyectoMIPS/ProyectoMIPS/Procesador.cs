@@ -137,7 +137,6 @@ namespace ProyectoMIPS
             numero_Quantum = 0;
         }
 
-
         /* ======================================================
          * Se crea un método para asignarle un valor al número de
          * hilillos
@@ -151,18 +150,15 @@ namespace ProyectoMIPS
          * Se crea un método para asignarle un valor al número de
          * quantum
          * ====================================================== */
-
         public void asignar_numero_quantum(int numQuantum)
         {
             numero_Quantum = numQuantum;
         }
 
-
         /* ======================================================
          * Se crea un método para cargar instrucciones a la 
          * memoria principal
          * ====================================================== */
-
         public void cargarInstruccionMemoria(int instruccion , int op1, int op2, int op3)
         {
             if (memoriaPrincipalInstruccionesBloqueLleno < 640)
@@ -188,9 +184,7 @@ namespace ProyectoMIPS
             using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\ProyectoMIPS\Memoria.txt"))
             {
                 for (int i = 0; i < 640; i++)
-                {
                     escritor.WriteLine("Posicion " + i + ": "+memoriaPrincipalInstrucciones[i] +"\n");
-                }
             }
         }
 
@@ -215,16 +209,14 @@ namespace ProyectoMIPS
                     escritor.WriteLine("PC: " + aux.obtener_PC() + "\n");
 
                     for (int i = 0; i < 33; i++)
-                    {
                         escritor.WriteLine("Registro" + i + " : " + aux.obtener_registros()[i] + "\n");
-                    }
                     escritor.WriteLine("\n----------------------------------------------------\n");
                 }
             }
         }
 
         // Se crea la información de cada hilillo
-        public void crear_hilillos ( int inicio, int fin, int numero_hilillo)
+        public void crear_hilillos (int inicio, int fin, int numero_hilillo)
         {
             hilillo nuevo_hilillo = new hilillo(numero_hilillo);
             nuevo_hilillo.asignar_inicio_hilillo(inicio);
@@ -233,21 +225,9 @@ namespace ProyectoMIPS
             colaHilillos.Enqueue(nuevo_hilillo);
         }
 
-
-        public void cargarContexto() {
-            
-        }
-
-        public void guardarContexto()
-        {
-            
-        }
-
-
         /* ======================================================
          * Se crea un método para ejecutar una instrucción
          * ====================================================== */
-
         public void EjecucionInstruccion(int hilo, int CodigoOperacion, int PrimerOperando, int SegundoOperando, int TercerOperando)
         {
             try
@@ -364,7 +344,6 @@ namespace ProyectoMIPS
          * Se crea un método para pedirle una instrucción a la
          * caché de instrucciones
          * ====================================================== */
-
         public instruccion obtienerInstruccion(int hilo)
         {
             //int numeroBloque = contextoHilo[hilo].getRegistro(33) / 16;
