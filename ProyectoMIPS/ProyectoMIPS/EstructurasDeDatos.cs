@@ -64,7 +64,10 @@ namespace ProyectoMIPS
         public void asignar_PC(int contador_programa)
         {
             PC = contador_programa;
-        } 
+        }
+        
+        
+         
         // Obtener el contexto
         public int[] obtener_registros()
         {
@@ -83,6 +86,9 @@ namespace ProyectoMIPS
         {
             finalizado = true;
         }
+
+
+
         // Obtener estado del hilillo
         public bool obtener_finalizado()
         {
@@ -154,6 +160,11 @@ namespace ProyectoMIPS
         {
             return this.PC;
         }
+
+        public void aumentar_contador_programa()
+        {
+            PC = PC + 4;
+        } 
 
         public void copiar_registros (hilillo hil)
         {

@@ -83,16 +83,18 @@ namespace ProyectoMIPS
             nucleo1.Start();
             nucleo2.Start();
             nucleo3.Start();
-
-            /* Voy por aqui Andre: Hay que asignarle los hilillos a los nucleos la primera vez. Existe un metodo en procesador
-            para ello*/ 
+            
+            procesador.desencolarContexto(0);
+            procesador.desencolarContexto(1);
+            procesador.desencolarContexto(2);
 
             // Se ejecuta los tres núcleos permanezcan activos
-            while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
-            {
-                
-
-            }
+           // while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
+            //{
+                procesador.obtiener_instruccion(0);
+                procesador.obtiener_instruccion(1);
+                procesador.obtiener_instruccion(2);
+            //}
 
             // Se unen  los hilos con el hilo principal
             nucleo1.Join();

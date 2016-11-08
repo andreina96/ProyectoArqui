@@ -334,167 +334,167 @@ Posicion 166: 0
 
 Posicion 167: 0
 
-Posicion 168: 0
+Posicion 168: 8
 
 Posicion 169: 0
 
-Posicion 170: 0
+Posicion 170: 4
 
-Posicion 171: 0
+Posicion 171: 4
 
-Posicion 172: 0
+Posicion 172: 8
 
 Posicion 173: 0
 
-Posicion 174: 0
+Posicion 174: 2
 
-Posicion 175: 0
+Posicion 175: 2
 
-Posicion 176: 0
+Posicion 176: 8
 
 Posicion 177: 0
 
-Posicion 178: 0
+Posicion 178: 28
 
-Posicion 179: 0
+Posicion 179: 28
 
-Posicion 180: 0
+Posicion 180: 8
 
 Posicion 181: 0
 
-Posicion 182: 0
+Posicion 182: 16
 
-Posicion 183: 0
+Posicion 183: 160
 
-Posicion 184: 0
+Posicion 184: 8
 
 Posicion 185: 0
 
-Posicion 186: 0
+Posicion 186: 5
 
-Posicion 187: 0
+Posicion 187: 1000
 
-Posicion 188: 0
+Posicion 188: 43
 
-Posicion 189: 0
+Posicion 189: 16
 
-Posicion 190: 0
+Posicion 190: 2
 
 Posicion 191: 0
 
-Posicion 192: 0
+Posicion 192: 43
 
-Posicion 193: 0
+Posicion 193: 16
 
-Posicion 194: 0
+Posicion 194: 2
 
-Posicion 195: 0
+Posicion 195: 4
 
-Posicion 196: 0
+Posicion 196: 43
 
-Posicion 197: 0
+Posicion 197: 16
 
-Posicion 198: 0
+Posicion 198: 2
 
-Posicion 199: 0
+Posicion 199: 8
 
-Posicion 200: 0
+Posicion 200: 43
 
-Posicion 201: 0
+Posicion 201: 16
 
-Posicion 202: 0
+Posicion 202: 2
 
-Posicion 203: 0
+Posicion 203: 12
 
-Posicion 204: 0
+Posicion 204: 34
 
-Posicion 205: 0
+Posicion 205: 28
 
-Posicion 206: 0
+Posicion 206: 4
 
-Posicion 207: 0
+Posicion 207: 28
 
-Posicion 208: 0
+Posicion 208: 8
 
-Posicion 209: 0
+Posicion 209: 16
 
-Posicion 210: 0
+Posicion 210: 16
 
-Posicion 211: 0
+Posicion 211: 16
 
-Posicion 212: 0
+Posicion 212: 8
 
-Posicion 213: 0
+Posicion 213: 5
 
-Posicion 214: 0
+Posicion 214: 5
 
-Posicion 215: 0
+Posicion 215: -1
 
-Posicion 216: 0
+Posicion 216: 5
 
-Posicion 217: 0
+Posicion 217: 5
 
 Posicion 218: 0
 
-Posicion 219: 0
+Posicion 219: -2
 
-Posicion 220: 0
+Posicion 220: 5
 
-Posicion 221: 0
+Posicion 221: 28
 
 Posicion 222: 0
 
-Posicion 223: 0
+Posicion 223: -10
 
-Posicion 224: 0
+Posicion 224: 8
 
 Posicion 225: 0
 
-Posicion 226: 0
+Posicion 226: 31
 
-Posicion 227: 0
+Posicion 227: 88
 
-Posicion 228: 0
+Posicion 228: 43
 
 Posicion 229: 0
 
-Posicion 230: 0
+Posicion 230: 31
 
 Posicion 231: 0
 
-Posicion 232: 0
+Posicion 232: 35
 
 Posicion 233: 0
 
-Posicion 234: 0
+Posicion 234: 13
 
-Posicion 235: 0
+Posicion 235: 92
 
-Posicion 236: 0
+Posicion 236: 35
 
 Posicion 237: 0
 
-Posicion 238: 0
+Posicion 238: 11
 
-Posicion 239: 0
+Posicion 239: 368
 
-Posicion 240: 0
+Posicion 240: 35
 
 Posicion 241: 0
 
-Posicion 242: 0
+Posicion 242: 14
 
-Posicion 243: 0
+Posicion 243: 28
 
-Posicion 244: 0
+Posicion 244: 35
 
 Posicion 245: 0
 
-Posicion 246: 0
+Posicion 246: 15
 
-Posicion 247: 0
+Posicion 247: 364
 
-Posicion 248: 0
+Posicion 248: 63
 
 Posicion 249: 0
 

@@ -344,37 +344,27 @@ namespace ProyectoMIPS
          * Se crea un método para pedirle una instrucción a la
          * caché de instrucciones
          * ====================================================== */
-        public instruccion obtienerInstruccion(int hilo)
+        public void obtiener_instruccion(int hilo)
         {
-            //int numeroBloque = contextoHilo[hilo].getRegistro(33) / 16;
-            //int numeroPalabra = (contextoHilo[hilo].getRegistro(33) % 16) / 4;
-
-            // índice donde se debería encontrar el bloque en cahé si estuviera
+            int numeroBloque = nucleoHilo[hilo].obtener_contador_programa() / 16;
+            int numeroPalabra = (nucleoHilo[hilo].obtener_contador_programa() % 16) / 4;
+            System.Console.WriteLine("Numero de bloque" + numeroBloque + "   numero de palabra" + numeroPalabra);
 
             // El bloque no está en caché
-            //if (cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque))
-                /*m_cache_instrucciones->identificador_de_bloque_memoria[indice]*/
-
+            if (!cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque))
             {
                 // Debe esperar mientras el bus no esté disponible
-                while (true)
-                {
-                    break;
+ 
                     //bloquear el bus
-                }
 
                 // Se pide el bloque a memoria prinicipal
                 /*m_procesador.obtener_bloque(numero_de_bloque)*/
               //  cacheInstruccionesHilo[hilo].setBloque(getBloqueMemoria(numeroBloque), numeroBloque);
-
-
                 // Aquí se da el retraso de tiempo en el cual se debe ir a memoria a traer un bloque.
-                
                 // Se libera el bus
             }
 
             //return cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra);
-            return null;
         }
 
         public instruccion[] obtener_bloque_memoria (int numeroDeBloque)
@@ -417,6 +407,7 @@ namespace ProyectoMIPS
         /* Se extrae un hilillo de la cola y se le asigna al nucleo*/
         public Boolean desencolarContexto(int nucleo)
         {
+            System.Console.WriteLine("Desencolando " + nucleo + "....");
             if (colaHilillos.Count != 0)
             {
                 hilillo auxiliar = colaHilillos.Dequeue();
