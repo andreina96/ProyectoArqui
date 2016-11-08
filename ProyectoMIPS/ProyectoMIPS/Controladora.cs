@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text.RegularExpressions;
-
+using System.Threading;
 
 namespace ProyectoMIPS
 {
@@ -71,6 +71,33 @@ namespace ProyectoMIPS
             cargar_memoria_principal();
             procesador.imprimirMemoria();
             procesador.imprimirColaHilillos();
+
+            procesador.asignar_numero_quantum(quantum); // Se asigna el quantum al procesador
+
+            // Se crean los núcleos que correrán los hilillos
+            Thread nucleo1 = new Thread(new ThreadStart(procesador.correInstrucciones));
+            Thread nucleo2 = new Thread(new ThreadStart(procesador.correInstrucciones));
+            Thread nucleo3 = new Thread(new ThreadStart(procesador.correInstrucciones));
+
+            // Se inicia la ejecución de los hilillos
+            nucleo1.Start();
+            nucleo2.Start();
+            nucleo3.Start();
+
+            /* Voy por aqui Andre: Hay que asignarle los hilillos a los nucleos la primera vez. Existe un metodo en procesador
+            para ello*/ 
+
+            // Se ejecuta los tres núcleos permanezcan activos
+            while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
+            {
+                
+
+            }
+
+            // Se unen  los hilos con el hilo principal
+            nucleo1.Join();
+            nucleo2.Join();
+            nucleo3.Join();
         }
     }
 }

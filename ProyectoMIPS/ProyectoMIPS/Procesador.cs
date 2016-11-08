@@ -399,5 +399,40 @@ namespace ProyectoMIPS
 
             return bloque;
         }
+
+        public void imprimirNucleo(int nucleo)
+        {
+            System.Console.WriteLine("__________________"+"Nucleo: "+ nucleo +"__________________\n");
+            System.Console.WriteLine("Inicio hilillo:" + nucleoHilo[nucleo].obtener_inicio_hilillo());
+            System.Console.WriteLine("Fin hilillo:" + nucleoHilo[nucleo].obtener_fin_hilillo());
+            System.Console.WriteLine("Fin hilillo:" + nucleoHilo[nucleo].obtener_contador_programa());
+
+            for (int i = 0; i < 33; i++)
+            {
+                System.Console.WriteLine("Registro" + i + ": " + nucleoHilo[nucleo].obtener_registro(i));
+            }
+
+        }
+
+        /* Se extrae un hilillo de la cola y se le asigna al nucleo*/
+        public Boolean desencolarContexto(int nucleo)
+        {
+            if (colaHilillos.Count != 0)
+            {
+                hilillo auxiliar = colaHilillos.Dequeue();
+                nucleoHilo[nucleo].asignar_inicio_hilillo(auxiliar.obtener_inicio_hilillo());
+                nucleoHilo[nucleo].asignar_fin_hilillo(auxiliar.obtener_fin_hilillo());
+                nucleoHilo[nucleo].copiar_registros(auxiliar);
+                return true;
+            }
+       
+            return false;
+        }
+
+        /*Metodo principal de ejecución*/
+        public void correInstrucciones()
+        {
+            System.Console.WriteLine("Iniciando...");
+        }
     }
 }

@@ -1,9 +1,9 @@
-  sdsd 2dsd
 Numero hilillo: 0
 Dirección de inicio: 0
 Dirección de fin: 83
 Finalizado: False
 PC: 0
+
 Registro0 : 0
 
 Registro1 : 0
@@ -70,13 +70,15 @@ Registro31 : 0
 
 Registro32 : 0
 
+
 ----------------------------------------------------
-  sdsd 2dsd
+
 Numero hilillo: 1
 Dirección de inicio: 84
 Dirección de fin: 167
 Finalizado: False
 PC: 84
+
 Registro0 : 0
 
 Registro1 : 0
@@ -143,4 +145,6 @@ Registro31 : 0
 
 Registro32 : 0
 
+
 ----------------------------------------------------
+

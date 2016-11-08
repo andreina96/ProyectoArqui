@@ -120,6 +120,26 @@ namespace ProyectoMIPS
             fin_hilillo = 0;
         }
 
+        public void asignar_inicio_hilillo(int inicio)
+        {
+            this.inicio_hilillo = inicio;
+        }
+
+        public int obtener_inicio_hilillo()
+        {
+            return this.inicio_hilillo;
+        }
+
+        public void asignar_fin_hilillo(int fin)
+        {
+            this.fin_hilillo = fin;
+        }
+
+        public int obtener_fin_hilillo()
+        {
+            return this.fin_hilillo;
+        }
+
         public void asignar_registro (int reg, int pos)
         {
             registro[pos] = reg;
@@ -128,6 +148,11 @@ namespace ProyectoMIPS
         public int obtener_registro(int pos)
         {
             return registro[pos];
+        }
+
+        public int obtener_contador_programa()
+        {
+            return this.PC;
         }
 
         public void copiar_registros (hilillo hil)
