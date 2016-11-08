@@ -31,7 +31,6 @@ namespace ProyectoMIPS
             numero_instrucciones = 0;
         }
 
-
         public void cargar_memoria_principal()
         {
             int inicio = 0;
@@ -64,7 +63,6 @@ namespace ProyectoMIPS
                 numero_instrucciones++;
             }
         }
-
 
         public void iniciarSimulacion()
         {

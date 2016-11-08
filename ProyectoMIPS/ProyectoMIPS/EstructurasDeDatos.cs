@@ -65,14 +65,13 @@ namespace ProyectoMIPS
         {
             PC = contador_programa;
         }
-        
-        
          
         // Obtener el contexto
         public int[] obtener_registros()
         {
             return registros;
         }
+
         // Asignar contexto de un hilillo
         public void asignar_contexto( int contador_programa, int[] reg)
         {
@@ -81,13 +80,12 @@ namespace ProyectoMIPS
             for (int i = 0; i < 33; i++)
                 registros[i] = reg[i]; 
         }
+
         // Asignar estado del hilillo
         public void asignar_finalizado()
         {
             finalizado = true;
         }
-
-
 
         // Obtener estado del hilillo
         public bool obtener_finalizado()
@@ -109,7 +107,6 @@ namespace ProyectoMIPS
      * Registro RL:
      *      registro[32]
      * ====================================================== */
-
     public class nucleo
     {
         public int[] registro;
@@ -190,7 +187,6 @@ namespace ProyectoMIPS
     * Tercer operando:
     *       instruc[3]
     * ====================================================== */
-    
     public class instruccion
     {
         int[] instruc;
@@ -225,7 +221,6 @@ namespace ProyectoMIPS
     * Bit de validez del bloque:
     *       validez (inicialmente falso)
     * ====================================================== */
-
     public class bloqueDatos
     {
         public int[] datos;
@@ -251,9 +246,7 @@ namespace ProyectoMIPS
         public void setBloque(int[] nuevosDatos)
         {
             for (int i = 0; i < 4; i++)
-            {
                 datos[i] = nuevosDatos[i];
-            }
         }
 
         public int[] getBloque()
@@ -320,7 +313,6 @@ namespace ProyectoMIPS
     *       numeroBloque[0]-numeroBloque[3] (inicialmente en
     *       -1)
     * ====================================================== */
-
     public class cacheDatos
     {
         public bloqueDatos[] bloqueDatos;
@@ -374,7 +366,6 @@ namespace ProyectoMIPS
     *       numeroBloque[0]-numeroBloque[3] (inicialmente en
     *       -1)
     * ====================================================== */
-
     public class cacheInstrucciones
     {
         public bloqueInstrucciones[] bloqueInstruccion;

@@ -21,14 +21,12 @@ namespace ProyectoMIPS
          *     bloque 24: memoriaPrincipalDatos[92]-memoriaPrincipalDatos[95]
          *      
          * ====================================================== */
-
         public int[] memoriaPrincipalDatos;
 
         /* ======================================================
          * Se crea una variable para guardar hasta qué parte la 
          * memoria de datos está llena
          * ====================================================== */
-
         int memoriaPrincipalDatosBloqueLleno;
 
         /* ======================================================
@@ -57,42 +55,36 @@ namespace ProyectoMIPS
          *                memoriaPrincipalInstrucciones[636]-memoriaPrincipalInstrucciones[639]
          *      
          * ====================================================== */
-
         public int[] memoriaPrincipalInstrucciones;
 
         /* ======================================================
          * Se crea una variable para guardar hasta qué parte la 
          * memoria de instrucciones está llena
          * ====================================================== */
-
         int memoriaPrincipalInstruccionesBloqueLleno;
 
         /* ======================================================
          * Se crean estructuras para representar los contextos
          * temporales de cada hilo
          * ====================================================== */
-
         nucleo [] nucleoHilo;
 
         /* ======================================================
          * Se crean estructuras para representar las cachés de 
          * datos de cada hilo
          * ====================================================== */
-
         cacheDatos[] cacheDatosHilo;
 
         /* ======================================================
          * Se crean estructuras para representar las cachés de 
          * instrucciones de cada hilo
          * ====================================================== */
-
         cacheInstrucciones[] cacheInstruccionesHilo;
 
         /* ======================================================
          * Se crea una estructura para representar el orden de 
          * los hilos que siguen por ejecutar
          * ====================================================== */
-
         Queue<hilillo> colaHilillos;
         Queue<hilillo> hilillos_finalizados;
 
@@ -100,14 +92,12 @@ namespace ProyectoMIPS
          * Se crea una variable para almacenar el número de hili-
          * llos
          * ====================================================== */
-
         int numero_hilillos;
 
         /* ======================================================
          * Se crea una variable para almacenar el número de quan-
          * tum
          * ====================================================== */
-
         int numero_Quantum;
 
         public Procesador()
@@ -170,9 +160,7 @@ namespace ProyectoMIPS
                 memoriaPrincipalInstruccionesBloqueLleno += 4;
             }
             else
-            {
                 MessageBox.Show("Error: la memoria se encuentra llena");
-            }
         }
 
         /* ======================================================
@@ -340,6 +328,74 @@ namespace ProyectoMIPS
             }
         }
 
+        /* Instruccion: LW
+         * 
+         * Descripción:
+         *      R[PrimerOperando] <- Mem[R[TercerOperando] + SegundoOperando * 4]
+         */
+        public void LW(int hilo, int PrimerOperando, int SegundoOperando, int TercerOperando)
+        {
+            /* **Todo esto va dentro un de un lock */
+
+            /* Se obtiene el número de byte en memoria al que corresponde la dirección */
+            int numByte = nucleoHilo[hilo].obtener_registro(TercerOperando) + (SegundoOperando * 4); 
+            /* Se obtiene el número de bloque en memoria al que corresponde la dirección */ 
+            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
+            /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
+            int numPalabra = (numByte % 16) / 4;
+            
+            /* 
+             * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
+             * es el bloque que se busca, entonces se ingresa al if, es decir hay HIT y se debe
+             * verificar si el bloque es válido
+             */
+            if (cacheDatosHilo[hilo].esNumeroBloque(numBloqueMemoria)) {
+                /*
+                 * Si el bloque es válido, entonces nada más se copia en el registro
+                 */
+                if(cacheDatosHilo[hilo].getBloque(numBloqueMemoria).validez == true)
+                {
+                    /* Se asigna el valor al registro */
+                    nucleoHilo[hilo].asignar_registro(
+                        cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), PrimerOperando);
+                }
+                /*
+                 * Sino, debe cargarse el bloque de memoria
+                 */
+                else
+                {
+                    /* Se carga a caché el bloque de memoria */
+                    int[] bloque = obtener_bloque_datos_memoria(numBloqueMemoria);
+                    cacheDatosHilo[hilo].setBloque(bloque, numBloqueMemoria);
+                    /* Se asigna el valor al registro */
+                    nucleoHilo[hilo].asignar_registro(
+                        cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), PrimerOperando);
+                }
+            }
+            /*
+             * Sino entonces hay que cargar el bloque de memoria
+             */
+            else
+            {
+                /* Se carga a caché el bloque de memoria */
+                int[] bloque = obtener_bloque_datos_memoria(numBloqueMemoria);
+                cacheDatosHilo[hilo].setBloque(bloque, numBloqueMemoria);
+                /* Se asigna el valor al registro */
+                nucleoHilo[hilo].asignar_registro(
+                    cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), PrimerOperando);
+            }
+        }
+
+        /* Instruccion: SW
+         * 
+         * Descripción:
+         *      Mem[R[TercerOperando] + SegundoOperando * 4] <- R[PrimerOperando]
+         */
+        public void SW(int PrimerOperando, int SegundoOperando, int TercerOperando)
+        {
+            /* Todo esto va dentro un de un lock */
+        }
+
         /* ======================================================
          * Se crea un método para pedirle una instrucción a la
          * caché de instrucciones
@@ -351,7 +407,7 @@ namespace ProyectoMIPS
             System.Console.WriteLine("Numero de bloque" + numeroBloque + "   numero de palabra" + numeroPalabra);
 
             // El bloque no está en caché
-            if (!cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque))
+            if (!cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque)) // Creo que aquí va numeroBloque % 4
             {
                 // Debe esperar mientras el bus no esté disponible
  
@@ -367,7 +423,7 @@ namespace ProyectoMIPS
             //return cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra);
         }
 
-        public instruccion[] obtener_bloque_memoria (int numeroDeBloque)
+        public instruccion[] obtener_bloque_instrucciones_memoria (int numeroDeBloque)
         {
             instruccion[] bloque = new instruccion[4];
             bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4], numeroDeBloque);
@@ -390,6 +446,17 @@ namespace ProyectoMIPS
             return bloque;
         }
 
+        public int[] obtener_bloque_datos_memoria(int numeroDeBloque)
+        {
+            int[] bloque = new int[4];
+            bloque[0] = memoriaPrincipalDatos[numeroDeBloque * 4];
+            bloque[1] = memoriaPrincipalDatos[numeroDeBloque * 4 + 1];
+            bloque[2] = memoriaPrincipalDatos[numeroDeBloque * 4 + 2];
+            bloque[3] = memoriaPrincipalDatos[numeroDeBloque * 4 + 3];
+
+            return bloque;
+        }
+
         public void imprimirNucleo(int nucleo)
         {
             System.Console.WriteLine("__________________"+"Nucleo: "+ nucleo +"__________________\n");
@@ -398,10 +465,7 @@ namespace ProyectoMIPS
             System.Console.WriteLine("Fin hilillo:" + nucleoHilo[nucleo].obtener_contador_programa());
 
             for (int i = 0; i < 33; i++)
-            {
                 System.Console.WriteLine("Registro" + i + ": " + nucleoHilo[nucleo].obtener_registro(i));
-            }
-
         }
 
         /* Se extrae un hilillo de la cola y se le asigna al nucleo*/
