@@ -393,6 +393,11 @@ namespace ProyectoMIPS
             }
         }
 
+        public int getNumeroBloque(int numBloque)
+        {
+            return numeroBloque[numBloque % 4];
+        }
+
         public void setBloque(instruccion[] bloqueNuevo, int nuevoNumeroBloque)
         {
             bloqueInstruccion[nuevoNumeroBloque % 4].setBloque(bloqueNuevo);
@@ -407,7 +412,7 @@ namespace ProyectoMIPS
 
         public bool esNumeroBloque(int numBloque)
         {
-            if ((numBloque % 4) == numeroBloque[numBloque % 4])
+            if (numBloque == numeroBloque[numBloque % 4])
                 return true;
             return false;
         }

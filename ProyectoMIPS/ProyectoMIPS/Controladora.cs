@@ -51,15 +51,16 @@ namespace ProyectoMIPS
                             fin += 4;
                             numero_instrucciones++;
                             procesador.cargarInstruccionMemoria(Convert.ToInt32(p[0]), Convert.ToInt32(p[1]), Convert.ToInt32(p[2]), Convert.ToInt32(p[3]));
-
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show("Ha ocurrido un error al leer el archivo: " + ex);
                         }
                     }
+
                     procesador.crear_hilillos(inicio, fin, i);
                 }
+
                 numero_instrucciones++;
             }
         }
@@ -73,31 +74,31 @@ namespace ProyectoMIPS
             procesador.asignar_numero_quantum(quantum); // Se asigna el quantum al procesador
 
             // Se crean los núcleos que correrán los hilillos
-            Thread nucleo1 = new Thread(new ThreadStart(procesador.correInstrucciones));
-            Thread nucleo2 = new Thread(new ThreadStart(procesador.correInstrucciones));
-            Thread nucleo3 = new Thread(new ThreadStart(procesador.correInstrucciones));
+            Thread nucleo1 = new Thread(procesador.correInstrucciones);
+            //Thread nucleo2 = new Thread(procesador.correInstrucciones);
+            //Thread nucleo3 = new Thread(procesador.correInstrucciones);
 
             // Se inicia la ejecución de los hilillos
-            nucleo1.Start();
-            nucleo2.Start();
-            nucleo3.Start();
+            nucleo1.Start(0);
+            //nucleo2.Start(1);
+            //nucleo3.Start(2);
             
-            procesador.desencolarContexto(0);
-            procesador.desencolarContexto(1);
-            procesador.desencolarContexto(2);
+            //procesador.desencolarContexto(0);
+            //procesador.desencolarContexto(1);
+            //procesador.desencolarContexto(2);
 
             // Se ejecuta los tres núcleos permanezcan activos
-           // while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
+            //while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
             //{
-                procesador.obtiener_instruccion(0);
-                procesador.obtiener_instruccion(1);
-                procesador.obtiener_instruccion(2);
+                //procesador.obtiener_instruccion(0);
+                //procesador.obtiener_instruccion(1);
+                //procesador.obtiener_instruccion(2);
             //}
 
             // Se unen  los hilos con el hilo principal
             nucleo1.Join();
-            nucleo2.Join();
-            nucleo3.Join();
+            //nucleo2.Join();
+            //nucleo3.Join();
         }
     }
 }

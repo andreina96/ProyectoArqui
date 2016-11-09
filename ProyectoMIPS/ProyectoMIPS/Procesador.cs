@@ -169,8 +169,8 @@ namespace ProyectoMIPS
          * ====================================================== */
         public void imprimirMemoria()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\ProyectoMIPS\Memoria.txt"))
-            {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\Memoria1.txt"))
+            {                      
                 for (int i = 0; i < 640; i++)
                     escritor.WriteLine("Posicion " + i + ": "+memoriaPrincipalInstrucciones[i] +"\n");
             }
@@ -182,7 +182,7 @@ namespace ProyectoMIPS
          * ====================================================== */
         public void imprimirColaHilillos()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\ProyectoMIPS\ColaHilillos.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\Memoria2.txt"))
             {
                 Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
                 hilillo aux = null;
@@ -231,7 +231,8 @@ namespace ProyectoMIPS
                          *      R[SegundoOperando] <- R[PrimerOperando] + TercerOperando 
                          */
 
-                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) + TercerOperando, SegundoOperando);
+                        nucleoHilo[hilo].asignar_registro(nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando, SegundoOperando);
+                        System.Console.WriteLine("DADDI dio: " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
                         break;
                     case 32:
                         /* Instruccion: DADD
@@ -249,7 +250,8 @@ namespace ProyectoMIPS
                          *      R[TercerOperando] <- R[PrimerOperando] - R[SegundoOperando] 
                          */
 
-                        //contextoHilo[hilo].setRegistro(contextoHilo[hilo].getRegistro(PrimerOperando) - contextoHilo[hilo].getRegistro(SegundoOperando), TercerOperando);
+                        nucleoHilo[hilo].asignar_registro(nucleoHilo[hilo].obtener_registro(PrimerOperando) - nucleoHilo[hilo].obtener_registro(SegundoOperando), TercerOperando);
+                        System.Console.WriteLine("SUB dio: " + nucleoHilo[hilo].obtener_registro(TercerOperando));
                         break;
                     case 12:
                         /* Instruccion: DMUL
@@ -451,48 +453,94 @@ namespace ProyectoMIPS
          * Se crea un método para pedirle una instrucción a la
          * caché de instrucciones
          * ====================================================== */
-        public void obtiener_instruccion(int hilo)
+        public int[] obtener_instruccion(int hilo)
         {
             int numeroBloque = nucleoHilo[hilo].obtener_contador_programa() / 16;
             int numeroPalabra = (nucleoHilo[hilo].obtener_contador_programa() % 16) / 4;
-            System.Console.WriteLine("Numero de bloque" + numeroBloque + "   numero de palabra" + numeroPalabra);
+            System.Console.WriteLine("Numero de bloque: " + numeroBloque + " | Numero de palabra: " + numeroPalabra);
+
+            int[] instruccion = new int[4];
 
             // El bloque no está en caché
+            System.Console.WriteLine("El número de bloque en esa posición en la caché es :" + cacheInstruccionesHilo[hilo].getNumeroBloque(numeroBloque));
             if (!cacheInstruccionesHilo[hilo].esNumeroBloque(numeroBloque)) // Creo que aquí va numeroBloque % 4
             {
                 // Debe esperar mientras el bus no esté disponible
- 
-                    //bloquear el bus
+                //bloquear el bus
 
                 // Se pide el bloque a memoria prinicipal
                 /*m_procesador.obtener_bloque(numero_de_bloque)*/
-              //  cacheInstruccionesHilo[hilo].setBloque(getBloqueMemoria(numeroBloque), numeroBloque);
+                cacheInstruccionesHilo[hilo].setBloque(obtener_bloque_instrucciones_memoria(numeroBloque), numeroBloque);
+                System.Console.WriteLine("Bloque en la caché: ");
+                System.Console.WriteLine("Palabra 0: " + 
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(0));
+                System.Console.WriteLine("Palabra 1: " +
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(1));
+                System.Console.WriteLine("Palabra 2: " +
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(2));
+                System.Console.WriteLine("Palabra 3: " +
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(3));
+                
+                instruccion[0] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(0);
+                instruccion[1] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(1);
+                instruccion[2] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(2);
+                instruccion[3] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(3);
+
                 // Aquí se da el retraso de tiempo en el cual se debe ir a memoria a traer un bloque.
                 // Se libera el bus
             }
+            else
+            {
+                int[] bloque = obtener_bloque_datos_memoria(numeroBloque);
+                cacheDatosHilo[hilo].setBloque(bloque, numeroBloque);
 
+                cacheInstruccionesHilo[hilo].setBloque(obtener_bloque_instrucciones_memoria(numeroBloque), numeroBloque);
+                System.Console.WriteLine("Bloque en la caché: ");
+                System.Console.WriteLine("Palabra 0: " +
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(0));
+                System.Console.WriteLine("Palabra 1: " +
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(1));
+                System.Console.WriteLine("Palabra 2: " +
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(2));
+                System.Console.WriteLine("Palabra 3: " +
+                    cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(3));
+
+                instruccion[0] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(0);
+                instruccion[1] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(1);
+                instruccion[2] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(2);
+                instruccion[3] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(3);
+            }
+
+            return instruccion;
+            //EjecucionInstruccion
             //return cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra);
         }
 
         public instruccion[] obtener_bloque_instrucciones_memoria (int numeroDeBloque)
         {
             instruccion[] bloque = new instruccion[4];
+            for(int i = 0; i < 4; i++)
+                bloque[i] = new instruccion();
+            /* Instrucción 0 */
             bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4], numeroDeBloque);
-            bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 1, numeroDeBloque);
-            bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 2, numeroDeBloque);
-            bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 3, numeroDeBloque);
-            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 4, numeroDeBloque);
-            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 5, numeroDeBloque);
-            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 6, numeroDeBloque);
-            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 7, numeroDeBloque);
-            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 8, numeroDeBloque);
-            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 9, numeroDeBloque);
-            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 10, numeroDeBloque);
-            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 11, numeroDeBloque);
-            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 12, numeroDeBloque);
-            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 13, numeroDeBloque);
-            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 14, numeroDeBloque);
-            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4] + 15, numeroDeBloque);
+            bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 1], numeroDeBloque + 1);
+            bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 2], numeroDeBloque + 2);
+            bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 3], numeroDeBloque + 3);
+            /* Instrucción 1 */
+            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 4], numeroDeBloque);
+            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 5], numeroDeBloque + 1);
+            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 6], numeroDeBloque + 2);
+            bloque[1].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 7], numeroDeBloque + 3);
+            /* Instrucción 2 */
+            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 8], numeroDeBloque);
+            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 9], numeroDeBloque + 1);
+            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 10], numeroDeBloque + 2);
+            bloque[2].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 11], numeroDeBloque + 3);
+            /* Instrucción 3 */
+            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 12], numeroDeBloque);
+            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 13], numeroDeBloque + 1);
+            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 14], numeroDeBloque + 2);
+            bloque[3].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 4 + 15], numeroDeBloque + 3);
 
             return bloque;
         }
@@ -534,6 +582,7 @@ namespace ProyectoMIPS
                 nucleoHilo[nucleo].asignar_inicio_hilillo(auxiliar.obtener_inicio_hilillo());
                 nucleoHilo[nucleo].asignar_fin_hilillo(auxiliar.obtener_fin_hilillo());
                 nucleoHilo[nucleo].copiar_registros(auxiliar);
+
                 return true;
             }
        
@@ -541,9 +590,27 @@ namespace ProyectoMIPS
         }
 
         /*Metodo principal de ejecución*/
-        public void correInstrucciones()
+        public void correInstrucciones(object hilo)
         {
-            System.Console.WriteLine("Iniciando...");
+            int ihilo = (int)hilo;
+
+            System.Console.WriteLine("Iniciando simulación de hilo " + ihilo + "...");
+            System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
+            this.desencolarContexto(ihilo);
+
+            int i = 1;
+            int j = 0;
+            //while (j < nucleoHilo[hilo].obtener_fin() && noHaAcabado) {
+                System.Console.WriteLine("Hilo " + ihilo + " - Obteniendo la instrucción " + i + "...");
+                int[] instruccion = this.obtener_instruccion(ihilo);
+            this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
+            nucleoHilo[ihilo].aumentar_contador_programa();
+                //System.Console.WriteLine("");
+                //System.Console.WriteLine("");
+                //System.Console.WriteLine("");
+                //System.Console.WriteLine("");
+                //System.Console.WriteLine("");
+            //}
         }
     }
 }
