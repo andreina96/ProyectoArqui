@@ -353,6 +353,16 @@ namespace ProyectoMIPS
         {
             return bloqueDatos[numBloque].validez;
         }
+
+        public void invalidar(int numBloque)
+        {
+            bloqueDatos[numBloque].validez = false;
+        }
+
+        public void modificarPalabraBloque(int dato, int palabra, int numBloque)
+        {
+            bloqueDatos[numBloque].setDato(dato, palabra);
+        }
     }
 
     /* ======================================================

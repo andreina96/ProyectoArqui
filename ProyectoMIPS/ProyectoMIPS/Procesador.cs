@@ -391,9 +391,60 @@ namespace ProyectoMIPS
          * Descripción:
          *      Mem[R[TercerOperando] + SegundoOperando * 4] <- R[PrimerOperando]
          */
-        public void SW(int PrimerOperando, int SegundoOperando, int TercerOperando)
+        public void SW(int hilo, int PrimerOperando, int SegundoOperando, int TercerOperando)
         {
-            /* Todo esto va dentro un de un lock */
+            /* **Todo esto va dentro un de un lock */
+
+            /* Se obtiene el número de byte en memoria al que corresponde la dirección */
+            int numByte = nucleoHilo[hilo].obtener_registro(TercerOperando) + (SegundoOperando * 4);
+            /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
+            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
+            /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
+            int numPalabra = (numByte % 16) / 4;
+
+            /*
+             * Se invalidan los bloques en las cachés de ambos hilos, en caso de qeu coincidan los 
+             * bloques en esa posición
+             */
+            if (cacheDatosHilo[(hilo + 1) % 3].esNumeroBloque(numBloqueMemoria))
+                cacheDatosHilo[(hilo + 1) % 3].invalidar(numBloqueMemoria);
+            if (cacheDatosHilo[(hilo + 2) % 3].esNumeroBloque(numBloqueMemoria))
+                cacheDatosHilo[(hilo + 2) % 3].invalidar(numBloqueMemoria);
+
+            /* 
+             * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
+             * es el bloque que se busca, entonces se ingresa al if, es decir hay HIT y se debe
+             * verificar si el bloque es válido
+             */
+            if (cacheDatosHilo[hilo].esNumeroBloque(numBloqueMemoria))
+            {
+                /*
+                 * Si el bloque es válido, entonces se guarda en caché y en memoria
+                 */
+                if (cacheDatosHilo[hilo].getBloque(numBloqueMemoria).validez == true)
+                {
+                    /* Se asigna el valor del dato del bloque a la caché */
+                    cacheDatosHilo[hilo].modificarPalabraBloque(nucleoHilo[hilo].obtener_registro(PrimerOperando), numPalabra, numBloqueMemoria);
+                    /* Se asigna el valor del dato del bloque a la memoria */
+                    cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(PrimerOperando), numPalabra, numBloqueMemoria);
+                }
+                /*
+                 * Sino, sólo se escribe el dato del bloque a memoria
+                 */
+                else
+                {
+                    /* Se asigna el valor del dato del bloque a la memoria */
+                    cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(PrimerOperando), numPalabra, numBloqueMemoria);
+                }
+            }
+            /*
+             * Sino entonces hay que guardar el bloque a memoria
+             */
+            else
+            {
+                /* Se asigna el valor del dato del bloque a la memoria */
+                cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(PrimerOperando), numPalabra, numBloqueMemoria);
+            }
         }
 
         /* ======================================================
@@ -455,6 +506,11 @@ namespace ProyectoMIPS
             bloque[3] = memoriaPrincipalDatos[numeroDeBloque * 4 + 3];
 
             return bloque;
+        }
+
+        public void cambiarDatoBloqueMemoria(int dato, int palabra, int numBloque)
+        {
+            memoriaPrincipalDatos[numBloque * 4 + palabra] = dato;
         }
 
         public void imprimirNucleo(int nucleo)

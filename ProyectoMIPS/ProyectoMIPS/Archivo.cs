@@ -13,7 +13,7 @@ namespace ProyectoMIPS
     {
         string ruta;
         int numInstrucciones;
-
+                                                                        
         public Archivo()
         {
             numInstrucciones = 0;
