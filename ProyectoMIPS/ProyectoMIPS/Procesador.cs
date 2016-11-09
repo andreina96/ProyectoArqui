@@ -340,9 +340,9 @@ namespace ProyectoMIPS
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
             int numByte = nucleoHilo[hilo].obtener_registro(TercerOperando) + (SegundoOperando * 4); 
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */ 
-            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
+            int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
-            int numPalabra = (numByte % 16) / 4;
+            int numPalabra = (numByte % 4) / 4;
             
             /* 
              * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
@@ -398,9 +398,9 @@ namespace ProyectoMIPS
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
             int numByte = nucleoHilo[hilo].obtener_registro(TercerOperando) + (SegundoOperando * 4);
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
-            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
+            int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
-            int numPalabra = (numByte % 16) / 4;
+            int numPalabra = (numByte % 4) / 4;
 
             /*
              * Se invalidan los bloques en las cachés de ambos hilos, en caso de qeu coincidan los 
