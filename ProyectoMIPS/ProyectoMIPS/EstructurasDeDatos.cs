@@ -345,7 +345,7 @@ namespace ProyectoMIPS
         public void setBloque(int[] bloqueNuevo, int nuevoNumeroBloque)
         {
             bloqueDatos[nuevoNumeroBloque % 4].setBloque(bloqueNuevo);
-            bloqueDatos[nuevoNumeroBloque % 4].validez = false;
+            bloqueDatos[nuevoNumeroBloque % 4].validez = true;
             numeroBloque[nuevoNumeroBloque % 4] = nuevoNumeroBloque;
         }
 
@@ -413,7 +413,7 @@ namespace ProyectoMIPS
         public void setBloque(instruccion[] bloqueNuevo, int nuevoNumeroBloque)
         {
             bloqueInstruccion[nuevoNumeroBloque % 4].setBloque(bloqueNuevo);
-            bloqueInstruccion[nuevoNumeroBloque % 4].validez = false;
+            bloqueInstruccion[nuevoNumeroBloque % 4].validez = true;
             numeroBloque[nuevoNumeroBloque % 4] = nuevoNumeroBloque;
         }
 

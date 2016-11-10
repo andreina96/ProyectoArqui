@@ -74,12 +74,13 @@ namespace ProyectoMIPS
             procesador.asignar_numero_quantum(quantum); // Se asigna el quantum al procesador
 
             // Se crean los núcleos que correrán los hilillos
-            Thread nucleo1 = new Thread(procesador.correInstrucciones);
+            /*Thread nucleo1 = new Thread(*/
+            procesador.correInstrucciones(0);//);
             //Thread nucleo2 = new Thread(procesador.correInstrucciones);
             //Thread nucleo3 = new Thread(procesador.correInstrucciones);
 
             // Se inicia la ejecución de los hilillos
-            nucleo1.Start(0);
+            //nucleo1.Start(0);
             //nucleo2.Start(1);
             //nucleo3.Start(2);
             
@@ -96,7 +97,7 @@ namespace ProyectoMIPS
             //}
 
             // Se unen  los hilos con el hilo principal
-            nucleo1.Join();
+            //nucleo1.Join();
             //nucleo2.Join();
             //nucleo3.Join();
         }
