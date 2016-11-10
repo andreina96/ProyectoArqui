@@ -26,7 +26,7 @@ namespace ProyectoMIPS
             numero_hilillo = numero_hil;
             inicio_hilillo = 0;
             fin_hilillo = 0;
-            registros = new int [34];
+            registros = new int[34];
             finalizado = false;
             PC = 0;
         }
@@ -65,7 +65,7 @@ namespace ProyectoMIPS
         {
             PC = contador_programa;
         }
-         
+
         // Obtener el contexto
         public int[] obtener_registros()
         {
@@ -73,12 +73,12 @@ namespace ProyectoMIPS
         }
 
         // Asignar contexto de un hilillo
-        public void asignar_contexto( int contador_programa, int[] reg)
+        public void asignar_contexto(int contador_programa, int[] reg)
         {
             PC = contador_programa;
 
             for (int i = 0; i < 33; i++)
-                registros[i] = reg[i]; 
+                registros[i] = reg[i];
         }
 
         // Asignar estado del hilillo
@@ -93,7 +93,7 @@ namespace ProyectoMIPS
             return finalizado;
         }
     }
-    
+
     /* ======================================================
      * Clase 2: Estructura Nucleo
      *
@@ -145,7 +145,7 @@ namespace ProyectoMIPS
             return this.fin_hilillo;
         }
 
-        public void asignar_registro (int reg, int pos)
+        public void asignar_registro(int reg, int pos)
         {
             registro[pos] = reg;
         }
@@ -163,9 +163,9 @@ namespace ProyectoMIPS
         public void aumentar_contador_programa()
         {
             PC = PC + 4;
-        } 
+        }
 
-        public void copiar_registros (hilillo hil)
+        public void copiar_registros(hilillo hil)
         {
             PC = hil.obtener_PC();
 
@@ -356,7 +356,7 @@ namespace ProyectoMIPS
 
         public bool esNumeroBloque(int numBloque)
         {
-            if((numBloque % 4) == numeroBloque[numBloque % 4])
+            if (numBloque == numeroBloque[numBloque % 4])
                 return true;
             return false;
         }
