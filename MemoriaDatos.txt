@@ -1,0 +1,192 @@
+Posicion 0: 1
+
+Posicion 1: 1
+
+Posicion 2: 1
+
+Posicion 3: 1
+
+Posicion 4: 1
+
+Posicion 5: 1
+
+Posicion 6: 1
+
+Posicion 7: 1
+
+Posicion 8: 1
+
+Posicion 9: 1
+
+Posicion 10: 1
+
+Posicion 11: 1
+
+Posicion 12: 1
+
+Posicion 13: 1
+
+Posicion 14: 1
+
+Posicion 15: 1
+
+Posicion 16: 1
+
+Posicion 17: 1
+
+Posicion 18: 1
+
+Posicion 19: 1
+
+Posicion 20: 1
+
+Posicion 21: 1
+
+Posicion 22: 1
+
+Posicion 23: 1
+
+Posicion 24: 1
+
+Posicion 25: 1
+
+Posicion 26: 1
+
+Posicion 27: 1
+
+Posicion 28: 1
+
+Posicion 29: 1
+
+Posicion 30: 1
+
+Posicion 31: 1
+
+Posicion 32: 1
+
+Posicion 33: 1
+
+Posicion 34: 1
+
+Posicion 35: 1
+
+Posicion 36: 1
+
+Posicion 37: 1
+
+Posicion 38: 1
+
+Posicion 39: 1
+
+Posicion 40: 1
+
+Posicion 41: 1
+
+Posicion 42: 1
+
+Posicion 43: 1
+
+Posicion 44: 1
+
+Posicion 45: 1
+
+Posicion 46: 1
+
+Posicion 47: 1
+
+Posicion 48: 1
+
+Posicion 49: 1
+
+Posicion 50: 1
+
+Posicion 51: 1
+
+Posicion 52: 1
+
+Posicion 53: 1
+
+Posicion 54: 1
+
+Posicion 55: 1
+
+Posicion 56: 1
+
+Posicion 57: 1
+
+Posicion 58: 1
+
+Posicion 59: 1
+
+Posicion 60: 1
+
+Posicion 61: 1
+
+Posicion 62: 1
+
+Posicion 63: 1
+
+Posicion 64: 1
+
+Posicion 65: 1
+
+Posicion 66: 1
+
+Posicion 67: 1
+
+Posicion 68: 1
+
+Posicion 69: 1
+
+Posicion 70: 1
+
+Posicion 71: 1
+
+Posicion 72: 1
+
+Posicion 73: 1
+
+Posicion 74: 1
+
+Posicion 75: 1
+
+Posicion 76: 1
+
+Posicion 77: 1
+
+Posicion 78: 1
+
+Posicion 79: 1
+
+Posicion 80: 1
+
+Posicion 81: 1
+
+Posicion 82: 1
+
+Posicion 83: 1
+
+Posicion 84: 1
+
+Posicion 85: 1
+
+Posicion 86: 1
+
+Posicion 87: 1
+
+Posicion 88: 1
+
+Posicion 89: 1
+
+Posicion 90: 1
+
+Posicion 91: 1
+
+Posicion 92: 99
+
+Posicion 93: 1
+
+Posicion 94: 1
+
+Posicion 95: 1
+
