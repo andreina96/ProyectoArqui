@@ -169,7 +169,7 @@ namespace ProyectoMIPS
          * ====================================================== */
         public void imprimirMemoria()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\Memoria1.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\MemoriaInicio.txt"))
             {                      
                 for (int i = 0; i < 640; i++)
                     escritor.WriteLine("Posicion " + i + ": "+memoriaPrincipalInstrucciones[i] +"\n");
@@ -182,7 +182,7 @@ namespace ProyectoMIPS
          * ====================================================== */
         public void imprimirColaHilillos()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\Memoria2.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\HililloInicio.txt"))
             {
                 Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
                 hilillo aux = null;
@@ -362,16 +362,14 @@ namespace ProyectoMIPS
         {
             /* **Todo esto va dentro un de un lock */
 
-            System.Console.WriteLine("LW dio:");
+            System.Console.WriteLine("  Entrando a LW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
             int numByte = nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando;
-            System.Console.WriteLine("  numByte : " + numByte); 
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */ 
             int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
-            System.Console.WriteLine("  numBloqueMemoria : " + numBloqueMemoria);
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
             int numPalabra = (numByte % 4) / 4;
-            System.Console.WriteLine("  numPalabra : " + numPalabra);
+            System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria + "  numPalabra : " + numPalabra);
             
             /* 
              * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
@@ -429,16 +427,14 @@ namespace ProyectoMIPS
         {
             /* **Todo esto va dentro un de un lock */
 
-            System.Console.WriteLine("SW dio:");
+            System.Console.WriteLine("  Entrando a SW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
             int numByte = nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando;
-            System.Console.WriteLine("  numByte : " + numByte);
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
             int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
-            System.Console.WriteLine("  numBloqueMemoria : " + numBloqueMemoria);
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
             int numPalabra = (numByte % 4);
-            System.Console.WriteLine("  numPalabra : " + numPalabra);
+            System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria + "  numPalabra : " + numPalabra);
 
             /*
              * Se invalidan los bloques en las cachés de ambos hilos, en caso de qeu coincidan los 
@@ -651,14 +647,23 @@ namespace ProyectoMIPS
             System.Console.WriteLine("");
             System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
             this.desencolarContexto(ihilo);
+            System.Console.WriteLine("");
 
             int i = 0;
             while (!nucleoHilo[ihilo].obtener_finalizado()) {
-                System.Console.WriteLine("Hilo " + ihilo + " - Obteniendo la instrucción " + i + "...");
+                System.Console.WriteLine("-----------------------------------------------");
+                System.Console.WriteLine("");
+                System.Console.WriteLine("Ejecutando instrucción " + i + "...");
+                System.Console.WriteLine("");
+                System.Console.WriteLine("Obteniendo información sobre la instrucción...");
+                System.Console.WriteLine("");
+                System.Console.WriteLine("  PC: " + nucleoHilo[ihilo].PC);
                 int[] instruccion = this.obtener_instruccion(ihilo);
-                System.Console.WriteLine("PC: " + nucleoHilo[ihilo].PC);
+                System.Console.WriteLine("");
                 this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
                 i++;
+                System.Console.WriteLine("-----------------------------------------------");
+                System.Console.WriteLine("");
             }
         }
     }
