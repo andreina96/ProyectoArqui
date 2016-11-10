@@ -113,6 +113,7 @@ namespace ProyectoMIPS
         public int PC;
         public int inicio_hilillo;
         public int fin_hilillo;
+        bool finalizado;
 
         public nucleo()
         {
@@ -121,6 +122,7 @@ namespace ProyectoMIPS
             registro[0] = 0;
             inicio_hilillo = 0;
             fin_hilillo = 0;
+            finalizado = false;
         }
 
         public void asignar_inicio_hilillo(int inicio)
@@ -169,6 +171,16 @@ namespace ProyectoMIPS
 
             for (int i = 1; i < 33; i++)
                 registro[i - 1] = hil.obtener_registros()[i];
+        }
+
+        public void asignar_finalizado(bool f)
+        {
+            finalizado = f;
+        }
+
+        public bool obtener_finalizado()
+        {
+            return finalizado;
         }
     }
 
