@@ -72,31 +72,22 @@ namespace ProyectoMIPS
             procesador.imprimirColaHilillos();
             procesador.asignar_numero_quantum(quantum); // Se asigna el quantum al procesador
             procesador.imprimirMemoriaDatos();
-            procesador.imprimirRegistro();
 
-            // Se crean los núcleos que correrán los hilillos
             Thread nucleo1 = new Thread(procesador.correInstrucciones);
             Thread nucleo2 = new Thread(procesador.correInstrucciones);
             Thread nucleo3 = new Thread(procesador.correInstrucciones);
 
-            // Se inicia la ejecución de los hilillos
             nucleo1.Start(0);
             nucleo2.Start(1);
             nucleo3.Start(2);
 
-            //procesador.desencolarContexto(0);
-            //procesador.desencolarContexto(1);
-            //procesador.desencolarContexto(2);
+            while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
+            {
 
-            // Se ejecuta los tres núcleos permanezcan activos
-            //while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
-            //{
-            //procesador.obtiener_instruccion(0);
-            //procesador.obtiener_instruccion(1);
-            //procesador.obtiener_instruccion(2);
-            //}
+            }
 
-            // Se unen  los hilos con el hilo principal
+            procesador.imprimirRegistro();
+
             nucleo1.Join();
             nucleo2.Join();
             nucleo3.Join();

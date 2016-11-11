@@ -215,7 +215,7 @@ namespace ProyectoMIPS
                 Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
                 hilillo aux = null;
 
-                while (cola_aux.Count != 0)
+                while (cola_aux.Count > 0)
                 {
                     aux = cola_aux.Dequeue();
                     escritor.WriteLine("Numero hilillo: " + aux.obtener_numero_hil());
@@ -461,8 +461,8 @@ namespace ProyectoMIPS
                             finally
                             {
                                 System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de memoria");
-                                Monitor.Exit(memoriaPrincipalDatos);
-
+                                Monitor.Exit(cacheDatosHilo[hilo]);
+                                completado = true;
                             }
                         }
                         else
@@ -474,7 +474,7 @@ namespace ProyectoMIPS
                     finally
                     {
                         System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de caché");
-                        Monitor.Exit(cacheDatosHilo);
+                        Monitor.Exit(memoriaPrincipalDatos);
                     }
                 }
                 else
@@ -530,19 +530,17 @@ namespace ProyectoMIPS
                             System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché para hilo " + ((hilo + 1) % 3));
                             try
                             {
-                                //if (cacheDatosHilo[(hilo + 1) % 3].esNumeroBloque(numBloqueMemoria))
-                                if(cacheDatosHilo[(hilo + 1) % 3].numeroBloque[numBloqueMemoria % 4] == numBloqueMemoria)
+                                if (cacheDatosHilo[(hilo + 1) % 3].esNumeroBloque(numBloqueMemoria))
                                 {
                                     System.Console.WriteLine("      Bloque en la caché del núcleo " + (hilo + 1) % 3 + " invalilado");
-                                    //cacheDatosHilo[(hilo + 1) % 3].invalidar(numBloqueMemoria);
-                                    cacheDatosHilo[(hilo + 1) % 3].bloqueDatos[numBloqueMemoria].validez = false;
+                                    cacheDatosHilo[(hilo + 1) % 3].invalidar(numBloqueMemoria);
                                 }
                             }
                             finally
                             {
                                 try
                                 {
-                                    Monitor.Exit(cacheDatosHilo[(hilo + 2) % 3]);
+                                    Monitor.Exit(cacheDatosHilo[(hilo + 1) % 3]);
                                     System.Console.WriteLine("Me metí a caca");
                                 }
                                 catch(Exception e)
@@ -632,8 +630,7 @@ namespace ProyectoMIPS
                             finally
                             {
                                 System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de caché");
-                                Monitor.Exit(memoriaPrincipalDatos);
-
+                                Monitor.Exit(cacheDatosHilo[hilo]);
                             }
                         }
                         else
@@ -645,7 +642,7 @@ namespace ProyectoMIPS
                     finally
                     {
                         System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de memoria");
-                        Monitor.Exit(cacheDatosHilo);
+                        Monitor.Exit(memoriaPrincipalDatos);
                     }
                 }
             }
@@ -789,21 +786,22 @@ namespace ProyectoMIPS
                 {
                     try
                     {
-                        if (colaHilillos.Count != 0)
+                        if (colaHilillos.Count > 0)
                         {
+                            System.Console.WriteLine("Hilo : " + hilo + " logró desencolar");
                             hilillo auxiliar = colaHilillos.Dequeue();
                             nucleoHilo[hilo].asignar_inicio_hilillo(auxiliar.obtener_inicio_hilillo());
                             nucleoHilo[hilo].asignar_fin_hilillo(auxiliar.obtener_fin_hilillo());
                             nucleoHilo[hilo].copiar_registros(auxiliar);
                             nucleoHilo[hilo].asignar_finalizado(false);
-
-                            return true;
                         }
                     }
                     finally
                     {
                         Monitor.Exit(colaHilillos);
                     }
+
+                    return true;
                 }
             }
         }
@@ -817,6 +815,7 @@ namespace ProyectoMIPS
             System.Console.WriteLine("");
 
             int i = 0;
+
             while (this.colaHilillos.Count > 0) {
                 System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
                 System.Console.WriteLine("");
