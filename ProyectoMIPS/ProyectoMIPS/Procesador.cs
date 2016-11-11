@@ -382,9 +382,9 @@ namespace ProyectoMIPS
         {
             System.Console.WriteLine("  Entrando a LW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
-            int numByte = nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando;
+            int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando) / 4;
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */ 
-            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
+            int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
             int numPalabra = (numByte % 4);
             System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria + "  numPalabra : " + numPalabra);
@@ -497,9 +497,9 @@ namespace ProyectoMIPS
         {
             System.Console.WriteLine("  Entrando a SW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
-            int numByte = nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando;
+            int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando) / 4;
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
-            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
+            int numBloqueMemoria = numByte / 4;
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
             System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria );
 
@@ -509,6 +509,7 @@ namespace ProyectoMIPS
              * Variable para controlar si se logró hacer los dos procedimientos de manera atómica
              */
             bool completado = false;
+
             while (!completado)
             {
                 bool busMemoria = Monitor.TryEnter(memoriaPrincipalDatos);
@@ -516,13 +517,13 @@ namespace ProyectoMIPS
                 if (busMemoria)
                 {
                     System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de memoria");
+
                     try
                     {
                         /*
                          * Se invalidan los bloques en las cachés de ambos hilos, en caso de qeu coincidan los 
                          * bloques en esa posición
                          */
-
                         bool busCache1 = Monitor.TryEnter(cacheDatosHilo[(hilo + 1) % 3]);
 
                         if (busCache1)
@@ -536,18 +537,16 @@ namespace ProyectoMIPS
                                     cacheDatosHilo[(hilo + 1) % 3].invalidar(numBloqueMemoria);
                                 }
                             }
+                            catch (Exception e)
+                            {
+                                System.Console.WriteLine("Error en SW " + (hilo + 1) % 3 + " : " + e);
+                            }
                             finally
                             {
-                                try
-                                {
-                                    Monitor.Exit(cacheDatosHilo[(hilo + 1) % 3]);
-                                    System.Console.WriteLine("Me metí a caca");
-                                }
-                                catch(Exception e)
-                                {
-                                    System.Console.WriteLine("Error en caca : " + e);
-                                }
+                                Monitor.Exit(cacheDatosHilo[(hilo + 1) % 3]);
+                                System.Console.WriteLine("Me metí a caca");
                             }
+
                             completado = true;
                         }
                         else
@@ -556,88 +555,104 @@ namespace ProyectoMIPS
                             completado = false;
                         }
 
-                        bool busCache2 = Monitor.TryEnter(cacheDatosHilo[(hilo + 2) % 3]);
+                        if (completado) {
+                            bool busCache2 = Monitor.TryEnter(cacheDatosHilo[(hilo + 2) % 3]);
 
-                        if (busCache2 && completado == true)
-                        {
-                            System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché para hilo " + ((hilo + 2) % 3));
-                            try
+                            if (busCache2)
                             {
-                                if (cacheDatosHilo[(hilo + 2) % 3].esNumeroBloque(numBloqueMemoria))
+                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché para hilo " + ((hilo + 2) % 3));
+                                try
                                 {
-                                    System.Console.WriteLine("      Bloque en la caché del núcleo " + (hilo + 1) % 3 + " invalilado");
-                                    cacheDatosHilo[(hilo + 2) % 3].invalidar(numBloqueMemoria);
+                                    if (cacheDatosHilo[(hilo + 2) % 3].esNumeroBloque(numBloqueMemoria))
+                                    {
+                                        System.Console.WriteLine("      Bloque en la caché del núcleo " + (hilo + 2) % 3 + " invalilado");
+                                        cacheDatosHilo[(hilo + 2) % 3].invalidar(numBloqueMemoria);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.WriteLine("Error en SW " + (hilo + 2) % 3 + " : " + e);
+                                }
+                                finally
+                                {
+                                    Monitor.Exit(cacheDatosHilo[(hilo + 2) % 3]);
                                 }
                             }
-                            finally
+                            else
                             {
-                                Monitor.Exit(cacheDatosHilo[(hilo + 2) % 3]);
+                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de caché para hilo " + ((hilo + 2) % 3));
+                                completado = false;
                             }
                         }
-                        else
-                        {
-                            System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de caché para hilo " + ((hilo + 2) % 3));
-                            completado = false;
-                        }
 
-                        bool busCache3 = Monitor.TryEnter(cacheDatosHilo[hilo]);
+                        if (completado) {
+                            bool busCache3 = Monitor.TryEnter(cacheDatosHilo[hilo]);
 
-                        if (busCache3 && completado == true)
-                        {
-                            System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché");
-                            try
+                            if (busCache3)
                             {
-                                /* 
-                                 * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
-                                 * es el bloque que se busca, entonces se ingresa al if, es decir hay HIT y se debe
-                                 * verificar si el bloque es válido
-                                 */
-                                if (cacheDatosHilo[hilo].esNumeroBloque(numBloqueMemoria))
+                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché");
+                                try
                                 {
-                                    /*
-                                     * Si el bloque es válido, entonces se guarda en caché y en memoria
+                                    /* 
+                                     * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
+                                     * es el bloque que se busca, entonces se ingresa al if, es decir hay HIT y se debe
+                                     * verificar si el bloque es válido
                                      */
-                                    if (cacheDatosHilo[hilo].getBloque(numBloqueMemoria).validez == true)
+                                    if (cacheDatosHilo[hilo].esNumeroBloque(numBloqueMemoria))
                                     {
-                                        System.Console.WriteLine("      HIT Válido");
-                                        /* Se asigna el valor del dato del bloque a la caché */
-                                        cacheDatosHilo[hilo].modificarPalabraBloque(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte % 4, numBloqueMemoria);
-                                        /* Se asigna el valor del dato del bloque a la memoria */
-                                        cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
-                                        System.Console.WriteLine("        El dato que se cargó en memoria fue " + nucleoHilo[hilo].obtener_registro(PrimerOperando));
+                                        /*
+                                         * Si el bloque es válido, entonces se guarda en caché y en memoria
+                                         */
+                                        if (cacheDatosHilo[hilo].getBloque(numBloqueMemoria).validez == true)
+                                        {
+                                            System.Console.WriteLine("      HIT Válido");
+                                            /* Se asigna el valor del dato del bloque a la caché */
+                                            cacheDatosHilo[hilo].modificarPalabraBloque(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte % 4, numBloqueMemoria);
+                                            /* Se asigna el valor del dato del bloque a la memoria */
+                                            cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
+                                            System.Console.WriteLine("        El dato que se cargó en memoria fue " + nucleoHilo[hilo].obtener_registro(PrimerOperando));
+                                        }
+                                        /*
+                                         * Sino, sólo se escribe el dato del bloque a memoria
+                                         */
+                                        else
+                                        {
+                                            System.Console.WriteLine("      HIT Inválido");
+                                            /* Se asigna el valor del dato del bloque a la memoria */
+                                            cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
+                                            System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
+                                        }
                                     }
                                     /*
-                                     * Sino, sólo se escribe el dato del bloque a memoria
+                                     * Sino entonces hay que guardar el bloque a memoria
                                      */
                                     else
                                     {
-                                        System.Console.WriteLine("      HIT Inválido");
                                         /* Se asigna el valor del dato del bloque a la memoria */
                                         cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
                                         System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
                                     }
                                 }
-                                /*
-                                 * Sino entonces hay que guardar el bloque a memoria
-                                 */
-                                else
+                                catch (Exception e)
                                 {
-                                    /* Se asigna el valor del dato del bloque a la memoria */
-                                    cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
-                                    System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
+                                    System.Console.WriteLine("Error en SW " + hilo + " : " + e);
+                                }
+                                finally
+                                {
+                                    System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de caché");
+                                    Monitor.Exit(cacheDatosHilo[hilo]);
                                 }
                             }
-                            finally
+                            else
                             {
-                                System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de caché");
-                                Monitor.Exit(cacheDatosHilo[hilo]);
+                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de caché");
+                                completado = false;
                             }
                         }
-                        else
-                        {
-                            System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de caché");
-                            completado = false;
-                        }
+                    }
+                    catch (Exception e)
+                    {
+                        System.Console.WriteLine("Error en SW Mem : " + e);
                     }
                     finally
                     {
@@ -792,6 +807,8 @@ namespace ProyectoMIPS
          */
         public Boolean desencolarContexto(int hilo)
         {
+            bool desencolo = false;
+
             while (true)
             {
                 if (Monitor.TryEnter(colaHilillos))
@@ -807,6 +824,12 @@ namespace ProyectoMIPS
                             nucleoHilo[hilo].copiar_registros(auxiliar);
                             nucleoHilo[hilo].asignar_finalizado(false);
                             nucleoHilo[hilo].asignar_num_hilillo(auxiliar.obtener_numero_hil());
+                            desencolo = true;
+                        }
+                        else
+                        {
+                            desencolo = false;
+                            System.Console.WriteLine("Hilo : " + hilo + " no logró desencolar");
                         }
                     }
                     finally
@@ -814,7 +837,7 @@ namespace ProyectoMIPS
                         Monitor.Exit(colaHilillos);
                     }
 
-                    return true;
+                    return desencolo;
                 }
             }
         }
@@ -856,11 +879,12 @@ namespace ProyectoMIPS
                 numeroDeInstrucciones = 1;
                 System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
                 System.Console.WriteLine("");
-                this.desencolarContexto(ihilo);
-
-                while (!nucleoHilo[ihilo].obtener_finalizado()/* && (nucleoHilo[ihilo].obtener_cambiar() == false)*/) {
-                    //if (numeroDeInstrucciones <= numero_Quantum)
-                    //{
+                if (this.desencolarContexto(ihilo))
+                {
+                    while (!nucleoHilo[ihilo].obtener_finalizado()/* && (nucleoHilo[ihilo].obtener_cambiar() == false)*/)
+                    {
+                        //if (numeroDeInstrucciones <= numero_Quantum)
+                        //{
                         System.Console.WriteLine("-----------------------------------------------");
                         System.Console.WriteLine("");
                         System.Console.WriteLine("Ejecutando instrucción " + numeroDeInstrucciones + "...");
@@ -874,20 +898,21 @@ namespace ProyectoMIPS
                         numeroDeInstrucciones++;
                         System.Console.WriteLine("-----------------------------------------------");
                         System.Console.WriteLine("");
-                    /*}
-                    else
-                    {
-                        System.Console.WriteLine("");
-                        System.Console.WriteLine("------------------------------------------------");
-                        System.Console.WriteLine("------------------------------------------------");
-                        System.Console.WriteLine("              Cambiando de hilo");
-                        System.Console.WriteLine("------------------------------------------------");
-                        System.Console.WriteLine("------------------------------------------------");
-                        System.Console.WriteLine("");
+                        /*}
+                        else
+                        {
+                            System.Console.WriteLine("");
+                            System.Console.WriteLine("------------------------------------------------");
+                            System.Console.WriteLine("------------------------------------------------");
+                            System.Console.WriteLine("              Cambiando de hilo");
+                            System.Console.WriteLine("------------------------------------------------");
+                            System.Console.WriteLine("------------------------------------------------");
+                            System.Console.WriteLine("");
 
-                        this.encolarContexto(ihilo);
-                        this.asignar_cambiar(ihilo, true);
-                    }*/
+                            this.encolarContexto(ihilo);
+                            this.asignar_cambiar(ihilo, true);
+                        }*/
+                    }
                 }
             }
         }
