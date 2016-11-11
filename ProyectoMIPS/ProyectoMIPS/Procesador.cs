@@ -382,9 +382,9 @@ namespace ProyectoMIPS
         {
             System.Console.WriteLine("  Entrando a LW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
-            int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando)/4;
+            int numByte = nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando;
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */ 
-            int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
+            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
             int numPalabra = (numByte % 4);
             System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria + "  numPalabra : " + numPalabra);
@@ -497,9 +497,9 @@ namespace ProyectoMIPS
         {
             System.Console.WriteLine("  Entrando a SW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
-            int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando)/4;
+            int numByte = nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando;
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
-            int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
+            int numBloqueMemoria = numByte / 16; //indiceBloqueMemDatos (0-24)
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
             System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria );
 
@@ -777,7 +777,19 @@ namespace ProyectoMIPS
                 System.Console.WriteLine("Registro" + i + ": " + nucleoHilo[nucleo].obtener_registro(i));
         }
 
-        /* Se extrae un hilillo de la cola y se le asigna al nucleo*/
+        public void asignar_cambiar(int hilo, bool cambio)
+        {
+            nucleoHilo[hilo].asignar_cambiar(cambio);
+        }
+
+        public bool obtener_cambio(int hilo)
+        {
+            return nucleoHilo[hilo].obtener_cambiar();
+        }
+
+        /* 
+         * Se extrae un hilillo de la cola y se le asigna al nucleo
+         */
         public Boolean desencolarContexto(int hilo)
         {
             while (true)
@@ -794,6 +806,7 @@ namespace ProyectoMIPS
                             nucleoHilo[hilo].asignar_fin_hilillo(auxiliar.obtener_fin_hilillo());
                             nucleoHilo[hilo].copiar_registros(auxiliar);
                             nucleoHilo[hilo].asignar_finalizado(false);
+                            nucleoHilo[hilo].asignar_num_hilillo(auxiliar.obtener_numero_hil());
                         }
                     }
                     finally
@@ -806,7 +819,30 @@ namespace ProyectoMIPS
             }
         }
 
-        /*Metodo principal de ejecución*/
+        /* 
+         * Se extrae el contexto actual del núcleo y se añade a un hilillo
+         * que se encola
+         */
+        public void encolarContexto(int hilo)
+        {
+            nucleo nucleo_hilo = nucleoHilo[hilo];
+            hilillo auxiliar = new hilillo(nucleo_hilo.obtener_num_hilillo());
+            auxiliar.asignar_finalizado(nucleo_hilo.obtener_finalizado());
+            auxiliar.asignar_fin_hilillo(nucleo_hilo.obtener_fin_hilillo());
+            auxiliar.asignar_inicio_hilillo(nucleo_hilo.obtener_inicio_hilillo());
+
+            int[] registros = new int[33];
+
+            for(int i = 0; i < 33; i++)
+                registros[i] = nucleo_hilo.obtener_registro(i);
+            
+            auxiliar.asignar_contexto(nucleo_hilo.obtener_contador_programa(), registros);
+            colaHilillos.Enqueue(auxiliar);
+        }
+
+        /* 
+         * Metodo principal de ejecución 
+         */
         public void correInstrucciones(object hilo)
         {
             int ihilo = (int)hilo;
@@ -814,27 +850,44 @@ namespace ProyectoMIPS
             System.Console.WriteLine("Iniciando simulación de hilo " + ihilo + "...");
             System.Console.WriteLine("");
 
-            int i = 0;
+            int numeroDeInstrucciones;
 
             while (this.colaHilillos.Count > 0) {
+                numeroDeInstrucciones = 1;
                 System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
                 System.Console.WriteLine("");
                 this.desencolarContexto(ihilo);
 
-                while (!nucleoHilo[ihilo].obtener_finalizado()) {
-                    System.Console.WriteLine("-----------------------------------------------");
-                    System.Console.WriteLine("");
-                    System.Console.WriteLine("Ejecutando instrucción " + i + "...");
-                    System.Console.WriteLine("");
-                    System.Console.WriteLine("Obteniendo información sobre la instrucción...");
-                    System.Console.WriteLine("");
-                    System.Console.WriteLine("  PC: " + nucleoHilo[ihilo].PC);
-                    int[] instruccion = this.obtener_instruccion(ihilo);
-                    System.Console.WriteLine("");
-                    this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
-                    i++;
-                    System.Console.WriteLine("-----------------------------------------------");
-                    System.Console.WriteLine("");
+                while (!nucleoHilo[ihilo].obtener_finalizado()/* && (nucleoHilo[ihilo].obtener_cambiar() == false)*/) {
+                    //if (numeroDeInstrucciones <= numero_Quantum)
+                    //{
+                        System.Console.WriteLine("-----------------------------------------------");
+                        System.Console.WriteLine("");
+                        System.Console.WriteLine("Ejecutando instrucción " + numeroDeInstrucciones + "...");
+                        System.Console.WriteLine("");
+                        System.Console.WriteLine("Obteniendo información sobre la instrucción...");
+                        System.Console.WriteLine("");
+                        System.Console.WriteLine("  PC: " + nucleoHilo[ihilo].PC);
+                        int[] instruccion = this.obtener_instruccion(ihilo);
+                        System.Console.WriteLine("");
+                        this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
+                        numeroDeInstrucciones++;
+                        System.Console.WriteLine("-----------------------------------------------");
+                        System.Console.WriteLine("");
+                    /*}
+                    else
+                    {
+                        System.Console.WriteLine("");
+                        System.Console.WriteLine("------------------------------------------------");
+                        System.Console.WriteLine("------------------------------------------------");
+                        System.Console.WriteLine("              Cambiando de hilo");
+                        System.Console.WriteLine("------------------------------------------------");
+                        System.Console.WriteLine("------------------------------------------------");
+                        System.Console.WriteLine("");
+
+                        this.encolarContexto(ihilo);
+                        this.asignar_cambiar(ihilo, true);
+                    }*/
                 }
             }
         }

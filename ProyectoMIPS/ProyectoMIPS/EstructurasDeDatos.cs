@@ -87,6 +87,11 @@ namespace ProyectoMIPS
             finalizado = true;
         }
 
+        public void asignar_finalizado(bool f)
+        {
+            finalizado = f;
+        }
+
         // Obtener estado del hilillo
         public bool obtener_finalizado()
         {
@@ -113,7 +118,9 @@ namespace ProyectoMIPS
         public int PC;
         public int inicio_hilillo;
         public int fin_hilillo;
+        public int num_hilillo;
         bool finalizado;
+        bool cambiar;
 
         public nucleo()
         {
@@ -123,6 +130,7 @@ namespace ProyectoMIPS
             inicio_hilillo = 0;
             fin_hilillo = 0;
             finalizado = false;
+            cambiar = false;
         }
 
         public void asignar_inicio_hilillo(int inicio)
@@ -181,6 +189,26 @@ namespace ProyectoMIPS
         public bool obtener_finalizado()
         {
             return finalizado;
+        }
+
+        public void asignar_num_hilillo(int num)
+        {
+            num_hilillo = num;
+        }
+
+        public int obtener_num_hilillo()
+        {
+            return num_hilillo;
+        }
+
+        public void asignar_cambiar(bool c)
+        {
+            cambiar = c;
+        }
+
+        public bool obtener_cambiar()
+        {
+            return cambiar;
         }
     }
 
