@@ -26,20 +26,26 @@ namespace ProyectoMIPS
             numero_hilillo = numero_hil;
             inicio_hilillo = 0;
             fin_hilillo = 0;
-            registros = new int[34];
+            registros = new int[33];
             finalizado = false;
             PC = 0;
+            for(int i = 0; i < 33; i++)
+            {
+                registros[i] = 0;
+            }
         }
 
         public int obtener_numero_hil()
         {
             return numero_hilillo;
         }
+
         // Asigna el inicio del hilillo
         public void asignar_inicio_hilillo(int inicia)
         {
             inicio_hilillo = inicia;
         }
+
         // Retorna el inicio del hilillo
         public int obtener_inicio_hilillo()
         {
@@ -178,7 +184,7 @@ namespace ProyectoMIPS
             PC = hil.obtener_PC();
 
             for (int i = 1; i < 33; i++)
-                registro[i - 1] = hil.obtener_registros()[i];
+                registro[i] = hil.obtener_registros()[i];
         }
 
         public void asignar_finalizado(bool f)
