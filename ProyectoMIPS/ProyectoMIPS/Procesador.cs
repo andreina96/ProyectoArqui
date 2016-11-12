@@ -501,7 +501,8 @@ namespace ProyectoMIPS
             /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
             int numBloqueMemoria = numByte / 4;
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
-            System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria );
+            int numPalabra = (numByte % 4);
+            System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria + "  numPalabra : " + numPalabra);
 
             System.Console.WriteLine("");
 
@@ -544,7 +545,6 @@ namespace ProyectoMIPS
                             finally
                             {
                                 Monitor.Exit(cacheDatosHilo[(hilo + 1) % 3]);
-                                System.Console.WriteLine("Me metí a caca");
                             }
 
                             completado = true;
@@ -607,9 +607,9 @@ namespace ProyectoMIPS
                                         {
                                             System.Console.WriteLine("      HIT Válido");
                                             /* Se asigna el valor del dato del bloque a la caché */
-                                            cacheDatosHilo[hilo].modificarPalabraBloque(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte % 4, numBloqueMemoria);
+                                            cacheDatosHilo[hilo].modificarPalabraBloque(nucleoHilo[hilo].obtener_registro(SegundoOperando), numPalabra, numBloqueMemoria);
                                             /* Se asigna el valor del dato del bloque a la memoria */
-                                            cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
+                                            cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
                                             System.Console.WriteLine("        El dato que se cargó en memoria fue " + nucleoHilo[hilo].obtener_registro(PrimerOperando));
                                         }
                                         /*
@@ -619,7 +619,7 @@ namespace ProyectoMIPS
                                         {
                                             System.Console.WriteLine("      HIT Inválido");
                                             /* Se asigna el valor del dato del bloque a la memoria */
-                                            cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
+                                            cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
                                             System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
                                         }
                                     }
@@ -629,7 +629,7 @@ namespace ProyectoMIPS
                                     else
                                     {
                                         /* Se asigna el valor del dato del bloque a la memoria */
-                                        cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numByte);
+                                        cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
                                         System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
                                     }
                                 }
@@ -768,10 +768,10 @@ namespace ProyectoMIPS
         public int[] obtener_bloque_datos_memoria(int numeroDeBloque)
         {
             int[] bloque = new int[4];
-            bloque[0] = memoriaPrincipalDatos[numeroDeBloque];
-            bloque[1] = memoriaPrincipalDatos[numeroDeBloque + 1];
-            bloque[2] = memoriaPrincipalDatos[numeroDeBloque + 2];
-            bloque[3] = memoriaPrincipalDatos[numeroDeBloque  + 3];
+            bloque[0] = memoriaPrincipalDatos[(numeroDeBloque * 4)];
+            bloque[1] = memoriaPrincipalDatos[(numeroDeBloque * 4) + 1];
+            bloque[2] = memoriaPrincipalDatos[(numeroDeBloque * 4) + 2];
+            bloque[3] = memoriaPrincipalDatos[(numeroDeBloque * 4) + 3];
 
             return bloque;
         }
