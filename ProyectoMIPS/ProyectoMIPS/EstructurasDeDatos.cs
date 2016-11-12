@@ -20,6 +20,7 @@ namespace ProyectoMIPS
         bool finalizado;     // Bandera que indica si ya finalizó
         int[] registros;     // R0 - R31 y RL
         int PC;
+        int ciclos_reloj;
 
         public hilillo(int numero_hil)
         {
@@ -33,11 +34,26 @@ namespace ProyectoMIPS
             {
                 registros[i] = 0;
             }
+            ciclos_reloj = 0;
+        }
+        public void asignar_numero_hilillo(int numero)
+        {
+            this.numero_hilillo = numero;
         }
 
         public int obtener_numero_hil()
         {
             return numero_hilillo;
+        }
+
+        public void asignar_ciclos_reloj( int ciclos)
+        {
+            this.ciclos_reloj = ciclos;
+        }
+
+        public int obtener_ciclos_reloj()
+        {
+            return this.ciclos_reloj;
         }
 
         // Asigna el inicio del hilillo
@@ -127,6 +143,9 @@ namespace ProyectoMIPS
         public int num_hilillo;
         bool finalizado;
         bool cambiar;
+        int ciclos_reloj;
+        int numero_hilillo;
+        int ciclos_reloj_acumulados;
 
         public nucleo()
         {
@@ -137,6 +156,28 @@ namespace ProyectoMIPS
             fin_hilillo = 0;
             finalizado = false;
             cambiar = false;
+            ciclos_reloj = 0;
+            numero_hilillo = 0;
+            ciclos_reloj_acumulados = 0;
+        }
+
+        public int obtener_ciclos_reloj_acumulados()
+        {
+            return this.ciclos_reloj_acumulados;
+        }
+        public void asignar_ciclos_reloj_acumulados(int ciclos)
+        {
+            ciclos_reloj_acumulados = ciclos;
+        }
+
+        public int obtener_ciclos_reloj()
+        {
+            return this.ciclos_reloj;
+        }
+
+        public void asignar_ciclos_reloj(int ciclos)
+        {
+            this.ciclos_reloj = ciclos;
         }
 
         public void asignar_inicio_hilillo(int inicio)
@@ -409,6 +450,37 @@ namespace ProyectoMIPS
         {
             bloqueDatos[numBloque % 4].setDato(dato, palabra);
         }
+    }
+
+    public class estructura_reloj
+    {
+        int valor;
+        bool modificado;
+
+        public estructura_reloj()
+        {
+        }
+
+        public int obtener_reloj()
+        {
+            return this.valor;
+        }
+
+        public Boolean obtener_modificado()
+        {
+            return this.modificado;
+        }
+
+        public void asignar_reloj(int num)
+        {
+            this.valor =  num;
+        }
+
+        public void asignar_modificado(bool mod)
+        {
+            this.modificado = mod;
+        }
+
     }
 
     /* ======================================================

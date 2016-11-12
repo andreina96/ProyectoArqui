@@ -65,13 +65,13 @@ namespace ProyectoMIPS
             }
         }
 
+
+
         public void iniciarSimulacion()
         {
             cargar_memoria_principal();
-            procesador.imprimirMemoriaInstrucciones();
-            procesador.imprimirColaHilillos();
             procesador.asignar_numero_quantum(quantum); // Se asigna el quantum al procesador
-            procesador.imprimirMemoriaDatos();
+
 
             Thread nucleo1 = new Thread(procesador.correInstrucciones);
             Thread nucleo2 = new Thread(procesador.correInstrucciones);
@@ -83,14 +83,17 @@ namespace ProyectoMIPS
 
             while (nucleo1.IsAlive || nucleo2.IsAlive || nucleo3.IsAlive)
             {
-
+                // El hilo principal espera hasta que los nucleo terminen 
             }
-
-            procesador.imprimirRegistro();
 
             nucleo1.Join();
             nucleo2.Join();
             nucleo3.Join();
+
+            procesador.imprimirMemoriaInstrucciones();
+            procesador.imprimirColaHilillos();
+            procesador.imprimirRegistro();
+            procesador.imprimirMemoriaDatos();
         }
     }
 }

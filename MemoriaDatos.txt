@@ -1,192 +1,192 @@
-Posicion 0: 1
+Posicion 0: 88
 
-Posicion 1: 1
+Posicion 4: 0
 
-Posicion 2: 1
+Posicion 8: 0
 
-Posicion 3: 1
+Posicion 12: 0
 
-Posicion 4: 1
+Posicion 16: 0
 
-Posicion 5: 1
+Posicion 20: 0
 
-Posicion 6: 1
+Posicion 24: 0
 
-Posicion 7: 1
+Posicion 28: 0
 
-Posicion 8: 1
+Posicion 32: 0
 
-Posicion 9: 1
+Posicion 36: 0
 
-Posicion 10: 1
+Posicion 40: 0
 
-Posicion 11: 1
+Posicion 44: 0
 
-Posicion 12: 1
+Posicion 48: 0
 
-Posicion 13: 1
+Posicion 52: 0
 
-Posicion 14: 1
+Posicion 56: 0
 
-Posicion 15: 1
+Posicion 60: 0
 
-Posicion 16: 1
+Posicion 64: 0
 
-Posicion 17: 1
+Posicion 68: 0
 
-Posicion 18: 1
+Posicion 72: 0
 
-Posicion 19: 1
+Posicion 76: 0
 
-Posicion 20: 1
+Posicion 80: 0
 
-Posicion 21: 1
+Posicion 84: 0
 
-Posicion 22: 1
+Posicion 88: 0
 
-Posicion 23: 1
+Posicion 92: 55
 
-Posicion 24: 1
+Posicion 96: 0
 
-Posicion 25: 1
+Posicion 100: 0
 
-Posicion 26: 1
+Posicion 104: 0
 
-Posicion 27: 1
+Posicion 108: 0
 
-Posicion 28: 1
+Posicion 112: 1
 
-Posicion 29: 1
+Posicion 116: 1
 
-Posicion 30: 1
+Posicion 120: 1
 
-Posicion 31: 1
+Posicion 124: 1
 
-Posicion 32: 1
+Posicion 128: 1
 
-Posicion 33: 1
+Posicion 132: 1
 
-Posicion 34: 1
+Posicion 136: 1
 
-Posicion 35: 1
+Posicion 140: 1
 
-Posicion 36: 1
+Posicion 144: 1
 
-Posicion 37: 1
+Posicion 148: 1
 
-Posicion 38: 1
+Posicion 152: 1
 
-Posicion 39: 1
+Posicion 156: 1
 
-Posicion 40: 1
+Posicion 160: 1
 
-Posicion 41: 1
+Posicion 164: 1
 
-Posicion 42: 1
+Posicion 168: 1
 
-Posicion 43: 1
+Posicion 172: 1
 
-Posicion 44: 1
+Posicion 176: 1
 
-Posicion 45: 1
+Posicion 180: 1
 
-Posicion 46: 1
+Posicion 184: 1
 
-Posicion 47: 1
+Posicion 188: 1
 
-Posicion 48: 1
+Posicion 192: 2
 
-Posicion 49: 1
+Posicion 196: 2
 
-Posicion 50: 1
+Posicion 200: 2
 
-Posicion 51: 1
+Posicion 204: 2
 
-Posicion 52: 1
+Posicion 208: 2
 
-Posicion 53: 1
+Posicion 212: 2
 
-Posicion 54: 1
+Posicion 216: 2
 
-Posicion 55: 1
+Posicion 220: 2
 
-Posicion 56: 1
+Posicion 224: 2
 
-Posicion 57: 1
+Posicion 228: 2
 
-Posicion 58: 1
+Posicion 232: 2
 
-Posicion 59: 1
+Posicion 236: 2
 
-Posicion 60: 1
+Posicion 240: 2
 
-Posicion 61: 1
+Posicion 244: 2
 
-Posicion 62: 1
+Posicion 248: 2
 
-Posicion 63: 1
+Posicion 252: 2
 
-Posicion 64: 1
+Posicion 256: 2
 
-Posicion 65: 1
+Posicion 260: 2
 
-Posicion 66: 1
+Posicion 264: 2
 
-Posicion 67: 1
+Posicion 268: 2
 
-Posicion 68: 1
+Posicion 272: 3
 
-Posicion 69: 1
+Posicion 276: 3
 
-Posicion 70: 1
+Posicion 280: 3
 
-Posicion 71: 1
+Posicion 284: 3
 
-Posicion 72: 1
+Posicion 288: 3
 
-Posicion 73: 1
+Posicion 292: 3
 
-Posicion 74: 1
+Posicion 296: 3
 
-Posicion 75: 1
+Posicion 300: 3
 
-Posicion 76: 1
+Posicion 304: 3
 
-Posicion 77: 1
+Posicion 308: 3
 
-Posicion 78: 1
+Posicion 312: 3
 
-Posicion 79: 1
+Posicion 316: 3
 
-Posicion 80: 1
+Posicion 320: 3
 
-Posicion 81: 1
+Posicion 324: 3
 
-Posicion 82: 1
+Posicion 328: 3
 
-Posicion 83: 1
+Posicion 332: 3
 
-Posicion 84: 1
+Posicion 336: 3
 
-Posicion 85: 1
+Posicion 340: 3
 
-Posicion 86: 1
+Posicion 344: 3
 
-Posicion 87: 1
+Posicion 348: 3
 
-Posicion 88: 1
+Posicion 352: 0
 
-Posicion 89: 1
+Posicion 356: 0
 
-Posicion 90: 1
+Posicion 360: 0
 
-Posicion 91: 1
+Posicion 364: 0
 
-Posicion 92: 99
+Posicion 368: 99
 
-Posicion 93: 1
+Posicion 372: 0
 
-Posicion 94: 1
+Posicion 376: 0
 
-Posicion 95: 1
+Posicion 380: 0
 

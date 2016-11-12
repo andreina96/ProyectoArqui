@@ -23,6 +23,11 @@ namespace ProyectoMIPS
          *      
          * ====================================================== */
         public int[] memoriaPrincipalDatos;
+        public estructura_reloj reloj;
+        public static Barrier barrera_aumento_reloj = new Barrier(participantCount: 3);
+        public static Barrier barrera_fin_aumento_reloj = new Barrier(participantCount: 3);
+        public static Barrier inicio_instrucciones = new Barrier(participantCount: 3);
+
 
         /* ======================================================
          * Se crea una estructura para representar la parte de
@@ -102,7 +107,7 @@ namespace ProyectoMIPS
         public Procesador()
         {
             memoriaPrincipalDatos = new int[96];
-
+            reloj = new estructura_reloj();
             memoriaPrincipalInstrucciones = new int[640];
             memoriaPrincipalInstruccionesBloqueLleno = 0;
 
@@ -129,6 +134,7 @@ namespace ProyectoMIPS
             numero_hilillos = 0;
             numero_Quantum = 0;
         }
+
 
         /* ======================================================
          * Se crea un método para asignarle un valor al número de
@@ -166,70 +172,6 @@ namespace ProyectoMIPS
                 MessageBox.Show("Error: la memoria se encuentra llena");
         }
 
-        /* ======================================================
-         * Se crea un método para imprimir en un archivo la 
-         * memoria principal
-         * ====================================================== */
-        public void imprimirMemoriaInstrucciones()
-        {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\MemoriaInstrucciones.txt"))
-            {                      
-                for (int i = 0; i < 640; i++)
-                    escritor.WriteLine("Posicion " + i + ": "+memoriaPrincipalInstrucciones[i] +"\n");
-            }
-        }
-
-        public void imprimirMemoriaDatos()
-        {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\MemoriaDatos.txt"))
-            {
-                for (int i = 0; i < 96; i++)
-                    escritor.WriteLine("Posicion " + i + ": " + memoriaPrincipalDatos[i] + "\n");
-            }
-        }
-
-        public void imprimirRegistro()
-        {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\Nucleos.txt"))
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    escritor.WriteLine("\n-------------- Núcleo "+ j +"------------------\n");
-                    escritor.WriteLine("Contador de programa: " + nucleoHilo[j].obtener_contador_programa());
-                    for (int i = 0; i < 32; i++)
-                    {
-                        escritor.WriteLine("Registro " + i + ": " + nucleoHilo[j].obtener_registro(i));
-                    }
-                }
-            }
-        }
-
-        /* ======================================================
-         * Se crea un método para imprimir en un archivo la 
-         * la cola de hilillos
-         * ====================================================== */
-        public void imprimirColaHilillos()
-        {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\HililloInicio.txt"))
-            {
-                Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
-                hilillo aux = null;
-
-                while (cola_aux.Count > 0)
-                {
-                    aux = cola_aux.Dequeue();
-                    escritor.WriteLine("Numero hilillo: " + aux.obtener_numero_hil());
-                    escritor.WriteLine("Dirección de inicio: " + aux.obtener_inicio_hilillo());
-                    escritor.WriteLine("Dirección de fin: " + aux.obtener_fin_hilillo());
-                    escritor.WriteLine("Finalizado: " + aux.obtener_finalizado());
-                    escritor.WriteLine("PC: " + aux.obtener_PC() + "\n");
-
-                    for (int i = 0; i < 33; i++)
-                        escritor.WriteLine("Registro" + i + " : " + aux.obtener_registros()[i] + "\n");
-                    escritor.WriteLine("\n----------------------------------------------------\n");
-                }
-            }
-        }
 
         // Se crea la información de cada hilillo
         public void crear_hilillos (int inicio, int fin, int numero_hilillo)
@@ -380,6 +322,8 @@ namespace ProyectoMIPS
          */
         public void LW(int hilo, int PrimerOperando, int SegundoOperando, int TercerOperando)
         {
+            System.Console.WriteLine("--------"+memoriaPrincipalDatos[92]);
+            System.Console.WriteLine("---------" + nucleoHilo[hilo].obtener_registro(11));
             System.Console.WriteLine("  Entrando a LW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
             int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando) / 4;
@@ -453,8 +397,7 @@ namespace ProyectoMIPS
                                     int[] bloque = obtener_bloque_datos_memoria(numBloqueMemoria);
                                     cacheDatosHilo[hilo].setBloque(bloque, numBloqueMemoria);
                                     /* Se asigna el valor al registro */
-                                    nucleoHilo[hilo].asignar_registro(
-                                        cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
+                                    nucleoHilo[hilo].asignar_registro( cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
                                     System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
                                 }
                             }
@@ -768,10 +711,10 @@ namespace ProyectoMIPS
         public int[] obtener_bloque_datos_memoria(int numeroDeBloque)
         {
             int[] bloque = new int[4];
-            bloque[0] = memoriaPrincipalDatos[numeroDeBloque];
-            bloque[1] = memoriaPrincipalDatos[numeroDeBloque + 1];
-            bloque[2] = memoriaPrincipalDatos[numeroDeBloque + 2];
-            bloque[3] = memoriaPrincipalDatos[numeroDeBloque  + 3];
+            bloque[0] = memoriaPrincipalDatos[numeroDeBloque*4];
+            bloque[1] = memoriaPrincipalDatos[numeroDeBloque*4 + 1];
+            bloque[2] = memoriaPrincipalDatos[numeroDeBloque*4 + 2];
+            bloque[3] = memoriaPrincipalDatos[numeroDeBloque*4  + 3];
 
             return bloque;
         }
@@ -824,7 +767,9 @@ namespace ProyectoMIPS
                             nucleoHilo[hilo].copiar_registros(auxiliar);
                             nucleoHilo[hilo].asignar_finalizado(false);
                             nucleoHilo[hilo].asignar_num_hilillo(auxiliar.obtener_numero_hil());
-                         
+                            nucleoHilo[hilo].asignar_ciclos_reloj_acumulados(auxiliar.obtener_ciclos_reloj());
+                            nucleoHilo[hilo].asignar_ciclos_reloj(0);
+                            nucleoHilo[hilo].asignar_num_hilillo(auxiliar.obtener_numero_hil());
                             desencolo = true;
                         }
                         else
@@ -853,6 +798,8 @@ namespace ProyectoMIPS
             auxiliar.asignar_finalizado(nucleoHilo[hilo].obtener_finalizado());
             auxiliar.asignar_fin_hilillo(nucleoHilo[hilo].obtener_fin_hilillo());
             auxiliar.asignar_inicio_hilillo(nucleoHilo[hilo].obtener_inicio_hilillo());
+            auxiliar.asignar_ciclos_reloj(nucleoHilo[hilo].obtener_ciclos_reloj() + nucleoHilo[hilo].obtener_ciclos_reloj_acumulados());
+            auxiliar.asignar_numero_hilillo(nucleoHilo[hilo].obtener_num_hilillo());
 
             int[] registros = new int[33];
 
@@ -868,53 +815,140 @@ namespace ProyectoMIPS
          */
         public void correInstrucciones(object hilo)
         {
-            int ihilo = (int)hilo;
+            int ihilo = (int) hilo;
 
             System.Console.WriteLine("Iniciando simulación de hilo " + ihilo + "...");
             System.Console.WriteLine("");
 
-            int numeroDeInstrucciones;
-
-            while (this.colaHilillos.Count > 0) {
-                numeroDeInstrucciones = 1;
+            while (this.colaHilillos.Count > 0)
+            {
                 System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
                 System.Console.WriteLine("");
+
+                inicio_instrucciones.SignalAndWait();
+                reloj.asignar_reloj(0);
+                // Barrera
+
                 if (this.desencolarContexto(ihilo))
                 {
-                    nucleoHilo[ihilo].asignar_cambiar(false);
-
-                    while (!nucleoHilo[ihilo].obtener_finalizado() && (nucleoHilo[ihilo].obtener_cambiar() == false))
+                    while (reloj.obtener_reloj() <= numero_Quantum )
                     {
-                        if (numeroDeInstrucciones <= numero_Quantum)
+                        barrera_aumento_reloj.SignalAndWait();
+
+                        bool obtenido = Monitor.TryEnter(reloj);
+
+                        try
+                        {
+                            if (reloj.obtener_modificado() == false)
+                            { 
+                                reloj.asignar_reloj((reloj.obtener_reloj() + 1));
+                                reloj.asignar_modificado(true); 
+                            }
+
+                        }
+                        catch
+                        {
+                            if (obtenido)
+                                Monitor.Exit(reloj);
+
+                        }
+
+                        barrera_fin_aumento_reloj.SignalAndWait();
+                        reloj.asignar_modificado(false);
+
+                        if (nucleoHilo[ihilo].obtener_finalizado() == false)
                         {
                             System.Console.WriteLine("-----------------------------------------------");
-                            System.Console.WriteLine("");
-                            System.Console.WriteLine("Ejecutando instrucción " + numeroDeInstrucciones + "...");
-                            System.Console.WriteLine("");
                             System.Console.WriteLine("Obteniendo información sobre la instrucción...");
                             System.Console.WriteLine("");
                             System.Console.WriteLine("  PC: " + nucleoHilo[ihilo].PC);
                             int[] instruccion = this.obtener_instruccion(ihilo);
                             System.Console.WriteLine("");
                             this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
-                            numeroDeInstrucciones++;
                             System.Console.WriteLine("-----------------------------------------------");
                             System.Console.WriteLine("");
                         }
-                        else
-                        {
-                            System.Console.WriteLine("");
-                            System.Console.WriteLine("------------------------------------------------");
-                            System.Console.WriteLine("------------------------------------------------");
-                            System.Console.WriteLine("              Cambiando de hilo");
-                            System.Console.WriteLine("------------------------------------------------");
-                            System.Console.WriteLine("------------------------------------------------");
-                            System.Console.WriteLine("");
-
-                            this.encolarContexto(ihilo);
-                            this.nucleoHilo[ihilo].asignar_cambiar(true);
+                        else {
+                            System.Console.WriteLine("------------FINALIZADO------");
                         }
                     }
+
+                    if (nucleoHilo[ihilo].obtener_finalizado() == false)
+                    {
+                        this.encolarContexto(ihilo);
+                    }
+                }
+                else
+                {
+                    barrera_aumento_reloj.RemoveParticipants(1);
+                    barrera_fin_aumento_reloj.RemoveParticipants(1);
+                    inicio_instrucciones.RemoveParticipants(1);
+                }
+            }
+        }
+
+
+        /* ======================================================
+        * Se crea un método para imprimir en un archivo la 
+        * memoria principal
+        * ====================================================== */
+        public void imprimirMemoriaInstrucciones()
+        {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\MemoriaInstrucciones.txt"))
+            {
+                for (int i = 0; i < 640; i++)
+                    escritor.WriteLine("Posicion " + i + ": " + memoriaPrincipalInstrucciones[i] + "\n");
+            }
+        }
+
+        public void imprimirMemoriaDatos()
+        {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\MemoriaDatos.txt"))
+            {
+                for (int i = 0; i < 96; i++)
+                    escritor.WriteLine("Posicion " + i*4 + ": " + memoriaPrincipalDatos[i] + "\n");
+            }
+        }
+
+        public void imprimirRegistro()
+        {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\Nucleos.txt"))
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    escritor.WriteLine("\n-------------- Núcleo " + j + "------------------\n");
+                    escritor.WriteLine("Contador de programa: " + nucleoHilo[j].obtener_contador_programa());
+                    for (int i = 0; i < 32; i++)
+                    {
+                        escritor.WriteLine("Registro " + i + ": " + nucleoHilo[j].obtener_registro(i));
+                    }
+                }
+            }
+        }
+
+        /* ======================================================
+         * Se crea un método para imprimir en un archivo la 
+         * la cola de hilillos
+         * ====================================================== */
+        public void imprimirColaHilillos()
+        {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\HililloInicio.txt"))
+            {
+                Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
+                hilillo aux = null;
+
+                while (cola_aux.Count > 0)
+                {
+                    aux = cola_aux.Dequeue();
+                    escritor.WriteLine("Numero hilillo: " + aux.obtener_numero_hil());
+                    escritor.WriteLine("Dirección de inicio: " + aux.obtener_inicio_hilillo());
+                    escritor.WriteLine("Dirección de fin: " + aux.obtener_fin_hilillo());
+                    escritor.WriteLine("Finalizado: " + aux.obtener_finalizado());
+                    escritor.WriteLine("PC: " + aux.obtener_PC() + "\n");
+
+                    for (int i = 0; i < 33; i++)
+                        escritor.WriteLine("Registro" + i + " : " + aux.obtener_registros()[i] + "\n");
+                    escritor.WriteLine("\n----------------------------------------------------\n");
                 }
             }
         }

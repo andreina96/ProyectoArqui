@@ -1,10 +1,10 @@
 
 -------------- Núcleo 0------------------
 
-Contador de programa: 80
+Contador de programa: 168
 Registro 0: 0
-Registro 1: 1
-Registro 2: 192
+Registro 1: 0
+Registro 2: 2
 Registro 3: 0
 Registro 4: 4
 Registro 5: 0
@@ -13,12 +13,12 @@ Registro 7: 0
 Registro 8: 0
 Registro 9: 0
 Registro 10: 0
-Registro 11: 0
-Registro 12: 1
-Registro 13: 1
-Registro 14: 1
-Registro 15: 1
-Registro 16: 0
+Registro 11: 99
+Registro 12: 0
+Registro 13: 0
+Registro 14: 0
+Registro 15: 0
+Registro 16: 272
 Registro 17: 0
 Registro 18: 0
 Registro 19: 0
@@ -33,24 +33,24 @@ Registro 27: 0
 Registro 28: 0
 Registro 29: 0
 Registro 30: 0
-Registro 31: 99
+Registro 31: 88
 
 -------------- Núcleo 1------------------
 
-Contador de programa: 0
+Contador de programa: 252
 Registro 0: 0
 Registro 1: 0
 Registro 2: 0
-Registro 3: 0
-Registro 4: 0
+Registro 3: 3
+Registro 4: 4
 Registro 5: 0
 Registro 6: 0
 Registro 7: 0
 Registro 8: 0
 Registro 9: 0
 Registro 10: 0
-Registro 11: 0
-Registro 12: 0
+Registro 11: 99
+Registro 12: 88
 Registro 13: 0
 Registro 14: 0
 Registro 15: 0
@@ -62,24 +62,24 @@ Registro 20: 0
 Registro 21: 0
 Registro 22: 0
 Registro 23: 0
-Registro 24: 0
+Registro 24: 352
 Registro 25: 0
 Registro 26: 0
 Registro 27: 0
 Registro 28: 0
 Registro 29: 0
 Registro 30: 0
-Registro 31: 0
+Registro 31: 55
 
 -------------- Núcleo 2------------------
 
-Contador de programa: 0
+Contador de programa: 196
 Registro 0: 0
 Registro 1: 0
 Registro 2: 0
-Registro 3: 0
-Registro 4: 0
-Registro 5: 0
+Registro 3: 3
+Registro 4: 4
+Registro 5: 2
 Registro 6: 0
 Registro 7: 0
 Registro 8: 0
@@ -98,11 +98,11 @@ Registro 20: 0
 Registro 21: 0
 Registro 22: 0
 Registro 23: 0
-Registro 24: 0
+Registro 24: 304
 Registro 25: 0
 Registro 26: 0
 Registro 27: 0
-Registro 28: 0
+Registro 28: 12
 Registro 29: 0
 Registro 30: 0
 Registro 31: 0
