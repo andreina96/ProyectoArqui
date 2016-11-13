@@ -36,6 +36,7 @@
             this.directorio = new System.Windows.Forms.Button();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.aceptar = new System.Windows.Forms.Button();
+            this.aceptarr = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -92,21 +93,32 @@
             // 
             // aceptar
             // 
-            this.aceptar.BackColor = System.Drawing.Color.MintCream;
+            this.aceptar.BackColor = System.Drawing.Color.White;
             this.aceptar.Location = new System.Drawing.Point(185, 171);
             this.aceptar.Name = "aceptar";
             this.aceptar.Size = new System.Drawing.Size(75, 23);
             this.aceptar.TabIndex = 6;
-            this.aceptar.Text = "Aceptar";
+            this.aceptar.Text = "Modo lento";
             this.aceptar.UseVisualStyleBackColor = false;
             this.aceptar.Click += new System.EventHandler(this.aceptar_Click);
+            // 
+            // aceptarr
+            // 
+            this.aceptarr.BackColor = System.Drawing.Color.White;
+            this.aceptarr.Location = new System.Drawing.Point(95, 171);
+            this.aceptarr.Name = "aceptarr";
+            this.aceptarr.Size = new System.Drawing.Size(75, 23);
+            this.aceptarr.TabIndex = 7;
+            this.aceptarr.Text = "Modo rápido";
+            this.aceptarr.UseVisualStyleBackColor = false;
             // 
             // Vista
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Honeydew;
+            this.BackColor = System.Drawing.Color.Gainsboro;
             this.ClientSize = new System.Drawing.Size(291, 225);
+            this.Controls.Add(this.aceptarr);
             this.Controls.Add(this.aceptar);
             this.Controls.Add(this.directorio);
             this.Controls.Add(this.numeroQuantum);
@@ -131,5 +143,6 @@
         private System.Windows.Forms.Button directorio;
         private System.Windows.Forms.FolderBrowserDialog folderBrowser;
         private System.Windows.Forms.Button aceptar;
+        private System.Windows.Forms.Button aceptarr;
     }
 }

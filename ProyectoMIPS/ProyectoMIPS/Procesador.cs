@@ -3,11 +3,18 @@ using ProyectoMIPS;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Threading;
+using ProyectoMIPS.Forms;
 
 namespace ProyectoMIPS
 {
     class Procesador
     {
+        /*
+         * Se crea una variable para almacenar el valor sobre si se está corriendo 
+         * la simulación en modo lento o rápido
+         */
+        bool modo;
+
         /*
          * Se crean las estructuras de sincronización de núcleos
          */
@@ -89,7 +96,7 @@ namespace ProyectoMIPS
          * los hilos que siguen por ejecutar
          * ====================================================== */
         Queue<hilillo> colaHilillos;
-        Queue<hilillo> hilillos_finalizados;
+        public Queue<hilillo> hilillos_finalizados;
 
         /* ======================================================
          * Se crea una variable para almacenar el número de hili-
@@ -115,16 +122,16 @@ namespace ProyectoMIPS
             reloj = new estructura_reloj();
             memoriaPrincipalInstrucciones = new int[640];
             memoriaPrincipalInstruccionesBloqueLleno = 0;
+            modo = false;
 
             nucleoHilo = new nucleo[3];
-
                     
             cacheDatosHilo = new cacheDatos[3];
             cacheInstruccionesHilo = new cacheInstrucciones[3];
 
             for (int j = 0; j < 96; j++)
             {
-                memoriaPrincipalDatos[j] = 0;
+                memoriaPrincipalDatos[j] = 1;
             }
 
             for (int i = 0; i < 3; i++)
@@ -139,6 +146,22 @@ namespace ProyectoMIPS
 
             numero_hilillos = 0;
             numero_Quantum = 0;
+        }
+
+        /*
+         * Se crea un método set para el modo de simulación
+         */
+        public void asignar_modo(bool m)
+        {
+            modo = m;
+        }
+
+        /*
+         * Se crea un método get para el modo de simulación
+         */
+        public bool obtener_modo()
+        {
+            return modo;
         }
 
         /* ======================================================
@@ -176,7 +199,6 @@ namespace ProyectoMIPS
             else
                 MessageBox.Show("Error: la memoria se encuentra llena");
         }
-
 
         // Se crea la información de cada hilillo
         public void crear_hilillos(int inicio, int fin, int numero_hilillo)
@@ -282,7 +304,7 @@ namespace ProyectoMIPS
                          */
 
                         nucleoHilo[hilo].asignar_registro(nucleoHilo[hilo].PC, 31);
-                        nucleoHilo[hilo].PC = nucleoHilo[hilo].PC + TercerOperando;
+                        nucleoHilo[hilo].PC = nucleoHilo[hilo].PC + TercerOperando * 4;
                         System.Console.WriteLine("JAL dio: se saltó a la dirección " + nucleoHilo[hilo].PC + TercerOperando);
                         break;
                     case 2:
@@ -443,7 +465,7 @@ namespace ProyectoMIPS
         /* Instruccion: SW
          * 
          * Descripción:
-         *      Mem[R[PrimerOperando] + TercerOperando * 4] <- R[SegundoOperando]
+         *      Mem[R[PrimerOperando] + TercerOperando] <- R[SegundoOperando]
          */
         public void SW(int hilo, int PrimerOperando, int SegundoOperando, int TercerOperando)
         {
@@ -743,6 +765,7 @@ namespace ProyectoMIPS
             auxiliar.asignar_inicio_hilillo(nucleoHilo[hilo].obtener_inicio_hilillo());
             auxiliar.asignar_ciclos_reloj(nucleoHilo[hilo].obtener_ciclos_reloj() + nucleoHilo[hilo].obtener_ciclos_reloj_acumulados());
             auxiliar.asignar_numero_hilillo(nucleoHilo[hilo].obtener_num_hilillo());
+            auxiliar.asignar_numero_nucleo(hilo);
 
             int[] registros = new int[33];
 
@@ -944,7 +967,7 @@ namespace ProyectoMIPS
         * ====================================================== */
         public void imprimirMemoriaInstrucciones()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\MemoriaInstrucciones.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\MemoriaInstrucciones.txt"))
             {
                 for (int i = 0; i < 640; i++)
                     escritor.WriteLine("Posicion " + i + ": " + memoriaPrincipalInstrucciones[i] + "\n");
@@ -953,7 +976,7 @@ namespace ProyectoMIPS
 
         public void imprimirMemoriaDatos()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\MemoriaDatos.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\MemoriaDatos.txt"))
             {
                 for (int i = 0; i < 96; i++)
                     escritor.WriteLine("Posicion " + i*4 + ": " + memoriaPrincipalDatos[i] + "\n");
@@ -962,7 +985,7 @@ namespace ProyectoMIPS
 
         public void imprimirRegistro()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\Nucleos.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\Nucleos.txt"))
             {
                 for (int j = 0; j < 3; j++)
                 {
@@ -982,7 +1005,7 @@ namespace ProyectoMIPS
          * ====================================================== */
         public void imprimirColaHilillos()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\HililloInicio.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\HililloInicio.txt"))
             {
                 Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
                 hilillo aux = null;
@@ -1005,7 +1028,7 @@ namespace ProyectoMIPS
 
         public void imprimirColaHilillosFinalizados()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\HilillosFinalizados.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\Andreína Alvarado\Desktop\ProyectoArquiImpresiones\HilillosFinalizados.txt"))
             {
                 Queue<hilillo> cola_aux = new Queue<hilillo>(hilillos_finalizados);
                 hilillo aux = null;
@@ -1035,6 +1058,11 @@ namespace ProyectoMIPS
         public void subir_cache_memoria(int hilo)
         {
             nucleoHilo[hilo].asignar_ciclos_reloj(nucleoHilo[hilo].obtener_ciclos_reloj() + 7);
+        }
+
+        public void mostrarResultados()
+        {
+
         }
     }
 }

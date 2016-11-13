@@ -35,6 +35,16 @@ namespace ProyectoMIPS.Forms
 
         private void aceptar_Click(object sender, EventArgs e)
         {
+            simulacion(false);
+        }
+
+        private void aceptarr_Click(object sender, EventArgs e)
+        {
+            simulacion(true);
+        }
+
+        public void simulacion(bool modo)
+        {
             try
             {
                 if (Regex.IsMatch(numeroHilillos.Text, @"^[0-9\p{L} \w]+$"))
@@ -42,17 +52,17 @@ namespace ProyectoMIPS.Forms
                     if (Convert.ToInt32(numeroHilillos.Text) > 0)
                     {
                         numero_hilillos = Convert.ToInt32(numeroHilillos.Text);
-                        
+
                         if (Directory.Exists(folderBrowser.SelectedPath))
                         {
                             rutas_archivos = Directory.GetFiles(folderBrowser.SelectedPath, @"*.txt", SearchOption.TopDirectoryOnly);
-                
+
                             if (Regex.IsMatch(numeroQuantum.Text, @"^[0-9\p{L} \w]+$"))
                             {
                                 if (Convert.ToInt32(numeroQuantum.Text) > 0)
                                 {
                                     quantum = Convert.ToInt32(numeroQuantum.Text);
-                                    controladora = new Controladora(numero_hilillos, quantum, rutas_archivos);
+                                    controladora = new Controladora(numero_hilillos, quantum, rutas_archivos, modo);
                                     controladora.iniciarSimulacion();
                                 }
                                 else
@@ -70,7 +80,7 @@ namespace ProyectoMIPS.Forms
                 else
                     MessageBox.Show("El valor del número de hilillos debe ser un número!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Ha ocurrido un error: " + ex);
             }

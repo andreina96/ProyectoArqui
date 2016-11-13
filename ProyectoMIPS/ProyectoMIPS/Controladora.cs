@@ -11,6 +11,7 @@ using System.Data;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Threading;
+using ProyectoMIPS.Forms;
 
 namespace ProyectoMIPS
 {
@@ -22,9 +23,16 @@ namespace ProyectoMIPS
         String[] archivos_rutas;    // rutas de los hilillos
         int numero_instrucciones;   // Numero total de instrucciones 
 
-        public Controladora(int num_hil, int quant, String[] archivos_r)
+        /*
+         * Se crea un objeto form Resultados, para desplegar en pantalla los 
+         * resultados de la simulación
+         */
+        public Resultados resultados;
+
+        public Controladora(int num_hil, int quant, String[] archivos_r, bool modo)
         {
             procesador = new Procesador();
+            procesador.asignar_modo(modo);
             numeroHilillos = num_hil;
             quantum = quant;
             archivos_rutas = archivos_r;
@@ -70,7 +78,6 @@ namespace ProyectoMIPS
             cargar_memoria_principal();
             procesador.asignar_numero_quantum(quantum); // Se asigna el quantum al procesador
 
-
             Thread nucleo1 = new Thread(procesador.correInstrucciones);
             Thread nucleo2 = new Thread(procesador.correInstrucciones);
             Thread nucleo3 = new Thread(procesador.correInstrucciones);
@@ -87,6 +94,12 @@ namespace ProyectoMIPS
             nucleo1.Join();
             nucleo2.Join();
             nucleo3.Join();
+
+            if (!procesador.obtener_modo())
+            {
+                resultados = new Resultados(procesador.hilillos_finalizados, procesador.memoriaPrincipalDatos);
+                resultados.Show();
+            }
 
             procesador.imprimirMemoriaInstrucciones();
             procesador.imprimirColaHilillos();

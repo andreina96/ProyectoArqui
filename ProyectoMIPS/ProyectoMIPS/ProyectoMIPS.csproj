@@ -49,6 +49,12 @@
   <ItemGroup>
     <Compile Include="Controladora.cs" />
     <Compile Include="EstructurasDeDatos.cs" />
+    <Compile Include="Forms\Resultados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Resultados.Designer.cs">
+      <DependentUpon>Resultados.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Vista.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +65,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Archivo.cs" />
+    <EmbeddedResource Include="Forms\Resultados.resx">
+      <DependentUpon>Resultados.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Vista.resx">
       <DependentUpon>Vista.cs</DependentUpon>
     </EmbeddedResource>

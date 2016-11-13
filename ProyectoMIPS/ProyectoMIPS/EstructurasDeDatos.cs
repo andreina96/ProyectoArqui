@@ -21,6 +21,7 @@ namespace ProyectoMIPS
         int[] registros;     // R0 - R31 y RL
         int PC;
         int ciclos_reloj;
+        int numero_nucleo;
 
         public hilillo(int numero_hil)
         {
@@ -30,12 +31,14 @@ namespace ProyectoMIPS
             registros = new int[33];
             finalizado = false;
             PC = 0;
+            numero_nucleo = -1;
+
             for(int i = 0; i < 33; i++)
-            {
                 registros[i] = 0;
-            }
+
             ciclos_reloj = 0;
         }
+
         public void asignar_numero_hilillo(int numero)
         {
             this.numero_hilillo = numero;
@@ -119,6 +122,16 @@ namespace ProyectoMIPS
         {
             return finalizado;
         }
+
+        public void asignar_numero_nucleo(int hilo)
+        {
+            numero_nucleo = hilo;
+        }
+
+        public int obtener_numero_nucleo()
+        {
+            return numero_nucleo;
+        }
     }
 
     /* ======================================================
@@ -141,11 +154,11 @@ namespace ProyectoMIPS
         public int inicio_hilillo;
         public int fin_hilillo;
         public int num_hilillo;
-        bool finalizado;
-        bool cambiar;
-        int ciclos_reloj;
-        int numero_hilillo;
-        int ciclos_reloj_acumulados;
+        public bool finalizado;
+        public bool cambiar;
+        public int ciclos_reloj;
+        public int numero_hilillo;
+        public int ciclos_reloj_acumulados;
 
         public nucleo()
         {
