@@ -70,7 +70,7 @@ namespace ProyectoMIPS
          * Se crean estructuras para representar los contextos
          * temporales de cada hilo
          * ====================================================== */
-        nucleo [] nucleoHilo;
+        nucleo[] nucleoHilo;
 
         /* ======================================================
          * Se crean estructuras para representar las cachés de 
@@ -107,6 +107,8 @@ namespace ProyectoMIPS
          * Constructor de la clase, inicializa las estructuras principales
          * para utilizar la clase procesador
          */
+        int ciclo_reloj_original;
+                    
         public Procesador()
         {
             memoriaPrincipalDatos = new int[96];
@@ -116,10 +118,11 @@ namespace ProyectoMIPS
 
             nucleoHilo = new nucleo[3];
 
+                    
             cacheDatosHilo = new cacheDatos[3];
             cacheInstruccionesHilo = new cacheInstrucciones[3];
 
-            for (int j = 0; j< 96; j++)
+            for (int j = 0; j < 96; j++)
             {
                 memoriaPrincipalDatos[j] = 0;
             }
@@ -160,7 +163,7 @@ namespace ProyectoMIPS
          * Se crea un método para cargar instrucciones a la 
          * memoria principal
          * ====================================================== */
-        public void cargarInstruccionMemoria(int instruccion , int op1, int op2, int op3)
+        public void cargarInstruccionMemoria(int instruccion, int op1, int op2, int op3)
         {
             if (memoriaPrincipalInstruccionesBloqueLleno < 640)
             {
@@ -176,7 +179,7 @@ namespace ProyectoMIPS
 
 
         // Se crea la información de cada hilillo
-        public void crear_hilillos (int inicio, int fin, int numero_hilillo)
+        public void crear_hilillos(int inicio, int fin, int numero_hilillo)
         {
             hilillo nuevo_hilillo = new hilillo(numero_hilillo);
             nuevo_hilillo.asignar_inicio_hilillo(inicio);
@@ -255,7 +258,7 @@ namespace ProyectoMIPS
                          */
 
                         if (nucleoHilo[hilo].obtener_registro(PrimerOperando) == 0)
-                            nucleoHilo[hilo]. PC = nucleoHilo[hilo].PC + TercerOperando * 4;
+                            nucleoHilo[hilo].PC = nucleoHilo[hilo].PC + TercerOperando * 4;
                         System.Console.WriteLine("BEQZ dio: registro " + PrimerOperando + " tiene : " + nucleoHilo[hilo].obtener_registro(PrimerOperando));
                         break;
                     case 5:
@@ -300,6 +303,7 @@ namespace ProyectoMIPS
                         break;
                     case 63:
                         Fin(hilo);
+                        encolar_finalizado(hilo);
                         break;
                 }
             }
@@ -327,7 +331,7 @@ namespace ProyectoMIPS
             System.Console.WriteLine("  Entrando a LW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
             int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando) / 4;
-            /* Se obtiene el número de bloque en memoria al que corresponde la dirección */ 
+            /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
             int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
             /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
             int numPalabra = (numByte % 4);
@@ -386,6 +390,7 @@ namespace ProyectoMIPS
                                         nucleoHilo[hilo].asignar_registro(
                                             cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
                                         System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
+                                        subir_cache_memoria(hilo);
                                     }
                                 }
                                 /*
@@ -397,8 +402,9 @@ namespace ProyectoMIPS
                                     int[] bloque = obtener_bloque_datos_memoria(numBloqueMemoria);
                                     cacheDatosHilo[hilo].setBloque(bloque, numBloqueMemoria);
                                     /* Se asigna el valor al registro */
-                                    nucleoHilo[hilo].asignar_registro( cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
+                                    nucleoHilo[hilo].asignar_registro(cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
                                     System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
+                                    subir_cache_memoria(hilo);
                                 }
                             }
                             finally
@@ -557,6 +563,7 @@ namespace ProyectoMIPS
                                             /* Se asigna el valor del dato del bloque a la memoria */
                                             cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
                                             System.Console.WriteLine("        El dato que se cargó en memoria fue " + nucleoHilo[hilo].obtener_registro(PrimerOperando));
+                                            escritura_cache_memoria(hilo);
                                         }
                                         /*
                                          * Sino, sólo se escribe el dato del bloque a memoria
@@ -567,6 +574,7 @@ namespace ProyectoMIPS
                                             /* Se asigna el valor del dato del bloque a la memoria */
                                             cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
                                             System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
+                                            escritura_cache_memoria(hilo);
                                         }
                                     }
                                     /*
@@ -575,8 +583,10 @@ namespace ProyectoMIPS
                                     else
                                     {
                                         /* Se asigna el valor del dato del bloque a la memoria */
+                                        escritura_cache_memoria(hilo);
                                         cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
                                         System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
+                                        escritura_cache_memoria(hilo);
                                     }
                                 }
                                 catch (Exception e)
@@ -638,7 +648,7 @@ namespace ProyectoMIPS
                 cacheInstruccionesHilo[hilo].setBloque(obtener_bloque_instrucciones_memoria(numeroBloque), numeroBloque);
 
                 System.Console.WriteLine("Bloque en la caché: ");
-                System.Console.WriteLine("Palabra 0: " + 
+                System.Console.WriteLine("Palabra 0: " +
                     cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(0));
                 System.Console.WriteLine("Palabra 1: " +
                     cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(1));
@@ -646,7 +656,7 @@ namespace ProyectoMIPS
                     cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(2));
                 System.Console.WriteLine("Palabra 3: " +
                     cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(3));
-                
+
                 instruccion[0] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(0);
                 instruccion[1] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(1);
                 instruccion[2] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(2);
@@ -682,10 +692,10 @@ namespace ProyectoMIPS
             //return cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra);
         }
 
-        public instruccion[] obtener_bloque_instrucciones_memoria (int numeroDeBloque)
+        public instruccion[] obtener_bloque_instrucciones_memoria(int numeroDeBloque)
         {
             instruccion[] bloque = new instruccion[4];
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
                 bloque[i] = new instruccion();
             /* Instrucción 0 */
             bloque[0].setParteInstruccion(memoriaPrincipalInstrucciones[numeroDeBloque * 16], 0);
@@ -722,6 +732,24 @@ namespace ProyectoMIPS
 
             return bloque;
         }
+
+        public void encolar_finalizado(int hilo)
+        {
+            hilillo auxiliar = new hilillo(nucleoHilo[hilo].obtener_num_hilillo());
+            auxiliar.asignar_finalizado(nucleoHilo[hilo].obtener_finalizado());
+            auxiliar.asignar_fin_hilillo(nucleoHilo[hilo].obtener_fin_hilillo());
+            auxiliar.asignar_inicio_hilillo(nucleoHilo[hilo].obtener_inicio_hilillo());
+            auxiliar.asignar_ciclos_reloj(nucleoHilo[hilo].obtener_ciclos_reloj() + nucleoHilo[hilo].obtener_ciclos_reloj_acumulados());
+            auxiliar.asignar_numero_hilillo(nucleoHilo[hilo].obtener_num_hilillo());
+
+            int[] registros = new int[33];
+
+            for (int i = 0; i < 33; i++)
+                registros[i] = nucleoHilo[hilo].obtener_registro(i);
+
+            auxiliar.asignar_contexto(nucleoHilo[hilo].obtener_contador_programa(), registros);
+            hilillos_finalizados.Enqueue(auxiliar);
+        } 
 
         public void cambiarDatoBloqueMemoria(int dato, int numBloque)
         {
@@ -829,11 +857,12 @@ namespace ProyectoMIPS
             {
                 System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
                 System.Console.WriteLine("");
-                reloj.asignar_reloj(0);
+                nucleoHilo[ihilo].asignar_ciclos_reloj(reloj.obtener_reloj() + nucleoHilo[ihilo].obtener_ciclos_reloj());
+                ciclo_reloj_original = reloj.obtener_reloj();
 
                 if (this.desencolarContexto(ihilo))
                 {
-                    while ((reloj.obtener_reloj() <= numero_Quantum) && (nucleoHilo[ihilo].obtener_finalizado() == false))
+                    while ((reloj.obtener_reloj() <= numero_Quantum + ciclo_reloj_original) && (nucleoHilo[ihilo].obtener_finalizado() == false))
                     {
                         if (nucleoHilo[ihilo].obtener_finalizado() == false)
                         {
@@ -879,9 +908,7 @@ namespace ProyectoMIPS
                             System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de inicio de instrucciones. Se esperan: " + inicio_instrucciones.ParticipantCount);
                             inicio_instrucciones.SignalAndWait();
 
-
                             this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
-
                             
                             System.Console.WriteLine("-------------------------------------------------------");
                             System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de fin aumento reloj. Se esperan: " + barrera_fin_aumento_reloj.ParticipantCount);
@@ -915,7 +942,7 @@ namespace ProyectoMIPS
         * ====================================================== */
         public void imprimirMemoriaInstrucciones()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\MemoriaInstrucciones.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\MemoriaInstrucciones.txt"))
             {
                 for (int i = 0; i < 640; i++)
                     escritor.WriteLine("Posicion " + i + ": " + memoriaPrincipalInstrucciones[i] + "\n");
@@ -924,7 +951,7 @@ namespace ProyectoMIPS
 
         public void imprimirMemoriaDatos()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\MemoriaDatos.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\MemoriaDatos.txt"))
             {
                 for (int i = 0; i < 96; i++)
                     escritor.WriteLine("Posicion " + i*4 + ": " + memoriaPrincipalDatos[i] + "\n");
@@ -933,7 +960,7 @@ namespace ProyectoMIPS
 
         public void imprimirRegistro()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\Nucleos.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\Nucleos.txt"))
             {
                 for (int j = 0; j < 3; j++)
                 {
@@ -953,7 +980,7 @@ namespace ProyectoMIPS
          * ====================================================== */
         public void imprimirColaHilillos()
         {
-            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\ProyectoArqui\HililloInicio.txt"))
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\HililloInicio.txt"))
             {
                 Queue<hilillo> cola_aux = new Queue<hilillo>(colaHilillos);
                 hilillo aux = null;
@@ -972,6 +999,40 @@ namespace ProyectoMIPS
                     escritor.WriteLine("\n----------------------------------------------------\n");
                 }
             }
+        }
+
+        public void imprimirColaHilillosFinalizados()
+        {
+            using (System.IO.StreamWriter escritor = new System.IO.StreamWriter(@"C:\Users\JoseDaniel\Desktop\Arqui Probar\ProyectoArqui\HilillosFinalizados.txt"))
+            {
+                Queue<hilillo> cola_aux = new Queue<hilillo>(hilillos_finalizados);
+                hilillo aux = null;
+
+                while (cola_aux.Count > 0)
+                {
+                    aux = cola_aux.Dequeue();
+                    escritor.WriteLine("Numero hilillo: " + aux.obtener_numero_hil());
+                    escritor.WriteLine("Dirección de inicio: " + aux.obtener_inicio_hilillo());
+                    escritor.WriteLine("Dirección de fin: " + aux.obtener_fin_hilillo());
+                    escritor.WriteLine("Finalizado: " + aux.obtener_finalizado());
+                    escritor.WriteLine("Ciclos de reloj: " + aux.obtener_ciclos_reloj());
+                    escritor.WriteLine("PC: " + aux.obtener_PC() + "\n");
+
+                    for (int i = 0; i < 33; i++)
+                        escritor.WriteLine("Registro" + i + " : " + aux.obtener_registros()[i] + "\n");
+                    escritor.WriteLine("\n----------------------------------------------------\n");
+                }
+            }
+        }
+
+        public void escritura_cache_memoria(int hilo)
+        {
+            nucleoHilo[hilo].asignar_ciclos_reloj(nucleoHilo[hilo].obtener_ciclos_reloj() + 7);
+        }
+
+        public void subir_cache_memoria(int hilo)
+        {
+            nucleoHilo[hilo].asignar_ciclos_reloj(nucleoHilo[hilo].obtener_ciclos_reloj() + 7);
         }
     }
 }

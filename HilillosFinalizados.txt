@@ -1,0 +1,456 @@
+Numero hilillo: 0
+Dirección de inicio: 0
+Dirección de fin: 83
+Finalizado: True
+Ciclos de reloj: 322
+PC: 84
+
+Registro0 : 0
+
+Registro1 : 1
+
+Registro2 : 192
+
+Registro3 : 0
+
+Registro4 : 4
+
+Registro5 : 0
+
+Registro6 : 0
+
+Registro7 : 0
+
+Registro8 : 0
+
+Registro9 : 0
+
+Registro10 : 0
+
+Registro11 : 0
+
+Registro12 : 0
+
+Registro13 : 0
+
+Registro14 : 0
+
+Registro15 : 0
+
+Registro16 : 0
+
+Registro17 : 0
+
+Registro18 : 0
+
+Registro19 : 0
+
+Registro20 : 0
+
+Registro21 : 0
+
+Registro22 : 0
+
+Registro23 : 0
+
+Registro24 : 0
+
+Registro25 : 0
+
+Registro26 : 0
+
+Registro27 : 0
+
+Registro28 : 0
+
+Registro29 : 0
+
+Registro30 : 0
+
+Registro31 : 99
+
+Registro32 : 0
+
+
+----------------------------------------------------
+
+Numero hilillo: 1
+Dirección de inicio: 84
+Dirección de fin: 167
+Finalizado: True
+Ciclos de reloj: 434
+PC: 168
+
+Registro0 : 0
+
+Registro1 : 0
+
+Registro2 : 2
+
+Registro3 : 0
+
+Registro4 : 4
+
+Registro5 : 0
+
+Registro6 : 0
+
+Registro7 : 0
+
+Registro8 : 0
+
+Registro9 : 0
+
+Registro10 : 0
+
+Registro11 : 99
+
+Registro12 : 0
+
+Registro13 : 0
+
+Registro14 : 0
+
+Registro15 : 0
+
+Registro16 : 272
+
+Registro17 : 0
+
+Registro18 : 0
+
+Registro19 : 0
+
+Registro20 : 0
+
+Registro21 : 0
+
+Registro22 : 0
+
+Registro23 : 0
+
+Registro24 : 0
+
+Registro25 : 0
+
+Registro26 : 0
+
+Registro27 : 0
+
+Registro28 : 0
+
+Registro29 : 0
+
+Registro30 : 0
+
+Registro31 : 88
+
+Registro32 : 0
+
+
+----------------------------------------------------
+
+Numero hilillo: 2
+Dirección de inicio: 168
+Dirección de fin: 251
+Finalizado: True
+Ciclos de reloj: 434
+PC: 252
+
+Registro0 : 0
+
+Registro1 : 0
+
+Registro2 : 0
+
+Registro3 : 3
+
+Registro4 : 4
+
+Registro5 : 0
+
+Registro6 : 0
+
+Registro7 : 0
+
+Registro8 : 0
+
+Registro9 : 0
+
+Registro10 : 0
+
+Registro11 : 99
+
+Registro12 : 88
+
+Registro13 : 0
+
+Registro14 : 0
+
+Registro15 : 0
+
+Registro16 : 0
+
+Registro17 : 0
+
+Registro18 : 0
+
+Registro19 : 0
+
+Registro20 : 0
+
+Registro21 : 0
+
+Registro22 : 0
+
+Registro23 : 0
+
+Registro24 : 352
+
+Registro25 : 0
+
+Registro26 : 0
+
+Registro27 : 0
+
+Registro28 : 0
+
+Registro29 : 0
+
+Registro30 : 0
+
+Registro31 : 55
+
+Registro32 : 0
+
+
+----------------------------------------------------
+
+Numero hilillo: 3
+Dirección de inicio: 252
+Dirección de fin: 375
+Finalizado: True
+Ciclos de reloj: 119
+PC: 376
+
+Registro0 : 0
+
+Registro1 : 0
+
+Registro2 : 0
+
+Registro3 : 6
+
+Registro4 : 4
+
+Registro5 : 3
+
+Registro6 : 3
+
+Registro7 : 0
+
+Registro8 : 0
+
+Registro9 : 0
+
+Registro10 : 6
+
+Registro11 : 99
+
+Registro12 : 88
+
+Registro13 : 55
+
+Registro14 : 0
+
+Registro15 : 0
+
+Registro16 : 0
+
+Registro17 : 0
+
+Registro18 : 0
+
+Registro19 : 0
+
+Registro20 : 0
+
+Registro21 : 0
+
+Registro22 : 0
+
+Registro23 : 0
+
+Registro24 : 0
+
+Registro25 : 288
+
+Registro26 : 0
+
+Registro27 : 0
+
+Registro28 : 0
+
+Registro29 : 0
+
+Registro30 : 20
+
+Registro31 : 44
+
+Registro32 : 0
+
+
+----------------------------------------------------
+
+Numero hilillo: 5
+Dirección de inicio: 480
+Dirección de fin: 551
+Finalizado: True
+Ciclos de reloj: 28
+PC: 520
+
+Registro0 : 0
+
+Registro1 : 0
+
+Registro2 : 2
+
+Registro3 : 0
+
+Registro4 : 0
+
+Registro5 : 45
+
+Registro6 : 0
+
+Registro7 : 0
+
+Registro8 : 0
+
+Registro9 : 0
+
+Registro10 : 0
+
+Registro11 : 0
+
+Registro12 : 0
+
+Registro13 : 0
+
+Registro14 : 0
+
+Registro15 : 0
+
+Registro16 : 0
+
+Registro17 : 0
+
+Registro18 : 0
+
+Registro19 : 0
+
+Registro20 : 0
+
+Registro21 : 0
+
+Registro22 : 42
+
+Registro23 : 1
+
+Registro24 : 0
+
+Registro25 : 0
+
+Registro26 : 0
+
+Registro27 : 0
+
+Registro28 : 0
+
+Registro29 : 0
+
+Registro30 : 0
+
+Registro31 : 504
+
+Registro32 : 0
+
+
+----------------------------------------------------
+
+Numero hilillo: 4
+Dirección de inicio: 376
+Dirección de fin: 479
+Finalizado: True
+Ciclos de reloj: 168
+PC: 480
+
+Registro0 : 0
+
+Registro1 : 132
+
+Registro2 : 352
+
+Registro3 : 0
+
+Registro4 : 4
+
+Registro5 : 0
+
+Registro6 : 3
+
+Registro7 : 3
+
+Registro8 : 3
+
+Registro9 : 3
+
+Registro10 : 0
+
+Registro11 : 99
+
+Registro12 : 88
+
+Registro13 : 55
+
+Registro14 : 44
+
+Registro15 : 0
+
+Registro16 : 0
+
+Registro17 : 0
+
+Registro18 : 0
+
+Registro19 : 0
+
+Registro20 : 0
+
+Registro21 : 0
+
+Registro22 : 0
+
+Registro23 : 0
+
+Registro24 : 0
+
+Registro25 : 0
+
+Registro26 : 0
+
+Registro27 : 0
+
+Registro28 : 0
+
+Registro29 : 0
+
+Registro30 : 0
+
+Registro31 : 33
+
+Registro32 : 0
+
+
+----------------------------------------------------
+

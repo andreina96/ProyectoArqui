@@ -502,247 +502,247 @@ Posicion 250: 0
 
 Posicion 251: 0
 
-Posicion 252: 0
+Posicion 252: 8
 
 Posicion 253: 0
 
-Posicion 254: 0
+Posicion 254: 4
 
-Posicion 255: 0
+Posicion 255: 4
 
-Posicion 256: 0
+Posicion 256: 8
 
 Posicion 257: 0
 
-Posicion 258: 0
+Posicion 258: 3
 
 Posicion 259: 0
 
-Posicion 260: 0
+Posicion 260: 34
 
-Posicion 261: 0
+Posicion 261: 30
 
-Posicion 262: 0
+Posicion 262: 30
 
-Posicion 263: 0
+Posicion 263: 30
 
-Posicion 264: 0
+Posicion 264: 34
 
-Posicion 265: 0
+Posicion 265: 10
 
-Posicion 266: 0
+Posicion 266: 10
 
-Posicion 267: 0
+Posicion 267: 10
 
-Posicion 268: 0
+Posicion 268: 8
 
 Posicion 269: 0
 
-Posicion 270: 0
+Posicion 270: 25
 
-Posicion 271: 0
+Posicion 271: 256
 
-Posicion 272: 0
+Posicion 272: 8
 
 Posicion 273: 0
 
-Posicion 274: 0
+Posicion 274: 8
 
-Posicion 275: 0
+Posicion 275: 8
 
-Posicion 276: 0
+Posicion 276: 35
 
-Posicion 277: 0
+Posicion 277: 25
 
-Posicion 278: 0
+Posicion 278: 5
 
 Posicion 279: 0
 
-Posicion 280: 0
+Posicion 280: 35
 
-Posicion 281: 0
+Posicion 281: 25
 
-Posicion 282: 0
+Posicion 282: 6
 
-Posicion 283: 0
+Posicion 283: 4
 
-Posicion 284: 0
+Posicion 284: 32
 
-Posicion 285: 0
+Posicion 285: 5
 
-Posicion 286: 0
+Posicion 286: 6
 
-Posicion 287: 0
+Posicion 287: 3
 
-Posicion 288: 0
+Posicion 288: 32
 
-Posicion 289: 0
+Posicion 289: 30
 
-Posicion 290: 0
+Posicion 290: 3
 
-Posicion 291: 0
+Posicion 291: 30
 
-Posicion 292: 0
+Posicion 292: 43
 
-Posicion 293: 0
+Posicion 293: 25
 
-Posicion 294: 0
+Posicion 294: 4
 
 Posicion 295: 0
 
-Posicion 296: 0
+Posicion 296: 43
 
-Posicion 297: 0
+Posicion 297: 25
 
-Posicion 298: 0
+Posicion 298: 4
 
-Posicion 299: 0
+Posicion 299: 4
 
-Posicion 300: 0
+Posicion 300: 35
 
-Posicion 301: 0
+Posicion 301: 25
 
-Posicion 302: 0
+Posicion 302: 5
 
-Posicion 303: 0
+Posicion 303: 8
 
-Posicion 304: 0
+Posicion 304: 35
 
-Posicion 305: 0
+Posicion 305: 25
 
-Posicion 306: 0
+Posicion 306: 6
 
-Posicion 307: 0
+Posicion 307: 12
 
-Posicion 308: 0
+Posicion 308: 32
 
-Posicion 309: 0
+Posicion 309: 5
 
-Posicion 310: 0
+Posicion 310: 6
 
-Posicion 311: 0
+Posicion 311: 10
 
-Posicion 312: 0
+Posicion 312: 43
 
-Posicion 313: 0
+Posicion 313: 25
 
-Posicion 314: 0
+Posicion 314: 4
 
-Posicion 315: 0
+Posicion 315: 8
 
-Posicion 316: 0
+Posicion 316: 43
 
-Posicion 317: 0
+Posicion 317: 25
 
-Posicion 318: 0
+Posicion 318: 4
 
-Posicion 319: 0
+Posicion 319: 12
 
-Posicion 320: 0
+Posicion 320: 32
 
-Posicion 321: 0
+Posicion 321: 30
 
-Posicion 322: 0
+Posicion 322: 10
 
-Posicion 323: 0
+Posicion 323: 30
 
-Posicion 324: 0
+Posicion 324: 8
 
-Posicion 325: 0
+Posicion 325: 8
 
-Posicion 326: 0
+Posicion 326: 8
 
-Posicion 327: 0
+Posicion 327: -4
 
-Posicion 328: 0
+Posicion 328: 8
 
-Posicion 329: 0
+Posicion 329: 25
 
-Posicion 330: 0
+Posicion 330: 25
 
-Posicion 331: 0
+Posicion 331: 16
 
-Posicion 332: 0
+Posicion 332: 5
 
-Posicion 333: 0
+Posicion 333: 8
 
 Posicion 334: 0
 
-Posicion 335: 0
+Posicion 335: -15
 
-Posicion 336: 0
+Posicion 336: 43
 
 Posicion 337: 0
 
-Posicion 338: 0
+Posicion 338: 30
 
-Posicion 339: 0
+Posicion 339: 20
 
-Posicion 340: 0
+Posicion 340: 4
 
-Posicion 341: 0
+Posicion 341: 8
 
 Posicion 342: 0
 
-Posicion 343: 0
+Posicion 343: 1
 
-Posicion 344: 0
+Posicion 344: 43
 
 Posicion 345: 0
 
-Posicion 346: 0
+Posicion 346: 25
 
-Posicion 347: 0
+Posicion 347: 24
 
-Posicion 348: 0
+Posicion 348: 8
 
 Posicion 349: 0
 
-Posicion 350: 0
+Posicion 350: 31
 
-Posicion 351: 0
+Posicion 351: 44
 
-Posicion 352: 0
+Posicion 352: 43
 
 Posicion 353: 0
 
-Posicion 354: 0
+Posicion 354: 31
 
-Posicion 355: 0
+Posicion 355: 28
 
-Posicion 356: 0
+Posicion 356: 35
 
 Posicion 357: 0
 
-Posicion 358: 0
+Posicion 358: 11
 
-Posicion 359: 0
+Posicion 359: 368
 
-Posicion 360: 0
+Posicion 360: 35
 
 Posicion 361: 0
 
-Posicion 362: 0
+Posicion 362: 12
 
 Posicion 363: 0
 
-Posicion 364: 0
+Posicion 364: 35
 
 Posicion 365: 0
 
-Posicion 366: 0
+Posicion 366: 13
 
-Posicion 367: 0
+Posicion 367: 92
 
-Posicion 368: 0
+Posicion 368: 35
 
 Posicion 369: 0
 
-Posicion 370: 0
+Posicion 370: 15
 
-Posicion 371: 0
+Posicion 371: 364
 
-Posicion 372: 0
+Posicion 372: 63
 
 Posicion 373: 0
 
@@ -750,207 +750,207 @@ Posicion 374: 0
 
 Posicion 375: 0
 
-Posicion 376: 0
+Posicion 376: 32
 
 Posicion 377: 0
 
 Posicion 378: 0
 
-Posicion 379: 0
+Posicion 379: 1
 
-Posicion 380: 0
+Posicion 380: 8
 
 Posicion 381: 0
 
-Posicion 382: 0
+Posicion 382: 4
 
-Posicion 383: 0
+Posicion 383: 4
 
-Posicion 384: 0
+Posicion 384: 8
 
 Posicion 385: 0
 
-Posicion 386: 0
+Posicion 386: 2
 
-Posicion 387: 0
+Posicion 387: 96
 
-Posicion 388: 0
+Posicion 388: 8
 
 Posicion 389: 0
 
-Posicion 390: 0
+Posicion 390: 3
 
-Posicion 391: 0
+Posicion 391: 64
 
-Posicion 392: 0
+Posicion 392: 8
 
 Posicion 393: 0
 
-Posicion 394: 0
+Posicion 394: 5
 
-Posicion 395: 0
+Posicion 395: 2
 
-Posicion 396: 0
+Posicion 396: 35
 
-Posicion 397: 0
+Posicion 397: 2
 
-Posicion 398: 0
+Posicion 398: 6
 
 Posicion 399: 0
 
-Posicion 400: 0
+Posicion 400: 35
 
-Posicion 401: 0
+Posicion 401: 2
 
-Posicion 402: 0
+Posicion 402: 7
 
-Posicion 403: 0
+Posicion 403: 4
 
-Posicion 404: 0
+Posicion 404: 35
 
-Posicion 405: 0
+Posicion 405: 2
 
-Posicion 406: 0
+Posicion 406: 8
 
-Posicion 407: 0
+Posicion 407: 8
 
-Posicion 408: 0
+Posicion 408: 35
 
-Posicion 409: 0
+Posicion 409: 2
 
-Posicion 410: 0
+Posicion 410: 9
 
-Posicion 411: 0
+Posicion 411: 12
 
-Posicion 412: 0
+Posicion 412: 34
 
-Posicion 413: 0
+Posicion 413: 3
 
-Posicion 414: 0
+Posicion 414: 4
 
-Posicion 415: 0
+Posicion 415: 3
 
-Posicion 416: 0
+Posicion 416: 8
 
-Posicion 417: 0
+Posicion 417: 2
 
-Posicion 418: 0
+Posicion 418: 2
 
-Posicion 419: 0
+Posicion 419: 16
 
-Posicion 420: 0
+Posicion 420: 32
 
-Posicion 421: 0
+Posicion 421: 1
 
-Posicion 422: 0
+Posicion 422: 6
 
-Posicion 423: 0
+Posicion 423: 1
 
-Posicion 424: 0
+Posicion 424: 32
 
-Posicion 425: 0
+Posicion 425: 1
 
-Posicion 426: 0
+Posicion 426: 7
 
-Posicion 427: 0
+Posicion 427: 1
 
-Posicion 428: 0
+Posicion 428: 32
 
-Posicion 429: 0
+Posicion 429: 1
 
-Posicion 430: 0
+Posicion 430: 8
 
-Posicion 431: 0
+Posicion 431: 1
 
-Posicion 432: 0
+Posicion 432: 32
 
-Posicion 433: 0
+Posicion 433: 1
 
-Posicion 434: 0
+Posicion 434: 9
 
-Posicion 435: 0
+Posicion 435: 1
 
-Posicion 436: 0
+Posicion 436: 8
 
-Posicion 437: 0
+Posicion 437: 5
 
-Posicion 438: 0
+Posicion 438: 5
 
-Posicion 439: 0
+Posicion 439: -1
 
-Posicion 440: 0
+Posicion 440: 5
 
-Posicion 441: 0
+Posicion 441: 5
 
 Posicion 442: 0
 
-Posicion 443: 0
+Posicion 443: -2
 
-Posicion 444: 0
+Posicion 444: 5
 
-Posicion 445: 0
+Posicion 445: 3
 
 Posicion 446: 0
 
-Posicion 447: 0
+Posicion 447: -14
 
-Posicion 448: 0
+Posicion 448: 43
 
 Posicion 449: 0
 
-Posicion 450: 0
+Posicion 450: 1
 
-Posicion 451: 0
+Posicion 451: 380
 
-Posicion 452: 0
+Posicion 452: 8
 
 Posicion 453: 0
 
-Posicion 454: 0
+Posicion 454: 31
 
-Posicion 455: 0
+Posicion 455: 33
 
-Posicion 456: 0
+Posicion 456: 43
 
 Posicion 457: 0
 
-Posicion 458: 0
+Posicion 458: 31
 
-Posicion 459: 0
+Posicion 459: 364
 
-Posicion 460: 0
+Posicion 460: 35
 
 Posicion 461: 0
 
-Posicion 462: 0
+Posicion 462: 11
 
-Posicion 463: 0
+Posicion 463: 368
 
-Posicion 464: 0
+Posicion 464: 35
 
 Posicion 465: 0
 
-Posicion 466: 0
+Posicion 466: 12
 
 Posicion 467: 0
 
-Posicion 468: 0
+Posicion 468: 35
 
 Posicion 469: 0
 
-Posicion 470: 0
+Posicion 470: 13
 
-Posicion 471: 0
+Posicion 471: 92
 
-Posicion 472: 0
+Posicion 472: 35
 
 Posicion 473: 0
 
-Posicion 474: 0
+Posicion 474: 14
 
-Posicion 475: 0
+Posicion 475: 28
 
-Posicion 476: 0
+Posicion 476: 63
 
 Posicion 477: 0
 
@@ -958,79 +958,79 @@ Posicion 478: 0
 
 Posicion 479: 0
 
-Posicion 480: 0
+Posicion 480: 8
 
 Posicion 481: 0
 
-Posicion 482: 0
+Posicion 482: 4
 
-Posicion 483: 0
+Posicion 483: 10
 
-Posicion 484: 0
+Posicion 484: 34
 
-Posicion 485: 0
+Posicion 485: 5
 
-Posicion 486: 0
+Posicion 486: 5
 
-Posicion 487: 0
+Posicion 487: 5
 
-Posicion 488: 0
+Posicion 488: 8
 
-Posicion 489: 0
+Posicion 489: 4
 
-Posicion 490: 0
+Posicion 490: 4
 
-Posicion 491: 0
+Posicion 491: -1
 
-Posicion 492: 0
+Posicion 492: 32
 
-Posicion 493: 0
+Posicion 493: 5
 
-Posicion 494: 0
+Posicion 494: 4
 
-Posicion 495: 0
+Posicion 495: 5
 
-Posicion 496: 0
+Posicion 496: 5
 
-Posicion 497: 0
+Posicion 497: 4
 
 Posicion 498: 0
 
-Posicion 499: 0
+Posicion 499: -3
 
-Posicion 500: 0
+Posicion 500: 3
 
 Posicion 501: 0
 
 Posicion 502: 0
 
-Posicion 503: 0
+Posicion 503: 16
 
-Posicion 504: 0
+Posicion 504: 12
 
-Posicion 505: 0
+Posicion 505: 22
 
-Posicion 506: 0
+Posicion 506: 2
 
-Posicion 507: 0
+Posicion 507: 22
 
-Posicion 508: 0
+Posicion 508: 43
 
 Posicion 509: 0
 
-Posicion 510: 0
+Posicion 510: 5
 
-Posicion 511: 0
+Posicion 511: 64
 
-Posicion 512: 0
+Posicion 512: 43
 
 Posicion 513: 0
 
-Posicion 514: 0
+Posicion 514: 22
 
-Posicion 515: 0
+Posicion 515: 68
 
-Posicion 516: 0
+Posicion 516: 63
 
 Posicion 517: 0
 
@@ -1038,65 +1038,65 @@ Posicion 518: 0
 
 Posicion 519: 0
 
-Posicion 520: 0
+Posicion 520: 8
 
 Posicion 521: 0
 
-Posicion 522: 0
+Posicion 522: 21
 
-Posicion 523: 0
+Posicion 523: 12
 
-Posicion 524: 0
+Posicion 524: 34
 
-Posicion 525: 0
+Posicion 525: 22
 
-Posicion 526: 0
+Posicion 526: 22
 
-Posicion 527: 0
+Posicion 527: 22
 
-Posicion 528: 0
+Posicion 528: 8
 
 Posicion 529: 0
 
-Posicion 530: 0
+Posicion 530: 2
 
-Posicion 531: 0
+Posicion 531: 2
 
-Posicion 532: 0
+Posicion 532: 14
 
-Posicion 533: 0
+Posicion 533: 21
 
-Posicion 534: 0
+Posicion 534: 2
 
-Posicion 535: 0
+Posicion 535: 23
 
-Posicion 536: 0
+Posicion 536: 8
 
-Posicion 537: 0
+Posicion 537: 21
 
-Posicion 538: 0
+Posicion 538: 21
 
-Posicion 539: 0
+Posicion 539: -2
 
-Posicion 540: 0
+Posicion 540: 32
 
-Posicion 541: 0
+Posicion 541: 22
 
-Posicion 542: 0
+Posicion 542: 23
 
-Posicion 543: 0
+Posicion 543: 22
 
-Posicion 544: 0
+Posicion 544: 5
 
-Posicion 545: 0
+Posicion 545: 21
 
 Posicion 546: 0
 
-Posicion 547: 0
+Posicion 547: -4
 
-Posicion 548: 0
+Posicion 548: 2
 
-Posicion 549: 0
+Posicion 549: 31
 
 Posicion 550: 0
 

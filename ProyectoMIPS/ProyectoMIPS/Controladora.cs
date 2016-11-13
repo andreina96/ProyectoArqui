@@ -92,6 +92,7 @@ namespace ProyectoMIPS
             procesador.imprimirColaHilillos();
             procesador.imprimirRegistro();
             procesador.imprimirMemoriaDatos();
+            procesador.imprimirColaHilillosFinalizados();
         }
     }
 }

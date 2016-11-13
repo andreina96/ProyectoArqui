@@ -8,11 +8,11 @@ Posicion 12: 0
 
 Posicion 16: 0
 
-Posicion 20: 0
+Posicion 20: 20
 
 Posicion 24: 0
 
-Posicion 28: 0
+Posicion 28: 44
 
 Posicion 32: 0
 
@@ -30,9 +30,9 @@ Posicion 56: 0
 
 Posicion 60: 0
 
-Posicion 64: 0
+Posicion 64: 45
 
-Posicion 68: 0
+Posicion 68: 42
 
 Posicion 72: 0
 
@@ -126,21 +126,21 @@ Posicion 248: 2
 
 Posicion 252: 2
 
-Posicion 256: 2
+Posicion 256: 4
 
-Posicion 260: 2
+Posicion 260: 4
 
-Posicion 264: 2
+Posicion 264: 4
 
-Posicion 268: 2
+Posicion 268: 4
 
-Posicion 272: 3
+Posicion 272: 4
 
-Posicion 276: 3
+Posicion 276: 4
 
-Posicion 280: 3
+Posicion 280: 4
 
-Posicion 284: 3
+Posicion 284: 4
 
 Posicion 288: 3
 
@@ -180,7 +180,7 @@ Posicion 356: 0
 
 Posicion 360: 0
 
-Posicion 364: 0
+Posicion 364: 33
 
 Posicion 368: 99
 
@@ -188,5 +188,5 @@ Posicion 372: 0
 
 Posicion 376: 0
 
-Posicion 380: 0
+Posicion 380: 132
 
