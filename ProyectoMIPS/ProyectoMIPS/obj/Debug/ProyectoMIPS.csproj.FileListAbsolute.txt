@@ -61,9 +61,9 @@ C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\Proyec
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.pdb
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\bin\Debug\ProyectoMIPS.exe
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\bin\Debug\ProyectoMIPS.pdb
-C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.csprojResolveAssemblyReference.cache
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.Forms.Resultados.resources
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.Forms.Vista.resources
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.Properties.Resources.resources
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.csproj.GenerateResource.Cache
 C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.Forms.ResultadosLento.resources
+C:\Users\Andreína Alvarado\Desktop\P Arqui, Ultima Version\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.csprojResolveAssemblyReference.cache

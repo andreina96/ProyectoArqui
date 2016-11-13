@@ -15,7 +15,7 @@ namespace ProyectoMIPS
          */
         bool modo;
 
-        ResultadosLento resultado = new ResultadosLento();
+        ResultadosLento resultado;
 
         /*
          * Se crean las estructuras de sincronización de núcleos
@@ -132,9 +132,7 @@ namespace ProyectoMIPS
             cacheInstruccionesHilo = new cacheInstrucciones[3];
 
             for (int j = 0; j < 96; j++)
-            {
                 memoriaPrincipalDatos[j] = 1;
-            }
 
             for (int i = 0; i < 3; i++)
             {
@@ -706,30 +704,7 @@ namespace ProyectoMIPS
                                         nucleoHilo[hilo].asignar_registro(
                                             cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
                                         /* Se asigna el valor al registro RL */
-
-                                        bool rl = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
-
-                                        if (rl)
-                                        {
-                                            try
-                                            {
-                                                nucleoHilo[hilo].asignar_registro(numByte, 32);
-                                            }
-                                            catch(Exception e)
-                                            {
-                                                System.Console.WriteLine("Error en LL rl hilo " + hilo + e);
-                                            }
-                                            finally
-                                            {
-                                                Monitor.Exit(nucleoHilo[hilo].registro[32]);
-                                                completado = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            completado = false;
-                                        }
-                                        
+                                        nucleoHilo[hilo].asignar_registro(numByte, 32);
                                         System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
                                     }
                                     /*
@@ -745,28 +720,7 @@ namespace ProyectoMIPS
                                         nucleoHilo[hilo].asignar_registro(
                                             cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
                                         /* Se asigna el valor al registro RL */
-                                        bool rl = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
-
-                                        if (rl)
-                                        {
-                                            try
-                                            {
-                                                nucleoHilo[hilo].asignar_registro(numByte, 32);
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                System.Console.WriteLine("Error en LL rl hilo " + hilo + e);
-                                            }
-                                            finally
-                                            {
-                                                Monitor.Exit(nucleoHilo[hilo].registro[32]);
-                                                completado = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            completado = false;
-                                        }
+                                        nucleoHilo[hilo].asignar_registro(numByte, 32);
                                         System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
                                     }
                                 }
@@ -782,35 +736,7 @@ namespace ProyectoMIPS
                                     nucleoHilo[hilo].asignar_registro(
                                         cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
                                     /* Se asigna el valor al registro RL */
-                                    bool rl = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
-
-                                    if (rl)
-                                    {
-                                        try
-                                        {
-                                            nucleoHilo[hilo].asignar_registro(numByte, 32);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            System.Console.WriteLine("Error en LL rl hilo " + hilo + e);
-                                        }
-                                        finally
-                                        {
-                                            completado = true;
-                                            try
-                                            {
-                                                Monitor.Exit(nucleoHilo[hilo].registro[32]);
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                System.Console.WriteLine("Error en línea 800 " + e);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        completado = false;
-                                    }
+                                    nucleoHilo[hilo].asignar_registro(numByte, 32);
                                     System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
                                 }
                             }
@@ -818,6 +744,7 @@ namespace ProyectoMIPS
                             {
                                 System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de memoria");
                                 Monitor.Exit(cacheDatosHilo[hilo]);
+                                completado = true;
                             }
                         }
                         else
@@ -931,7 +858,7 @@ namespace ProyectoMIPS
                                 }
                                 catch (Exception e)
                                 {
-                                    System.Console.WriteLine("Error en SC " + (hilo + 2) % 3 + " : " + e);
+                                    System.Console.WriteLine("Error en SW " + (hilo + 2) % 3 + " : " + e);
                                 }
                                 finally
                                 {
@@ -944,81 +871,6 @@ namespace ProyectoMIPS
                                 completado = false;
                             }
                         }
-
-                        if (completado)
-                        {
-                            bool rl1 = Monitor.TryEnter(nucleoHilo[(hilo + 1) % 3].registro[32]);
-
-                            if (rl1)
-                            {
-                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de rl para hilo " + (hilo + 1) % 3);
-                                try
-                                {
-                                    if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
-                                    {
-                                        nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    System.Console.WriteLine("Error en SC rl " + (hilo + 1) % 3 + " : " + e);
-                                }
-                                finally
-                                {
-                                    Monitor.Exit(nucleoHilo[(hilo + 1) % 3].registro[32]);
-                                }
-                            }
-                            else
-                            {
-                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de rl para hilo " + ((hilo + 1) % 3));
-                                completado = false;
-                            }
-                        }
-
-                        if (completado)
-                        {
-                            bool rl2 = Monitor.TryEnter(nucleoHilo[(hilo + 2) % 3].registro[32]);
-
-                            if (rl2)
-                            {
-                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de rl para hilo " + (hilo + 2) % 3);
-                                try
-                                {
-                                    if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
-                                    {
-                                        nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    System.Console.WriteLine("Error en SC rl " + (hilo + 2) % 3 + " : " + e);
-                                }
-                                finally
-                                {
-                                    Monitor.Exit(nucleoHilo[(hilo + 2) % 3].registro[32]);
-                                }
-                            }
-                            else
-                            {
-                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de rl para hilo " + ((hilo + 2) % 3));
-                                completado = false;
-                            }
-                        }
-
-                        if (completado)
-                        {
-                            bool rl3 = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
-
-                            if (rl3)
-                            {
-                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de rl para hilo " + hilo);
-                                try
-                                {
-                                    if (nucleoHilo[hilo].registro[32] == numByte)
-                                    {
-                                        nucleoHilo[hilo].registro[32] = -1;
-                                    }
-                                
 
                         if (completado)
                         {
@@ -1043,6 +895,15 @@ namespace ProyectoMIPS
                                         {
                                             if (nucleoHilo[hilo].obtener_registro(32) == numByte)
                                             {
+                                                if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
+                                                {
+                                                    nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
+                                                }
+                                                if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
+                                                {
+                                                    nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
+                                                }
+                                                nucleoHilo[hilo].registro[32] = -1;
                                                 System.Console.WriteLine("      HIT Válido");
                                                 /* Se asigna el valor del dato del bloque a la caché */
                                                 cacheDatosHilo[hilo].modificarPalabraBloque(nucleoHilo[hilo].obtener_registro(SegundoOperando), numPalabra, numBloqueMemoria);
@@ -1062,6 +923,15 @@ namespace ProyectoMIPS
                                         {
                                             if (nucleoHilo[hilo].obtener_registro(32) == numByte)
                                             {
+                                                if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
+                                                {
+                                                    nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
+                                                }
+                                                if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
+                                                {
+                                                    nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
+                                                }
+                                                nucleoHilo[hilo].registro[32] = -1;
                                                 System.Console.WriteLine("      HIT Inválido");
                                                 /* Se asigna el valor del dato del bloque a la memoria */
                                                 cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
@@ -1080,6 +950,15 @@ namespace ProyectoMIPS
                                     {
                                         if (nucleoHilo[hilo].obtener_registro(32) == numByte)
                                         {
+                                            if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
+                                            {
+                                                nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
+                                            }
+                                            if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
+                                            {
+                                                nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
+                                            }
+                                            nucleoHilo[hilo].registro[32] = -1;
                                             /* Se asigna el valor del dato del bloque a la memoria */
                                             cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
                                             System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
@@ -1092,7 +971,7 @@ namespace ProyectoMIPS
                                 }
                                 catch (Exception e)
                                 {
-                                    System.Console.WriteLine("Error en SC " + hilo + " : " + e);
+                                    System.Console.WriteLine("Error en SW " + hilo + " : " + e);
                                 }
                                 finally
                                 {
@@ -1106,26 +985,10 @@ namespace ProyectoMIPS
                                 completado = false;
                             }
                         }
-                                }
-                                catch (Exception e)
-                                {
-                                    System.Console.WriteLine("Error en SC rl " + hilo + " : " + e);
-                                }
-                                finally
-                                {
-                                    Monitor.Exit(nucleoHilo[hilo].registro[32]);
-                                }
-                            }
-                            else
-                            {
-                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de rl");
-                                completado = false;
-                            }
-                        }
                     }
                     catch (Exception e)
                     {
-                        System.Console.WriteLine("Error en SC Mem : " + e);
+                        System.Console.WriteLine("Error en SW Mem : " + e);
                     }
                     finally
                     {
@@ -1382,6 +1245,8 @@ namespace ProyectoMIPS
 
                 if (this.desencolarContexto(ihilo))
                 {
+                    reloj.asignar_modificado(false);
+
                     while ((reloj.obtener_reloj() <= numero_Quantum + ciclo_reloj_original) && (nucleoHilo[ihilo].obtener_finalizado() == false))
                     {
                         if (nucleoHilo[ihilo].obtener_finalizado() == false)
@@ -1420,7 +1285,7 @@ namespace ProyectoMIPS
                                     if (modo == true)
                                     {
                                         inicio_instrucciones.AddParticipant();
-                                        Monitor.Exit(reloj);
+                                        resultado = new ResultadosLento();
                                         resultado.asignar_memoria(memoriaPrincipalDatos);
                                         resultado.asignar_nucleo_hilo(nucleoHilo);
                                         resultado.asignar_reloj(reloj.obtener_reloj());
@@ -1435,13 +1300,13 @@ namespace ProyectoMIPS
                                         }
                                         inicio_instrucciones.RemoveParticipant();
                                     }
+                                    Monitor.Exit(reloj);
                                 }
                             }
 
                             System.Console.WriteLine("-------------------------------------------------------");
                             System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de inicio de instrucciones. Se esperan: " + inicio_instrucciones.ParticipantCount);
                             inicio_instrucciones.SignalAndWait();
-                            reloj.asignar_modificado(false);
 
                             this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
 
@@ -1458,6 +1323,7 @@ namespace ProyectoMIPS
                     }
                     if (nucleoHilo[ihilo].obtener_finalizado() == false)
                     {
+                        nucleoHilo[ihilo].registro[32] = -1;
                         this.encolarContexto(ihilo);
                     }
                 }
