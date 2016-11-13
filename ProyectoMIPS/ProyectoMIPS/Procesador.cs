@@ -685,6 +685,7 @@ namespace ProyectoMIPS
                 instruccion[1] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(1);
                 instruccion[2] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(2);
                 instruccion[3] = cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra).getParteInstruccion(3);
+                subir_cache_memoria(hilo);
             }
 
             return instruccion;
@@ -694,6 +695,7 @@ namespace ProyectoMIPS
 
         public instruccion[] obtener_bloque_instrucciones_memoria(int numeroDeBloque)
         {
+            
             instruccion[] bloque = new instruccion[4];
             for (int i = 0; i < 4; i++)
                 bloque[i] = new instruccion();
