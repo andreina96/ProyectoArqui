@@ -8,6 +8,14 @@ namespace ProyectoMIPS
 {
     class Procesador
     {
+        /*
+         * Se crean las estructuras de sincronización de núcleos
+         */
+        public estructura_reloj reloj;
+        public static Barrier barrera_aumento_reloj = new Barrier(participantCount: 3);
+        public static Barrier barrera_fin_aumento_reloj = new Barrier(participantCount: 3);
+        public static Barrier inicio_instrucciones = new Barrier(participantCount: 3);
+
         /* ======================================================
          * Se crea una estructura para representar la parte de
          * datos de memoria principal 
@@ -23,11 +31,6 @@ namespace ProyectoMIPS
          *      
          * ====================================================== */
         public int[] memoriaPrincipalDatos;
-        public estructura_reloj reloj;
-        public static Barrier barrera_aumento_reloj = new Barrier(participantCount: 3);
-        public static Barrier barrera_fin_aumento_reloj = new Barrier(participantCount: 3);
-        public static Barrier inicio_instrucciones = new Barrier(participantCount: 3);
-
 
         /* ======================================================
          * Se crea una estructura para representar la parte de
@@ -134,7 +137,6 @@ namespace ProyectoMIPS
             numero_hilillos = 0;
             numero_Quantum = 0;
         }
-
 
         /* ======================================================
          * Se crea un método para asignarle un valor al número de
@@ -322,8 +324,6 @@ namespace ProyectoMIPS
          */
         public void LW(int hilo, int PrimerOperando, int SegundoOperando, int TercerOperando)
         {
-            System.Console.WriteLine("--------"+memoriaPrincipalDatos[92]);
-            System.Console.WriteLine("---------" + nucleoHilo[hilo].obtener_registro(11));
             System.Console.WriteLine("  Entrando a LW...");
             /* Se obtiene el número de byte en memoria al que corresponde la dirección */
             int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando) / 4;
@@ -426,9 +426,12 @@ namespace ProyectoMIPS
                     completado = false;
                 }
             }
-            System.Console.WriteLine("");
-            System.Console.WriteLine("Hilo : " + hilo + " volviendo a intentar...");
-            System.Console.WriteLine("");
+            if (completado == false)
+            {
+                System.Console.WriteLine("");
+                System.Console.WriteLine("Hilo : " + hilo + " volviendo a intentar...");
+                System.Console.WriteLine("");
+            }
         }
 
         /* Instruccion: SW
@@ -711,17 +714,11 @@ namespace ProyectoMIPS
         public int[] obtener_bloque_datos_memoria(int numeroDeBloque)
         {
             int[] bloque = new int[4];
-<<<<<<< HEAD
-            bloque[0] = memoriaPrincipalDatos[numeroDeBloque*4];
-            bloque[1] = memoriaPrincipalDatos[numeroDeBloque*4 + 1];
-            bloque[2] = memoriaPrincipalDatos[numeroDeBloque*4 + 2];
-            bloque[3] = memoriaPrincipalDatos[numeroDeBloque*4  + 3];
-=======
+
             bloque[0] = memoriaPrincipalDatos[(numeroDeBloque * 4)];
             bloque[1] = memoriaPrincipalDatos[(numeroDeBloque * 4) + 1];
             bloque[2] = memoriaPrincipalDatos[(numeroDeBloque * 4) + 2];
             bloque[3] = memoriaPrincipalDatos[(numeroDeBloque * 4) + 3];
->>>>>>> 35c713131fb5c97fe41db48809cb4e414bab3e77
 
             return bloque;
         }
@@ -755,7 +752,7 @@ namespace ProyectoMIPS
         /* 
          * Se extrae un hilillo de la cola y se le asigna al nucleo
          */
-        public Boolean desencolarContexto(int hilo)
+        public bool desencolarContexto(int hilo)
         {
             bool desencolo = false;
 
@@ -826,52 +823,70 @@ namespace ProyectoMIPS
 
             System.Console.WriteLine("Iniciando simulación de hilo " + ihilo + "...");
             System.Console.WriteLine("");
+            System.Console.WriteLine("Tratando de obtener colaHilillos");
 
             while (this.colaHilillos.Count > 0)
             {
                 System.Console.WriteLine("Hilo " + ihilo + " - Desencolando hilillo");
                 System.Console.WriteLine("");
-
-                inicio_instrucciones.SignalAndWait();
                 reloj.asignar_reloj(0);
-                // Barrera
 
                 if (this.desencolarContexto(ihilo))
                 {
-                    while (reloj.obtener_reloj() <= numero_Quantum )
+                    while ((reloj.obtener_reloj() <= numero_Quantum) && (nucleoHilo[ihilo].obtener_finalizado() == false))
                     {
-                        barrera_aumento_reloj.SignalAndWait();
-
-                        bool obtenido = Monitor.TryEnter(reloj);
-
-                        try
-                        {
-                            if (reloj.obtener_modificado() == false)
-                            { 
-                                reloj.asignar_reloj((reloj.obtener_reloj() + 1));
-                                reloj.asignar_modificado(true); 
-                            }
-
-                        }
-                        catch
-                        {
-                            if (obtenido)
-                                Monitor.Exit(reloj);
-
-                        }
-
-                        barrera_fin_aumento_reloj.SignalAndWait();
-                        reloj.asignar_modificado(false);
-
                         if (nucleoHilo[ihilo].obtener_finalizado() == false)
                         {
                             System.Console.WriteLine("-----------------------------------------------");
                             System.Console.WriteLine("Obteniendo información sobre la instrucción...");
+                            System.Console.WriteLine("Instrucción " + reloj.obtener_reloj());
                             System.Console.WriteLine("");
                             System.Console.WriteLine("  PC: " + nucleoHilo[ihilo].PC);
                             int[] instruccion = this.obtener_instruccion(ihilo);
                             System.Console.WriteLine("");
+
+                            System.Console.WriteLine("-------------------------------------------------------");
+                            System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de aumento de reloj. Se esperan: " + barrera_aumento_reloj.ParticipantCount);
+                            barrera_aumento_reloj.SignalAndWait();
+
+                            bool obtenido = Monitor.TryEnter(reloj);
+
+                            if (obtenido)
+                            {
+                                try
+                                {
+                                    if (reloj.obtener_modificado() == false)
+                                    {
+                                        reloj.asignar_reloj((reloj.obtener_reloj() + 1));
+                                        reloj.asignar_modificado(true);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.WriteLine("Error al obtener reloj en hilo " + ihilo + ": " + e);
+                                }
+                                finally
+                                {
+                                    Monitor.Exit(reloj);
+                                }
+                            }
+                            else
+                            {
+                                reloj.asignar_modificado(false);
+                            }
+
+                            System.Console.WriteLine("-------------------------------------------------------");
+                            System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de inicio de instrucciones. Se esperan: " + inicio_instrucciones.ParticipantCount);
+                            inicio_instrucciones.SignalAndWait();
+
+
                             this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
+
+                            
+                            System.Console.WriteLine("-------------------------------------------------------");
+                            System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de fin aumento reloj. Se esperan: " + barrera_fin_aumento_reloj.ParticipantCount);
+                            barrera_fin_aumento_reloj.SignalAndWait();
+
                             System.Console.WriteLine("-----------------------------------------------");
                             System.Console.WriteLine("");
                         }
@@ -879,21 +894,20 @@ namespace ProyectoMIPS
                             System.Console.WriteLine("------------FINALIZADO------");
                         }
                     }
-
                     if (nucleoHilo[ihilo].obtener_finalizado() == false)
                     {
                         this.encolarContexto(ihilo);
                     }
                 }
-                else
-                {
-                    barrera_aumento_reloj.RemoveParticipants(1);
-                    barrera_fin_aumento_reloj.RemoveParticipants(1);
-                    inicio_instrucciones.RemoveParticipants(1);
-                }
             }
+            System.Console.WriteLine("");
+            System.Console.WriteLine("No más hilillos por desencolar");
+            System.Console.WriteLine("Hilo " + ihilo + " siendo removido de las barreras");
+            System.Console.WriteLine("");
+            barrera_aumento_reloj.RemoveParticipant();
+            barrera_fin_aumento_reloj.RemoveParticipant();
+            inicio_instrucciones.RemoveParticipant();
         }
-
 
         /* ======================================================
         * Se crea un método para imprimir en un archivo la 

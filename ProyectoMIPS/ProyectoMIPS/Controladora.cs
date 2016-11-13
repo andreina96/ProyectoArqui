@@ -65,8 +65,6 @@ namespace ProyectoMIPS
             }
         }
 
-
-
         public void iniciarSimulacion()
         {
             cargar_memoria_principal();

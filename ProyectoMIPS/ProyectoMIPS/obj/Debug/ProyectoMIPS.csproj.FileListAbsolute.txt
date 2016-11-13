@@ -38,3 +38,12 @@ C:\Users\Andreína Alvarado\Desktop\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\
 C:\Users\Andreína Alvarado\Desktop\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.csproj.GenerateResource.Cache
 C:\Users\Andreína Alvarado\Desktop\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.exe
 C:\Users\Andreína Alvarado\Desktop\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.pdb
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\bin\Debug\ProyectoMIPS.exe.config
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.exe
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.pdb
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\bin\Debug\ProyectoMIPS.exe
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\bin\Debug\ProyectoMIPS.pdb
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.csprojResolveAssemblyReference.cache
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.Forms.Vista.resources
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.Properties.Resources.resources
+C:\Users\Andreína Alvarado\Documents\Universidad y estudios\Arquitectura de Computadores\ProyectoArqui\ProyectoMIPS\ProyectoMIPS\obj\Debug\ProyectoMIPS.csproj.GenerateResource.Cache
