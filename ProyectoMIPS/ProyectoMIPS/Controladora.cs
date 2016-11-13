@@ -17,11 +17,13 @@ namespace ProyectoMIPS
 {
     class Controladora
     {
+        ResultadosLento resultadosl = new ResultadosLento();
         Procesador procesador;      // Unico procesador
         int numeroHilillos;         // Numero total de hilillos
         int quantum;                // quantum  
         String[] archivos_rutas;    // rutas de los hilillos
         int numero_instrucciones;   // Numero total de instrucciones 
+        bool modo;
 
         /*
          * Se crea un objeto form Resultados, para desplegar en pantalla los 
@@ -29,10 +31,10 @@ namespace ProyectoMIPS
          */
         public Resultados resultados;
 
-        public Controladora(int num_hil, int quant, String[] archivos_r, bool modo)
+        public Controladora(int num_hil, int quant, String[] archivos_r, bool m)
         {
             procesador = new Procesador();
-            procesador.asignar_modo(modo);
+            modo = m;
             numeroHilillos = num_hil;
             quantum = quant;
             archivos_rutas = archivos_r;
@@ -77,6 +79,7 @@ namespace ProyectoMIPS
         {
             cargar_memoria_principal();
             procesador.asignar_numero_quantum(quantum); // Se asigna el quantum al procesador
+            procesador.asignar_modo(modo);
 
             Thread nucleo1 = new Thread(procesador.correInstrucciones);
             Thread nucleo2 = new Thread(procesador.correInstrucciones);
@@ -98,7 +101,15 @@ namespace ProyectoMIPS
             if (!procesador.obtener_modo())
             {
                 resultados = new Resultados(procesador.hilillos_finalizados, procesador.memoriaPrincipalDatos);
-                resultados.Show();
+                resultados.ShowDialog();
+            }
+            else
+            {
+                resultadosl.asignar_memoria(procesador.memoriaPrincipalDatos);
+                resultadosl.asignar_nucleo_hilo(procesador.nucleoHilo);
+                resultadosl.asignar_reloj(procesador.reloj.obtener_reloj());
+                resultadosl.asignar_cache_datos_hilo(procesador.cacheDatosHilo);
+                resultadosl.ShowDialog();
             }
 
             procesador.imprimirMemoriaInstrucciones();

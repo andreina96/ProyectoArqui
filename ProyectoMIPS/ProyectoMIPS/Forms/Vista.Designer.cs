@@ -98,7 +98,7 @@
             this.aceptar.Name = "aceptar";
             this.aceptar.Size = new System.Drawing.Size(75, 23);
             this.aceptar.TabIndex = 6;
-            this.aceptar.Text = "Modo lento";
+            this.aceptar.Text = "Modo rápido";
             this.aceptar.UseVisualStyleBackColor = false;
             this.aceptar.Click += new System.EventHandler(this.aceptar_Click);
             // 
@@ -109,8 +109,9 @@
             this.aceptarr.Name = "aceptarr";
             this.aceptarr.Size = new System.Drawing.Size(75, 23);
             this.aceptarr.TabIndex = 7;
-            this.aceptarr.Text = "Modo rápido";
+            this.aceptarr.Text = "Modo lento";
             this.aceptarr.UseVisualStyleBackColor = false;
+            this.aceptarr.Click += new System.EventHandler(this.aceptarr_Click);
             // 
             // Vista
             // 
@@ -128,6 +129,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Vista";
             this.Text = "Llenar información";
+            this.Load += new System.EventHandler(this.Vista_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

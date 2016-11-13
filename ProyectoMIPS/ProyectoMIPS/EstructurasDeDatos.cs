@@ -167,6 +167,7 @@ namespace ProyectoMIPS
             registro[0] = 0;
             inicio_hilillo = 0;
             fin_hilillo = 0;
+            num_hilillo = -1;
             finalizado = false;
             cambiar = false;
             ciclos_reloj = 0;

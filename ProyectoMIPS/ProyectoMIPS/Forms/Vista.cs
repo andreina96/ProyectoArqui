@@ -85,5 +85,10 @@ namespace ProyectoMIPS.Forms
                 MessageBox.Show("Ha ocurrido un error: " + ex);
             }
         }
+
+        private void Vista_Load(object sender, EventArgs e)
+        {
+            this.CenterToScreen();
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace ProyectoMIPS
          */
         bool modo;
 
+        ResultadosLento resultado = new ResultadosLento();
+
         /*
          * Se crean las estructuras de sincronización de núcleos
          */
@@ -77,13 +79,13 @@ namespace ProyectoMIPS
          * Se crean estructuras para representar los contextos
          * temporales de cada hilo
          * ====================================================== */
-        nucleo[] nucleoHilo;
+        public nucleo[] nucleoHilo;
 
         /* ======================================================
          * Se crean estructuras para representar las cachés de 
          * datos de cada hilo
          * ====================================================== */
-        cacheDatos[] cacheDatosHilo;
+        public cacheDatos[] cacheDatosHilo;
 
         /* ======================================================
          * Se crean estructuras para representar las cachés de 
@@ -115,7 +117,7 @@ namespace ProyectoMIPS
          * para utilizar la clase procesador
          */
         int ciclo_reloj_original;
-                    
+
         public Procesador()
         {
             memoriaPrincipalDatos = new int[96];
@@ -125,7 +127,7 @@ namespace ProyectoMIPS
             modo = false;
 
             nucleoHilo = new nucleo[3];
-                    
+
             cacheDatosHilo = new cacheDatos[3];
             cacheInstruccionesHilo = new cacheInstrucciones[3];
 
@@ -322,6 +324,12 @@ namespace ProyectoMIPS
                         break;
                     case 43:
                         SW(hilo, PrimerOperando, SegundoOperando, TercerOperando);
+                        break;
+                    case 50:
+                        LL(hilo, PrimerOperando, SegundoOperando, TercerOperando);
+                        break;
+                    case 51:
+                        SC(hilo, PrimerOperando, SegundoOperando, TercerOperando);
                         break;
                     case 63:
                         Fin(hilo);
@@ -641,6 +649,493 @@ namespace ProyectoMIPS
             }
         }
 
+        /*
+         * Instruccion: LL
+         * 
+         * Descripción:
+         *      R[SegundoOperando] <- M[R[PrimerOperando] + TercerOperando]
+         *      R[32] <- R[PrimerOperando] + TercerOperando
+         */
+        public void LL(int hilo, int PrimerOperando, int SegundoOperando, int TercerOperando)
+        {
+            System.Console.WriteLine("  Entrando a LL...");
+            /* Se obtiene el número de byte en memoria al que corresponde la dirección */
+            int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando) / 4;
+            /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
+            int numBloqueMemoria = numByte / 4; //indiceBloqueMemDatos (0-24)
+            /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
+            int numPalabra = (numByte % 4);
+            System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria + "  numPalabra : " + numPalabra);
+
+            System.Console.WriteLine("");
+
+            /*
+             * Variable para controlar si se logró hacer los dos procedimientos de manera atómica
+             */
+            bool completado = false;
+            while (!completado)
+            {
+                bool busMemoria = Monitor.TryEnter(memoriaPrincipalDatos);
+
+                if (busMemoria)
+                {
+                    System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de memoria");
+                    try
+                    {
+                        bool busCache = Monitor.TryEnter(cacheDatosHilo[hilo]);
+
+                        if (busCache)
+                        {
+                            System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché");
+                            try
+                            {
+                                /* 
+                                 * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
+                                 * es el bloque que se busca, entonces se ingresa al if, es decir hay HIT y se debe
+                                 * verificar si el bloque es válido
+                                 */
+                                if (cacheDatosHilo[hilo].esNumeroBloque(numBloqueMemoria))
+                                {
+                                    /*
+                                     * Si el bloque es válido, entonces nada más se copia en el registro
+                                     */
+                                    if (cacheDatosHilo[hilo].getBloque(numBloqueMemoria).validez == true)
+                                    {
+                                        System.Console.WriteLine("      HIT Válido");
+                                        /* Se asigna el valor al registro */
+                                        nucleoHilo[hilo].asignar_registro(
+                                            cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
+                                        /* Se asigna el valor al registro RL */
+
+                                        bool rl = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
+
+                                        if (rl)
+                                        {
+                                            try
+                                            {
+                                                nucleoHilo[hilo].asignar_registro(numByte, 32);
+                                            }
+                                            catch(Exception e)
+                                            {
+                                                System.Console.WriteLine("Error en LL rl hilo " + hilo + e);
+                                            }
+                                            finally
+                                            {
+                                                Monitor.Exit(nucleoHilo[hilo].registro[32]);
+                                                completado = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            completado = false;
+                                        }
+                                        
+                                        System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
+                                    }
+                                    /*
+                                     * Sino, debe cargarse el bloque de memoria
+                                     */
+                                    else
+                                    {
+                                        System.Console.WriteLine("      HIT Inválido");
+                                        /* Se carga a caché el bloque de memoria */
+                                        int[] bloque = obtener_bloque_datos_memoria(numBloqueMemoria);
+                                        cacheDatosHilo[hilo].setBloque(bloque, numBloqueMemoria);
+                                        /* Se asigna el valor al registro */
+                                        nucleoHilo[hilo].asignar_registro(
+                                            cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
+                                        /* Se asigna el valor al registro RL */
+                                        bool rl = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
+
+                                        if (rl)
+                                        {
+                                            try
+                                            {
+                                                nucleoHilo[hilo].asignar_registro(numByte, 32);
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                System.Console.WriteLine("Error en LL rl hilo " + hilo + e);
+                                            }
+                                            finally
+                                            {
+                                                Monitor.Exit(nucleoHilo[hilo].registro[32]);
+                                                completado = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            completado = false;
+                                        }
+                                        System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
+                                    }
+                                }
+                                /*
+                                 * Sino entonces hay que cargar el bloque de memoria
+                                 */
+                                else
+                                {
+                                    /* Se carga a caché el bloque de memoria */
+                                    int[] bloque = obtener_bloque_datos_memoria(numBloqueMemoria);
+                                    cacheDatosHilo[hilo].setBloque(bloque, numBloqueMemoria);
+                                    /* Se asigna el valor al registro */
+                                    nucleoHilo[hilo].asignar_registro(
+                                        cacheDatosHilo[hilo].getBloque(numBloqueMemoria).getDato(numPalabra), SegundoOperando);
+                                    /* Se asigna el valor al registro RL */
+                                    bool rl = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
+
+                                    if (rl)
+                                    {
+                                        try
+                                        {
+                                            nucleoHilo[hilo].asignar_registro(numByte, 32);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            System.Console.WriteLine("Error en LL rl hilo " + hilo + e);
+                                        }
+                                        finally
+                                        {
+                                            completado = true;
+                                            try
+                                            {
+                                                Monitor.Exit(nucleoHilo[hilo].registro[32]);
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                System.Console.WriteLine("Error en línea 800 " + e);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        completado = false;
+                                    }
+                                    System.Console.WriteLine("        El dato que se cargó en el registro " + SegundoOperando + " fue " + nucleoHilo[hilo].obtener_registro(SegundoOperando));
+                                }
+                            }
+                            finally
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de memoria");
+                                Monitor.Exit(cacheDatosHilo[hilo]);
+                            }
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de memoria");
+                            completado = false;
+                        }
+                    }
+                    finally
+                    {
+                        System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de caché");
+                        Monitor.Exit(memoriaPrincipalDatos);
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de memoria");
+                    completado = false;
+                }
+            }
+            System.Console.WriteLine("");
+            System.Console.WriteLine("Hilo : " + hilo + " volviendo a intentar...");
+            System.Console.WriteLine("");
+        }
+
+        /*
+         * Instruccion: SC
+         * 
+         * Descripción:
+         *      Si R[32] es R[PrimerOperando] + TercerOperando, entonces
+         *          M[R[PrimerOperando] + TercerOperando] <- R[SegundoOperando]
+         *      Sino
+         *   		R[SegundoOperando] <- 0
+         */
+        public void SC(int hilo, int PrimerOperando, int SegundoOperando, int TercerOperando)
+        {
+            System.Console.WriteLine("  Entrando a SC...");
+            /* Se obtiene el número de byte en memoria al que corresponde la dirección */
+            int numByte = (nucleoHilo[hilo].obtener_registro(PrimerOperando) + TercerOperando) / 4;
+            /* Se obtiene el número de bloque en memoria al que corresponde la dirección */
+            int numBloqueMemoria = numByte / 4;
+            /* Se obtiene el número de palabra del bloque al que corresponde la dirección */
+            int numPalabra = (numByte % 4);
+            System.Console.WriteLine("      numByte : " + numByte + "  numBloqueMemoria : " + numBloqueMemoria + "  numPalabra : " + numPalabra);
+
+            System.Console.WriteLine("");
+
+            /*
+             * Variable para controlar si se logró hacer los dos procedimientos de manera atómica
+             */
+            bool completado = false;
+
+            while (!completado)
+            {
+                bool busMemoria = Monitor.TryEnter(memoriaPrincipalDatos);
+
+                if (busMemoria)
+                {
+                    System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de memoria");
+
+                    try
+                    {
+                        /*
+                         * Se invalidan los bloques en las cachés de ambos hilos, en caso de qeu coincidan los 
+                         * bloques en esa posición
+                         */
+                        bool busCache1 = Monitor.TryEnter(cacheDatosHilo[(hilo + 1) % 3]);
+
+                        if (busCache1)
+                        {
+                            System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché para hilo " + ((hilo + 1) % 3));
+                            try
+                            {
+                                if (cacheDatosHilo[(hilo + 1) % 3].esNumeroBloque(numBloqueMemoria))
+                                {
+                                    System.Console.WriteLine("      Bloque en la caché del núcleo " + (hilo + 1) % 3 + " invalilado");
+                                    cacheDatosHilo[(hilo + 1) % 3].invalidar(numBloqueMemoria);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                System.Console.WriteLine("Error en SW " + (hilo + 1) % 3 + " : " + e);
+                            }
+                            finally
+                            {
+                                Monitor.Exit(cacheDatosHilo[(hilo + 1) % 3]);
+                            }
+
+                            completado = true;
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de caché para hilo " + ((hilo + 1) % 3));
+                            completado = false;
+                        }
+
+                        if (completado)
+                        {
+                            bool busCache2 = Monitor.TryEnter(cacheDatosHilo[(hilo + 2) % 3]);
+
+                            if (busCache2)
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché para hilo " + ((hilo + 2) % 3));
+                                try
+                                {
+                                    if (cacheDatosHilo[(hilo + 2) % 3].esNumeroBloque(numBloqueMemoria))
+                                    {
+                                        System.Console.WriteLine("      Bloque en la caché del núcleo " + (hilo + 2) % 3 + " invalilado");
+                                        cacheDatosHilo[(hilo + 2) % 3].invalidar(numBloqueMemoria);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.WriteLine("Error en SC " + (hilo + 2) % 3 + " : " + e);
+                                }
+                                finally
+                                {
+                                    Monitor.Exit(cacheDatosHilo[(hilo + 2) % 3]);
+                                }
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de caché para hilo " + ((hilo + 2) % 3));
+                                completado = false;
+                            }
+                        }
+
+                        if (completado)
+                        {
+                            bool rl1 = Monitor.TryEnter(nucleoHilo[(hilo + 1) % 3].registro[32]);
+
+                            if (rl1)
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de rl para hilo " + (hilo + 1) % 3);
+                                try
+                                {
+                                    if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
+                                    {
+                                        nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.WriteLine("Error en SC rl " + (hilo + 1) % 3 + " : " + e);
+                                }
+                                finally
+                                {
+                                    Monitor.Exit(nucleoHilo[(hilo + 1) % 3].registro[32]);
+                                }
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de rl para hilo " + ((hilo + 1) % 3));
+                                completado = false;
+                            }
+                        }
+
+                        if (completado)
+                        {
+                            bool rl2 = Monitor.TryEnter(nucleoHilo[(hilo + 2) % 3].registro[32]);
+
+                            if (rl2)
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de rl para hilo " + (hilo + 2) % 3);
+                                try
+                                {
+                                    if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
+                                    {
+                                        nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.WriteLine("Error en SC rl " + (hilo + 2) % 3 + " : " + e);
+                                }
+                                finally
+                                {
+                                    Monitor.Exit(nucleoHilo[(hilo + 2) % 3].registro[32]);
+                                }
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de rl para hilo " + ((hilo + 2) % 3));
+                                completado = false;
+                            }
+                        }
+
+                        if (completado)
+                        {
+                            bool rl3 = Monitor.TryEnter(nucleoHilo[hilo].registro[32]);
+
+                            if (rl3)
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de rl para hilo " + hilo);
+                                try
+                                {
+                                    if (nucleoHilo[hilo].registro[32] == numByte)
+                                    {
+                                        nucleoHilo[hilo].registro[32] = -1;
+                                    }
+                                
+
+                        if (completado)
+                        {
+                            bool busCache3 = Monitor.TryEnter(cacheDatosHilo[hilo]);
+
+                            if (busCache3)
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " obtuvo el bus de caché");
+                                try
+                                {
+                                    /* 
+                                     * Si el bloque que se encuentra en caché en la dirección numBloqueMemoria % 4 
+                                     * es el bloque que se busca, entonces se ingresa al if, es decir hay HIT y se debe
+                                     * verificar si el bloque es válido
+                                     */
+                                    if (cacheDatosHilo[hilo].esNumeroBloque(numBloqueMemoria))
+                                    {
+                                        /*
+                                         * Si el bloque es válido, entonces se guarda en caché y en memoria
+                                         */
+                                        if (cacheDatosHilo[hilo].getBloque(numBloqueMemoria).validez == true)
+                                        {
+                                            if (nucleoHilo[hilo].obtener_registro(32) == numByte)
+                                            {
+                                                System.Console.WriteLine("      HIT Válido");
+                                                /* Se asigna el valor del dato del bloque a la caché */
+                                                cacheDatosHilo[hilo].modificarPalabraBloque(nucleoHilo[hilo].obtener_registro(SegundoOperando), numPalabra, numBloqueMemoria);
+                                                /* Se asigna el valor del dato del bloque a la memoria */
+                                                cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
+                                                System.Console.WriteLine("        El dato que se cargó en memoria fue " + nucleoHilo[hilo].obtener_registro(PrimerOperando));
+                                            }
+                                            else
+                                            {
+                                                nucleoHilo[hilo].asignar_registro(0, SegundoOperando);
+                                            }
+                                        }
+                                        /*
+                                         * Sino, sólo se escribe el dato del bloque a memoria
+                                         */
+                                        else
+                                        {
+                                            if (nucleoHilo[hilo].obtener_registro(32) == numByte)
+                                            {
+                                                System.Console.WriteLine("      HIT Inválido");
+                                                /* Se asigna el valor del dato del bloque a la memoria */
+                                                cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
+                                                System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
+                                            }
+                                            else
+                                            {
+                                                nucleoHilo[hilo].asignar_registro(0, SegundoOperando);
+                                            }
+                                        }
+                                    }
+                                    /*
+                                     * Sino entonces hay que guardar el bloque a memoria
+                                     */
+                                    else
+                                    {
+                                        if (nucleoHilo[hilo].obtener_registro(32) == numByte)
+                                        {
+                                            /* Se asigna el valor del dato del bloque a la memoria */
+                                            cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
+                                            System.Console.WriteLine("        El dato que se cargó en memoria fue " + obtener_bloque_datos_memoria(numBloqueMemoria)[numByte % 4]);
+                                        }
+                                        else
+                                        {
+                                            nucleoHilo[hilo].asignar_registro(0, SegundoOperando);
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.WriteLine("Error en SC " + hilo + " : " + e);
+                                }
+                                finally
+                                {
+                                    System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de caché");
+                                    Monitor.Exit(cacheDatosHilo[hilo]);
+                                }
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de caché");
+                                completado = false;
+                            }
+                        }
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.WriteLine("Error en SC rl " + hilo + " : " + e);
+                                }
+                                finally
+                                {
+                                    Monitor.Exit(nucleoHilo[hilo].registro[32]);
+                                }
+                            }
+                            else
+                            {
+                                System.Console.WriteLine("Hilo : " + hilo + " no obtuvo el bus de rl");
+                                completado = false;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        System.Console.WriteLine("Error en SC Mem : " + e);
+                    }
+                    finally
+                    {
+                        System.Console.WriteLine("Hilo : " + hilo + " devolviendo el bus de memoria");
+                        Monitor.Exit(memoriaPrincipalDatos);
+                    }
+                }
+            }
+        }
+
         /* ======================================================
          * Se crea un método para pedirle una instrucción a la
          * caché de instrucciones
@@ -717,7 +1212,7 @@ namespace ProyectoMIPS
 
         public instruccion[] obtener_bloque_instrucciones_memoria(int numeroDeBloque)
         {
-            
+
             instruccion[] bloque = new instruccion[4];
             for (int i = 0; i < 4; i++)
                 bloque[i] = new instruccion();
@@ -774,7 +1269,7 @@ namespace ProyectoMIPS
 
             auxiliar.asignar_contexto(nucleoHilo[hilo].obtener_contador_programa(), registros);
             hilillos_finalizados.Enqueue(auxiliar);
-        } 
+        }
 
         public void cambiarDatoBloqueMemoria(int dato, int numBloque)
         {
@@ -783,7 +1278,7 @@ namespace ProyectoMIPS
 
         public void imprimirNucleo(int nucleo)
         {
-            System.Console.WriteLine("__________________"+"Nucleo: "+ nucleo +"__________________\n");
+            System.Console.WriteLine("__________________" + "Nucleo: " + nucleo + "__________________\n");
             System.Console.WriteLine("Inicio hilillo:" + nucleoHilo[nucleo].obtener_inicio_hilillo());
             System.Console.WriteLine("Fin hilillo:" + nucleoHilo[nucleo].obtener_fin_hilillo());
             System.Console.WriteLine("Fin hilillo:" + nucleoHilo[nucleo].obtener_contador_programa());
@@ -860,9 +1355,9 @@ namespace ProyectoMIPS
 
             int[] registros = new int[33];
 
-            for(int i = 0; i < 33; i++)
+            for (int i = 0; i < 33; i++)
                 registros[i] = nucleoHilo[hilo].obtener_registro(i);
-            
+
             auxiliar.asignar_contexto(nucleoHilo[hilo].obtener_contador_programa(), registros);
             colaHilillos.Enqueue(auxiliar);
         }
@@ -872,7 +1367,7 @@ namespace ProyectoMIPS
          */
         public void correInstrucciones(object hilo)
         {
-            int ihilo = (int) hilo;
+            int ihilo = (int)hilo;
 
             System.Console.WriteLine("Iniciando simulación de hilo " + ihilo + "...");
             System.Console.WriteLine("");
@@ -911,6 +1406,7 @@ namespace ProyectoMIPS
                                 {
                                     if (reloj.obtener_modificado() == false)
                                     {
+                                        System.Console.WriteLine("RELOJ");
                                         reloj.asignar_reloj((reloj.obtener_reloj() + 1));
                                         reloj.asignar_modificado(true);
                                     }
@@ -921,20 +1417,34 @@ namespace ProyectoMIPS
                                 }
                                 finally
                                 {
-                                    Monitor.Exit(reloj);
+                                    if (modo == true)
+                                    {
+                                        inicio_instrucciones.AddParticipant();
+                                        Monitor.Exit(reloj);
+                                        resultado.asignar_memoria(memoriaPrincipalDatos);
+                                        resultado.asignar_nucleo_hilo(nucleoHilo);
+                                        resultado.asignar_reloj(reloj.obtener_reloj());
+                                        resultado.asignar_cache_datos_hilo(cacheDatosHilo);
+                                        try
+                                        {
+                                            resultado.ShowDialog();
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            System.Console.WriteLine("Ha ocurrido un error desplegando resultados: " + e);
+                                        }
+                                        inicio_instrucciones.RemoveParticipant();
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                reloj.asignar_modificado(false);
                             }
 
                             System.Console.WriteLine("-------------------------------------------------------");
                             System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de inicio de instrucciones. Se esperan: " + inicio_instrucciones.ParticipantCount);
                             inicio_instrucciones.SignalAndWait();
+                            reloj.asignar_modificado(false);
 
                             this.EjecucionInstruccion(ihilo, instruccion[0], instruccion[1], instruccion[2], instruccion[3]);
-                            
+
                             System.Console.WriteLine("-------------------------------------------------------");
                             System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de fin aumento reloj. Se esperan: " + barrera_fin_aumento_reloj.ParticipantCount);
                             barrera_fin_aumento_reloj.SignalAndWait();
@@ -1058,11 +1568,6 @@ namespace ProyectoMIPS
         public void subir_cache_memoria(int hilo)
         {
             nucleoHilo[hilo].asignar_ciclos_reloj(nucleoHilo[hilo].obtener_ciclos_reloj() + 7);
-        }
-
-        public void mostrarResultados()
-        {
-
         }
     }
 }

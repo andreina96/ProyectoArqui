@@ -26,6 +26,8 @@ namespace ProyectoMIPS.Forms
         
         public void Resultados_Load(object sender, EventArgs e)
         {
+            this.CenterToScreen();
+
             tregistros1.ReadOnly = true;
             tregistros2.ReadOnly = true;
             tregistros3.ReadOnly = true;
