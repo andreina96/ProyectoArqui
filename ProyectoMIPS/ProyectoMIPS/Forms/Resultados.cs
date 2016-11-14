@@ -66,6 +66,7 @@ namespace ProyectoMIPS.Forms
         public void chilillo1_SelectedIndexChanged(object sender, EventArgs e)
         {
             hilillo auxiilar;
+            string reg = "";
             if (chilillo1.SelectedIndex != 0)
             {
                 for (int i = 0; i < hilillos.Count; i++)
@@ -74,18 +75,17 @@ namespace ProyectoMIPS.Forms
                     {
                         auxiilar = hilillos.ElementAt(i);
 
-                        string reg = "";
                         int[] registros = auxiilar.obtener_registros();
 
                         for (int j = 0; j < registros.Length; j++)
                             reg = reg + "R" + j + ": " + registros[j] + " \n";
 
-                        tregistros1.Text = reg;
-
                         i = hilillos.Count;
                     }
                 }
             }
+
+            tregistros1.Text = reg;
         }
 
         public void chilillo2_SelectedIndexChanged(object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace ProyectoMIPS.Forms
                 hilillo auxiilar;
                 for (int i = 0; i < hilillos.Count; i++)
                 {
-                    if (hilillos.ElementAt(i).obtener_numero_hil().ToString() == chilillo1.SelectedItem.ToString())
+                    if (hilillos.ElementAt(i).obtener_numero_hil().ToString() == chilillo2.SelectedItem.ToString())
                     {
                         auxiilar = hilillos.ElementAt(i);
 
@@ -122,7 +122,7 @@ namespace ProyectoMIPS.Forms
                 hilillo auxiilar;
                 for (int i = 0; i < hilillos.Count; i++)
                 {
-                    if (hilillos.ElementAt(i).obtener_numero_hil().ToString() == chilillo1.SelectedItem.ToString())
+                    if (hilillos.ElementAt(i).obtener_numero_hil().ToString() == chilillo3.SelectedItem.ToString())
                     {
                         auxiilar = hilillos.ElementAt(i);
 

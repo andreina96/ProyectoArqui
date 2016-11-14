@@ -304,7 +304,7 @@ namespace ProyectoMIPS
                          */
 
                         nucleoHilo[hilo].asignar_registro(nucleoHilo[hilo].PC, 31);
-                        nucleoHilo[hilo].PC = nucleoHilo[hilo].PC + TercerOperando * 4;
+                        nucleoHilo[hilo].PC = nucleoHilo[hilo].PC + TercerOperando;
                         System.Console.WriteLine("JAL dio: se saltó a la dirección " + nucleoHilo[hilo].PC + TercerOperando);
                         break;
                     case 2:
@@ -896,13 +896,9 @@ namespace ProyectoMIPS
                                             if (nucleoHilo[hilo].obtener_registro(32) == numByte)
                                             {
                                                 if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
-                                                {
                                                     nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
-                                                }
                                                 if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
-                                                {
                                                     nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
-                                                }
                                                 nucleoHilo[hilo].registro[32] = -1;
                                                 System.Console.WriteLine("      HIT Válido");
                                                 /* Se asigna el valor del dato del bloque a la caché */
@@ -924,14 +920,11 @@ namespace ProyectoMIPS
                                             if (nucleoHilo[hilo].obtener_registro(32) == numByte)
                                             {
                                                 if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
-                                                {
                                                     nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
-                                                }
                                                 if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
-                                                {
                                                     nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
-                                                }
                                                 nucleoHilo[hilo].registro[32] = -1;
+
                                                 System.Console.WriteLine("      HIT Inválido");
                                                 /* Se asigna el valor del dato del bloque a la memoria */
                                                 cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
@@ -951,13 +944,9 @@ namespace ProyectoMIPS
                                         if (nucleoHilo[hilo].obtener_registro(32) == numByte)
                                         {
                                             if (nucleoHilo[(hilo + 1) % 3].registro[32] == numByte)
-                                            {
                                                 nucleoHilo[(hilo + 1) % 3].registro[32] = -1;
-                                            }
                                             if (nucleoHilo[(hilo + 2) % 3].registro[32] == numByte)
-                                            {
                                                 nucleoHilo[(hilo + 2) % 3].registro[32] = -1;
-                                            }
                                             nucleoHilo[hilo].registro[32] = -1;
                                             /* Se asigna el valor del dato del bloque a la memoria */
                                             cambiarDatoBloqueMemoria(nucleoHilo[hilo].obtener_registro(SegundoOperando), numBloqueMemoria * 4 + numPalabra);
@@ -1069,13 +1058,10 @@ namespace ProyectoMIPS
             }
 
             return instruccion;
-            //EjecucionInstruccion
-            //return cacheInstruccionesHilo[hilo].getBloque(numeroBloque).getInstruccion(numeroPalabra);
         }
 
         public instruccion[] obtener_bloque_instrucciones_memoria(int numeroDeBloque)
         {
-
             instruccion[] bloque = new instruccion[4];
             for (int i = 0; i < 4; i++)
                 bloque[i] = new instruccion();
@@ -1245,8 +1231,6 @@ namespace ProyectoMIPS
 
                 if (this.desencolarContexto(ihilo))
                 {
-                    reloj.asignar_modificado(false);
-
                     while ((reloj.obtener_reloj() <= numero_Quantum + ciclo_reloj_original) && (nucleoHilo[ihilo].obtener_finalizado() == false))
                     {
                         if (nucleoHilo[ihilo].obtener_finalizado() == false)
@@ -1258,7 +1242,7 @@ namespace ProyectoMIPS
                             System.Console.WriteLine("  PC: " + nucleoHilo[ihilo].PC);
                             int[] instruccion = this.obtener_instruccion(ihilo);
                             System.Console.WriteLine("");
-
+                            reloj.asignar_modificado(false);
                             System.Console.WriteLine("-------------------------------------------------------");
                             System.Console.WriteLine("Hilo " + ihilo + " entrando a barrera de aumento de reloj. Se esperan: " + barrera_aumento_reloj.ParticipantCount);
                             barrera_aumento_reloj.SignalAndWait();
